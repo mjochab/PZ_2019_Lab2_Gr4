@@ -1,6 +1,7 @@
 # PZ_2019_Lab2_Gr4
 
-<br> Cele i zakres systemu </br>
+#Cele i zakres systemu
+
 
 
 Wstępne funkcjonalności nauczyciel:
