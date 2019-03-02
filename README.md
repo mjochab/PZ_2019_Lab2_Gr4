@@ -1,5 +1,7 @@
 # PZ_2019_Lab2_Gr4
 
+<br> Cele i zakres systemu </br>
+
 
 Wstępne funkcjonalności nauczyciel:
 - wyświetlanie listy uczniów
