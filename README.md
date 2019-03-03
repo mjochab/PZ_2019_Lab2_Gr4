@@ -20,10 +20,10 @@
 *Dodatkowo dyrektor prawo do generowania raportów (wydruków)  
 5. Dyrektor posiadający wszystkie dane o wszystkich użytkownikach rozdziela grupy uczniów danym nauczycielom dając im wgląd w informację tylko o swoich wychowankach. Rodzic otrzymuję wgląd w informację tylko na temat własnego dziecka. W przypadku wprowadzenia oceny przez nauczyciela informacja o tym zostaje udostępniona dyrektorowi jak i rodzicom konkretnego użytkownika.
 
-6. -Dyrektor ma prawo zmienić oceny i dane użytkownika
-    -Nauczyciel ma prawo zmienić oceny użytkownika
-    -Rodzic ma prawo tylko do odczytu danych w systemie. 
-      (W razie chęci zmiany danych ucznia np. miejsca zamieszkania. Konieczne jest poinformowanie dyrektora placówki)
+6. Dyrektor ma prawo zmienić oceny i dane użytkownika
+   -Nauczyciel ma prawo zmienić oceny użytkownika
+   -Rodzic ma prawo tylko do odczytu danych w systemie. 
+    (W razie chęci zmiany danych ucznia np. miejsca zamieszkania. Konieczne jest poinformowanie dyrektora placówki)
 
 	
 
