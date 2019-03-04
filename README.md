@@ -17,7 +17,7 @@
 
 -Dla dyrektora możliwość wygenerowania ocen i informacji na temat wszystkich grup dostępnych w placówce.*
 
-*Dodatkowo dyrektor prawo do generowania raportów (wydruków)  
+Dodatkowo dyrektor prawo do generowania raportów (wydruków)
 5. Dyrektor posiadający wszystkie dane o wszystkich użytkownikach rozdziela grupy uczniów danym nauczycielom dając im wgląd w informację tylko o swoich wychowankach. Rodzic otrzymuję wgląd w informację tylko na temat własnego dziecka. W przypadku wprowadzenia oceny przez nauczyciela informacja o tym zostaje udostępniona dyrektorowi jak i rodzicom konkretnego użytkownika.
 
 6. Dyrektor ma prawo zmienić oceny i dane użytkownika
