@@ -27,25 +27,25 @@
 
 	
 ## Funkcjonalności:
-Nauczyciel:
+### Nauczyciel:
 - wyświetlanie listy uczniów
 - dodawanie ocen
 - dodawanie uwag
 - sprawdzanie obecności
 - akceptacja usprawiedliwienia
 
-Uczeń:
+### Uczeń:
 - Wyświetlanie ocen
 - Wyświetlanie nieobecności
 - Wyświetlanie uwag
 
-Rodzic:
+### Rodzic:
 - wpisywanie usprawiedliwień
 - Wyświetlanie nieobecności
 - Wyświetlanie uwag
 - Wyświetlanie ocen
 
-Dyrektor:
+### Dyrektor:
 - dodawanie uczniów i nauczycieli
 
 ## Diagramy UML:
