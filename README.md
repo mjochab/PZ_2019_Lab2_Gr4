@@ -11,11 +11,11 @@
 
 4. Generowane dokumenty bedą dotyczyć ocen i danych uczniów. Dokument w formacie pdf w zależności od prawie dostępu będzie zawierał różne dane.
 
--Dla ucznia jak i dla rodzica możliwość wygenerowania własnych ocen z systemu w postaci dokumentu pdf 
+- Dla ucznia jak i dla rodzica możliwość wygenerowania własnych ocen z systemu w postaci dokumentu pdf 
 
--Dla nauczyciela możliwość wygenerowania ocen i informacji całych grup do których został przydzielony.
+- Dla nauczyciela możliwość wygenerowania ocen i informacji całych grup do których został przydzielony.
 
--Dla dyrektora możliwość wygenerowania ocen i informacji na temat wszystkich grup dostępnych w placówce.*
+- Dla dyrektora możliwość wygenerowania ocen i informacji na temat wszystkich grup dostępnych w placówce.*
 
 Dodatkowo dyrektor prawo do generowania raportów (wydruków)
 5. Dyrektor posiadający wszystkie dane o wszystkich użytkownikach rozdziela grupy uczniów danym nauczycielom dając im wgląd w informację tylko o swoich wychowankach. Rodzic otrzymuję wgląd w informację tylko na temat własnego dziecka. W przypadku wprowadzenia oceny przez nauczyciela informacja o tym zostaje udostępniona dyrektorowi jak i rodzicom konkretnego użytkownika.
