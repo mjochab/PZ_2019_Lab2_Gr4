@@ -25,7 +25,7 @@
     (W razie chęci zmiany danych ucznia np. miejsca zamieszkania. Konieczne jest poinformowanie dyrektora placówki)
 
 	
-## Funkcjonalności:
+## Funkcjonalności systemu:
 ### Nauczyciel:
 - wyświetlanie listy uczniów
 - dodawanie ocen
