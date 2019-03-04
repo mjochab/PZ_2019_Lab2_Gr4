@@ -49,7 +49,7 @@ Dyrektor:
 - dodawanie uczniów i nauczycieli
 
 ## Diagramy UML:
-## Diagram klas
+### Diagram klas
 ![Diagram klas](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/master/Diagramy/klas.jpg)
-## Diagram przypadków użycia
+### Diagram przypadków użycia
 ![Diagram przypadków użycia](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/master/Diagramy/przypadki.png)
