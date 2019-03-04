@@ -48,6 +48,7 @@ Rodzic:
 Dyrektor:
 - dodawanie uczniów i nauczycieli
 
-#Diagramy UML:
+# Diagramy UML:
 
-![Diagram klas](https://github.com/drozd1krystian/Portal/blob/master/Screen%20Shot%2010-03-18%20at%2006.49%20PM.PNG)
+![Diagram klas](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/master/Diagramy/klas.jpg)
+![Diagram przypadków użycia](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/master/Diagramy/przypadki.png)
