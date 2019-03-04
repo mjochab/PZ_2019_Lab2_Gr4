@@ -1,5 +1,5 @@
 # Dziennik elektroniczny
-# Cele i zakres systemu
+## Cele i zakres systemu
 
  
 1. Program dziennika elektronicznego ma służyć prostej organizacji uczniów i ich ocen w systemie. Nauczyciel jak i rodzic mają stały wgląd w kształcenie Swoich wychowanków. Rozwiązujemy problem skomplikowanych systemów w których rodzic starszego pokolenia nie wie gdzie i w jaki sposób sprawdzić oceny jak i uwagi kierowane w stronę ucznia. Przy realizacji projektu kierujemy się intuicyjnością co pozwoli każdemu bez problemów obsłużyć nasz produkt. 
