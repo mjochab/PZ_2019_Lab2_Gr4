@@ -26,30 +26,28 @@
     (W razie chęci zmiany danych ucznia np. miejsca zamieszkania. Konieczne jest poinformowanie dyrektora placówki)
 
 	
-
-
-
-
-## Cele i zakres systemu:  
-  Aplikacja...
- 
-Wstępne funkcjonalności nauczyciel:
+#Funkcjonalności:
+Nauczyciel:
 - wyświetlanie listy uczniów
 - dodawanie ocen
 - dodawanie uwag
 - sprawdzanie obecności
 - akceptacja usprawiedliwienia
 
-Funkcjonalności uczeń:
+Uczeń:
 - Wyświetlanie ocen
 - Wyświetlanie nieobecności
 - Wyświetlanie uwag
 
-Funkcjonalnosci rodzic:
+Rodzic:
 - wpisywanie usprawiedliwień
 - Wyświetlanie nieobecności
 - Wyświetlanie uwag
 - Wyświetlanie ocen
 
-Funkcjolaności admin:
+Dyrektor:
 - dodawanie uczniów i nauczycieli
+
+#Diagramy UML:
+
+![Diagram klas](https://github.com/drozd1krystian/Portal/blob/master/Screen%20Shot%2010-03-18%20at%2006.49%20PM.PNG)
