@@ -54,4 +54,6 @@
 ![Diagram przypadków użycia](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/master/Diagramy/przypadki.png)
 ### Diagram sekwencji
 ![Diagram sekwencji](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/master/Diagramy/Diagram_sekwencji.png)
+### Diagram aktywności
+![Diagram aktywności](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/master/Diagramy/Diagram_aktywnosci.png)
 
