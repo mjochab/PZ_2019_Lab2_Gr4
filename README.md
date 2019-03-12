@@ -45,7 +45,7 @@
 - Wyświetlanie ocen
 
 ### Dyrektor:
-- dodawanie uczniów i nauczycieli
+- dodawanie uczniów i nauczycieli oraz przydzielanie ich do klas
 
 ## Diagramy UML:
 ### Diagram klas
