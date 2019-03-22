@@ -17,46 +17,58 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
-/**
- * FXML Controller class
- *
- * @author Veth
- */
+
 public class UczenUwagiController implements Initializable {
 
-    @FXML
-    private AnchorPane rootPane;
-
-    @FXML
+ @FXML
     private Button ocenybtn;
     @FXML
     private Button nieobecnoscibtn;
     @FXML
-    private Button kontaktbtn;
+    private Button uwagibtn;
     @FXML
     private Button wylogujbtn;
- 
+    @FXML
+    private Text increment;
+    @FXML
+    private AnchorPane rootPane;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
 
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-    }
-     @FXML
-    private void logout(){
-        //todo
-    }
-    //ładujemy defaultowe okno z uwagami
-        @FXML
-    private void LoadUwagi(ActionEvent event) throws IOException {
-          AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
-          rootPane.getChildren().setAll(pane);
+    private void handleButtonAction(ActionEvent event) throws IOException {
+
     }
 
-  
+    @FXML
+    private void logout() {
+        //todo 
+    }
+
+    //ładujemy okno z ocenami uczenia.
+    @FXML
+    private void LoadNieobecnosci(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
+        rootPane.getChildren().setAll(pane);
+    }
+
+    @FXML
+    private void LoadOceny(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
+        rootPane.getChildren().setAll(pane);
+    }
+
+    @FXML
+    private void LoadUwagi(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
+        rootPane.getChildren().setAll(pane);
+    }
+
 }
+

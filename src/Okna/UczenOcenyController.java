@@ -17,11 +17,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
-/**
- * FXML Controller class
- *
- * @author Veth
- */
+
 public class UczenOcenyController implements Initializable {
 
     @FXML
@@ -32,31 +28,44 @@ public class UczenOcenyController implements Initializable {
     @FXML
     private Button nieobecnoscibtn;
     @FXML
-    private Button kontaktbtn;
+    private Button uwagibtn;
     @FXML
     private Button wylogujbtn;
- 
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
     }
-     @FXML
-    private void logout(){
+
+    @FXML
+    private void logout() {
         //todo
     }
+
     //ładujemy defaultowe okno z ocenami ucznia
-        @FXML
+    @FXML
     private void LoadOceny(ActionEvent event) throws IOException {
-          AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
-          rootPane.getChildren().setAll(pane);
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
+        rootPane.getChildren().setAll(pane);
     }
 
-  
+    @FXML
+    private void LoadNieobecnosci(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
+        rootPane.getChildren().setAll(pane);
+    }
+
+    @FXML
+    private void LoadUwagi(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
+        rootPane.getChildren().setAll(pane);
+    }
+
 }
