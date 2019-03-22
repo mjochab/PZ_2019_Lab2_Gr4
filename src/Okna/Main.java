@@ -15,9 +15,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        //Main, tutaj odpali się pierwsze logowanie.
-        //Kasia tutaj Logowanie.fxml nizej
-        Parent root = FXMLLoader.load(getClass().getResource("Rodzic.fxml"));
+        
+        Parent root = FXMLLoader.load(getClass().getResource("Uczen.fxml"));
       
         primaryStage.setScene(new Scene(root));
         primaryStage.show();

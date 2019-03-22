@@ -22,10 +22,11 @@ import javafx.scene.text.Text;
  *
  * @author Veth
  */
-public class RodzicController implements Initializable {
+public class UczenOcenyController implements Initializable {
 
-    
-   
+    @FXML
+    private AnchorPane rootPane;
+
     @FXML
     private Button uczenbtn;
     @FXML
@@ -34,13 +35,9 @@ public class RodzicController implements Initializable {
     private Button kontaktbtn;
     @FXML
     private Button wylogujbtn;
-    @FXML
-    private Text increment;
+ 
     @FXML
     private Button usprawiedliwbtn;
-    @FXML
-    private AnchorPane rootPane;
-   
 
     /**
      * Initializes the controller class.
@@ -51,20 +48,18 @@ public class RodzicController implements Initializable {
     }    
 
     @FXML
-    private void handleButtonAction(ActionEvent event) throws IOException {
-
+    private void handleButtonAction(ActionEvent event) {
     }
-    
-    @FXML
+     @FXML
     private void logout(){
-        //todo 
+        //todo
     }
-    
-    //ładujemy okno z ocenami uczenia.
-    @FXML
-      private void LoadUczen(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("RodzicOceny.fxml"));
-             rootPane.getChildren().setAll(pane);
+    //ładujemy defaultowe okno z usprawiedliwieniami i nieobecnosciami ucznia
+        @FXML
+    private void LoadDefault(ActionEvent event) throws IOException {
+          AnchorPane pane = FXMLLoader.load(getClass().getResource("Uczen.fxml"));
+          rootPane.getChildren().setAll(pane);
     }
-    
+
+  
 }
