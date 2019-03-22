@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Okna.UczenController">
+   <children>
+      <AnchorPane layoutX="313.0" layoutY="44.0" prefHeight="580.0" prefWidth="973.0">
+         <children>
+            <ScrollPane fx:id="scrollView" layoutX="7.0" prefHeight="580.0" prefWidth="960.0">
+               <content>
+                  <TableView prefHeight="575.0" prefWidth="956.0">
+                     <columns>
+                        <TableColumn prefWidth="150.0" text="Data" />
+                        <TableColumn prefWidth="803.0" text="Uwaga" />
+                     </columns>
+                  </TableView>
+               </content>
+            </ScrollPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="-6.0" prefHeight="726.0" prefWidth="248.0">
+         <children>
+            <Button fx:id="ocenybtn" layoutX="14.0" layoutY="44.0" mnemonicParsing="false" onAction="#LoadUczen" prefHeight="25.0" prefWidth="248.0" text="Oceny" />
+            <Button fx:id="nieobecnoscibtn" layoutX="14.0" layoutY="83.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="248.0" text="Nieobecności" />
+            <Button fx:id="uwagibtn" layoutX="14.0" layoutY="121.0" mnemonicParsing="false" onAction="#LoadUczenUwagiController" prefHeight="25.0" prefWidth="248.0" text="Uwagi" />
+            <Button fx:id="wylogujbtn" layoutX="14.0" layoutY="162.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />
+            <Label fx:id="userid1" layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="177.0" text="Dziennik elektroniczny.net" />
+         </children>
+      </AnchorPane>
+      <Label layoutX="1026.0" layoutY="14.0" prefHeight="17.0" prefWidth="97.0" text="Zalogowano jako" />
+      <Label fx:id="userid" layoutX="1123.0" layoutY="14.0" prefHeight="17.0" prefWidth="97.0" text="tu login" />
+   </children>
+</AnchorPane>

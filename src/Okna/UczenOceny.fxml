@@ -15,9 +15,11 @@
                <content>
                   <TableView prefHeight="575.0" prefWidth="956.0">
                     <columns>
-                      <TableColumn prefWidth="95.0" text="Polski" />
-                      <TableColumn prefWidth="88.0" text="Niemiecki" />
-                        <TableColumn prefWidth="128.0" text="Angielski" />
+                      <TableColumn prefWidth="95.0" text="j. polski" />
+                      <TableColumn prefWidth="88.0" text="j. niemiecki" />
+                        <TableColumn prefWidth="99.0" text="j. angielski" />
+                        <TableColumn prefWidth="79.0" text="geografia" />
+                        <TableColumn prefWidth="100.0" text="matematyka" />
                     </columns>
                   </TableView>
                </content>
@@ -26,14 +28,13 @@
       </AnchorPane>
       <AnchorPane layoutX="-6.0" prefHeight="726.0" prefWidth="248.0">
          <children>
-            <Button fx:id="uczenbtn" layoutX="5.0" layoutY="44.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="248.0" text="Uczeń" />
-            <Button fx:id="nieobecnoscibtn" layoutX="5.0" layoutY="69.0" mnemonicParsing="false" onAction="#LoadDefault" prefHeight="25.0" prefWidth="248.0" text="Nieobecności" />
-            <Button fx:id="kontaktbtn" layoutX="5.0" layoutY="94.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="248.0" text="Kontakt" />
-            <Button fx:id="wylogujbtn" layoutX="5.0" layoutY="119.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />
+            <Button fx:id="uczenbtn" layoutX="14.0" layoutY="52.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="248.0" text="Oceny" />
+            <Button fx:id="nieobecnoscibtn" layoutX="14.0" layoutY="91.0" mnemonicParsing="false" onAction="#LoadDefault" prefHeight="25.0" prefWidth="248.0" text="Nieobecności" />
+            <Button fx:id="kontaktbtn" layoutX="14.0" layoutY="133.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="248.0" text="Uwagi" />
+            <Button fx:id="wylogujbtn" layoutX="14.0" layoutY="171.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />
                <Label fx:id="userid1" layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="177.0" text="Dziennik elektroniczny.net" />
          </children>
       </AnchorPane>
-      <Button fx:id="usprawiedliwbtn" layoutX="1166.0" layoutY="639.0" mnemonicParsing="false" text="Usprawiedliw" />
       <Label layoutX="1026.0" layoutY="14.0" prefHeight="17.0" prefWidth="217.0" text="Zalogowano jako " />
        <Label fx:id="userid" layoutX="1123.0" layoutY="14.0" prefHeight="17.0" prefWidth="97.0" text="tu login" />
    </children>

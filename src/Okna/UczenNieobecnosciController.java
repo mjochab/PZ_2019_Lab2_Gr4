@@ -22,22 +22,20 @@ import javafx.scene.text.Text;
  *
  * @author Veth
  */
-public class UczenController implements Initializable {
+public class UczenNieobecnosciController implements Initializable {
 
     
    
     @FXML
-    private Button uczenbtn;
+    private Button ocenybtn;
     @FXML
     private Button nieobecnoscibtn;
     @FXML
-    private Button kontaktbtn;
+    private Button uwagibtn;
     @FXML
     private Button wylogujbtn;
     @FXML
     private Text increment;
-    @FXML
-    private Button usprawiedliwbtn;
     @FXML
     private AnchorPane rootPane;
    
@@ -63,7 +61,7 @@ public class UczenController implements Initializable {
     //ładujemy okno z ocenami uczenia.
     @FXML
       private void LoadUczen(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
              rootPane.getChildren().setAll(pane);
     }
     

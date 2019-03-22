@@ -22,7 +22,7 @@ import javafx.scene.text.Text;
  *
  * @author Veth
  */
-public class UczenOcenyController implements Initializable {
+public class UczenUwagiController implements Initializable {
 
     @FXML
     private AnchorPane rootPane;
@@ -51,10 +51,10 @@ public class UczenOcenyController implements Initializable {
     private void logout(){
         //todo
     }
-    //ładujemy defaultowe okno z ocenami ucznia
+    //ładujemy defaultowe okno z uwagami
         @FXML
-    private void LoadOceny(ActionEvent event) throws IOException {
-          AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
+    private void LoadUwagi(ActionEvent event) throws IOException {
+          AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
           rootPane.getChildren().setAll(pane);
     }
 
