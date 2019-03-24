@@ -43,12 +43,18 @@ public class Dyrektor_rodzicController implements Initializable {
     private void Lougout_pan() {
     }
     @FXML
-    private void LoadNauczyciel() {
+    private void LoadNauczyciel(ActionEvent event) throws IOException {
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor.fxml"));
+             rootPane.getChildren().setAll(pane);
     }
     @FXML
-    private void LoadRodzic(){
+    private void LoadRodzic(ActionEvent event) throws IOException {
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor_rodzic.fxml"));
+             rootPane.getChildren().setAll(pane);
     }
     @FXML
-    private void LoadUczen(){
+    private void LoadUczen(ActionEvent event) throws IOException {
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor_uczen.fxml"));
+             rootPane.getChildren().setAll(pane);
     }
 }
