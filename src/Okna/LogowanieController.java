@@ -39,8 +39,23 @@ public class LogowanieController implements Initializable {
         // TODO
     }
     @FXML
-    private void logIn(ActionEvent event) throws IOException {
+    private void logDyrektor(ActionEvent event) throws IOException {
             AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor.fxml"));
+             rootPane.getChildren().setAll(pane);
+    }
+    @FXML
+    private void logNauczyciel(ActionEvent event) throws IOException {
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("NauczycielKlasy.fxml"));
+             rootPane.getChildren().setAll(pane);
+    }
+    @FXML
+    private void logRodzic(ActionEvent event) throws IOException {
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("Rodzic.fxml"));
+             rootPane.getChildren().setAll(pane);
+    }
+    @FXML
+    private void logUczen(ActionEvent event) throws IOException {
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
              rootPane.getChildren().setAll(pane);
     }
 

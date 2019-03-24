@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Okna;
+package oknoNauczyciel;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,21 +17,14 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
+public class DodajUsprawiedliwienieController implements Initializable {
 
-public class UczenUwagiController implements Initializable {
-
- @FXML
-    private Button ocenybtn;
     @FXML
-    private Button nieobecnoscibtn;
-    @FXML
-    private Button uwagibtn;
-    @FXML
-    private Button wylogujbtn;
-    @FXML
-    private Text increment;
+    private Button dodaj_usprabtn;
     @FXML
     private AnchorPane rootPane;
+    @FXML
+    private Button powrotbtn;
 
     /**
      * Initializes the controller class.
@@ -53,22 +46,9 @@ public class UczenUwagiController implements Initializable {
 
     //ładujemy okno z ocenami uczenia.
     @FXML
-    private void LoadNieobecnosci(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
-        rootPane.getChildren().setAll(pane);
-    }
-
-    @FXML
-    private void LoadOceny(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
-        rootPane.getChildren().setAll(pane);
-    }
-
-    @FXML
-    private void LoadUwagi(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
+    private void LoadPowrot(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("Klasa.fxml"));
         rootPane.getChildren().setAll(pane);
     }
 
 }
-

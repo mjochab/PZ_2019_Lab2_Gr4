@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Okna;
+package oknoRodzic;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,20 +17,27 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
-
-public class UczenOcenyController implements Initializable {
+/**
+ * FXML Controller class
+ *
+ * @author Veth
+ */
+public class RodzicOcenyController implements Initializable {
 
     @FXML
     private AnchorPane rootPane;
 
     @FXML
-    private Button ocenybtn;
+    private Button uczenbtn;
     @FXML
     private Button nieobecnoscibtn;
     @FXML
-    private Button uwagibtn;
+    private Button kontaktbtn;
     @FXML
     private Button wylogujbtn;
+ 
+    @FXML
+    private Button usprawiedliwbtn;
 
     /**
      * Initializes the controller class.
@@ -38,34 +45,21 @@ public class UczenOcenyController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }
+    }    
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
     }
-
-    @FXML
-    private void logout() {
+     @FXML
+    private void logout(){
         //todo
     }
-
-    //ładujemy defaultowe okno z ocenami ucznia
-    @FXML
-    private void LoadOceny(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
-        rootPane.getChildren().setAll(pane);
+    //ładujemy defaultowe okno z usprawiedliwieniami i nieobecnosciami ucznia
+        @FXML
+    private void LoadDefault(ActionEvent event) throws IOException {
+          AnchorPane pane = FXMLLoader.load(getClass().getResource("Rodzic.fxml"));
+          rootPane.getChildren().setAll(pane);
     }
 
-    @FXML
-    private void LoadNieobecnosci(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
-        rootPane.getChildren().setAll(pane);
-    }
-
-    @FXML
-    private void LoadUwagi(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
-        rootPane.getChildren().setAll(pane);
-    }
-
+  
 }

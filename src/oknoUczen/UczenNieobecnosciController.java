@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Okna;
+package oknoUczen;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,21 +19,20 @@ import javafx.scene.text.Text;
 
 
 
-public class KlasaController implements Initializable {
+public class UczenNieobecnosciController implements Initializable {
 
     @FXML
-    private Button dodaj_ocenebtn;
+    private Button ocenybtn;
     @FXML
-    private Button dodaj_nieobecnoscbtn;
+    private Button nieobecnoscibtn;
     @FXML
-    private Button usprawiedliwbtn;
+    private Button uwagibtn;
+    @FXML
+    private Button wylogujbtn;
     @FXML
     private Text increment;
     @FXML
     private AnchorPane rootPane;
-    @FXML
-    private Button powrotbtn;
-    
 
     /**
      * Initializes the controller class.
@@ -55,26 +54,21 @@ public class KlasaController implements Initializable {
 
     //ładujemy okno z ocenami uczenia.
     @FXML
-    private void LoadPowrot(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("NauczycielKlasy.fxml"));
+    private void LoadNieobecnosci(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
         rootPane.getChildren().setAll(pane);
     }
 
     @FXML
-    private void LoadDodajOcene(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("DodajOcene.fxml"));
+    private void LoadOceny(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
         rootPane.getChildren().setAll(pane);
     }
 
     @FXML
-    private void LoadDodajNieobecnosc(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("DodajNieobecnosc.fxml"));
+    private void LoadUwagi(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
         rootPane.getChildren().setAll(pane);
     }
-    @FXML
-    private void LoadUsprawiedliw(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("DodajUsprawiedliwienie.fxml"));
-        rootPane.getChildren().setAll(pane);
-    }
-    
+
 }

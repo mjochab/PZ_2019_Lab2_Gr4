@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Okna;
+package oknoUczen;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,13 +18,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 
+public class UczenUwagiController implements Initializable {
 
-public class NauczycielKlasyController implements Initializable {
-
+ @FXML
+    private Button ocenybtn;
     @FXML
-    private Button klasa_1btn;
+    private Button nieobecnoscibtn;
     @FXML
-    private Button klasa_2btn;
+    private Button uwagibtn;
     @FXML
     private Button wylogujbtn;
     @FXML
@@ -52,9 +53,22 @@ public class NauczycielKlasyController implements Initializable {
 
     //ładujemy okno z ocenami uczenia.
     @FXML
-    private void LoadKlasa(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("Klasa.fxml"));
+    private void LoadNieobecnosci(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
+        rootPane.getChildren().setAll(pane);
+    }
+
+    @FXML
+    private void LoadOceny(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
+        rootPane.getChildren().setAll(pane);
+    }
+
+    @FXML
+    private void LoadUwagi(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
         rootPane.getChildren().setAll(pane);
     }
 
 }
+

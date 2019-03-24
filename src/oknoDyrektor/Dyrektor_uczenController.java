@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Okna;
+package oknoDyrektor;
 
 import java.io.IOException;
 import java.net.URL;
@@ -40,7 +40,9 @@ public class Dyrektor_uczenController implements Initializable {
         // TODO
     }    
     @FXML
-    private void Lougout_pan() {
+    private void Lougout_pan(ActionEvent event) throws IOException {
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("Logowanie.fxml"));
+             rootPane.getChildren().setAll(pane);
     }
     @FXML
     private void LoadNauczyciel(ActionEvent event) throws IOException {

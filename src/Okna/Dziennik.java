@@ -12,16 +12,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- *
- * @author Kasia
- */
 public class Dziennik extends Application {
 
        @Override
     public void start(Stage primaryStage) throws Exception{
-        //Parent root = FXMLLoader.load(getClass().getResource("Logowanie.fxml"));  
-        Parent root = FXMLLoader.load(getClass().getResource("Dyrektor.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("Logowanie.fxml"));  
+        //Parent root = FXMLLoader.load(getClass().getResource("Dyrektor.fxml"));
         //Parent root = FXMLLoader.load(getClass().getResource("NauczycielKlasy.fxml"));
         //Parent root = FXMLLoader.load(getClass().getResource("Rodzic.fxml"));
         primaryStage.setScene(new Scene(root));

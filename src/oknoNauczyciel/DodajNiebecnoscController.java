@@ -1,9 +1,11 @@
+package oknoNauczyciel;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Okna;
+
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,10 +19,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
-public class DodajUsprawiedliwienieController implements Initializable {
+public class DodajNiebecnoscController implements Initializable {
 
     @FXML
-    private Button dodaj_usprabtn;
+    private Button dodaj_nieobecnoscbtn;
     @FXML
     private AnchorPane rootPane;
     @FXML
@@ -50,5 +52,4 @@ public class DodajUsprawiedliwienieController implements Initializable {
         AnchorPane pane = FXMLLoader.load(getClass().getResource("Klasa.fxml"));
         rootPane.getChildren().setAll(pane);
     }
-
 }
