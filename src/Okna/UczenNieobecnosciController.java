@@ -17,30 +17,22 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
-/**
- * FXML Controller class
- *
- * @author Veth
- */
-public class RodzicController implements Initializable {
 
-    
-   
+
+public class UczenNieobecnosciController implements Initializable {
+
     @FXML
-    private Button uczenbtn;
+    private Button ocenybtn;
     @FXML
     private Button nieobecnoscibtn;
     @FXML
-    private Button kontaktbtn;
+    private Button uwagibtn;
     @FXML
     private Button wylogujbtn;
     @FXML
     private Text increment;
     @FXML
-    private Button usprawiedliwbtn;
-    @FXML
     private AnchorPane rootPane;
-   
 
     /**
      * Initializes the controller class.
@@ -48,23 +40,35 @@ public class RodzicController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
 
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException {
 
     }
-    
+
     @FXML
-    private void logout(){
+    private void logout() {
         //todo 
     }
-    
+
     //ładujemy okno z ocenami uczenia.
     @FXML
-      private void LoadUczen(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("RodzicOceny.fxml"));
-             rootPane.getChildren().setAll(pane);
+    private void LoadNieobecnosci(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
+        rootPane.getChildren().setAll(pane);
     }
-    
+
+    @FXML
+    private void LoadOceny(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
+        rootPane.getChildren().setAll(pane);
+    }
+
+    @FXML
+    private void LoadUwagi(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
+        rootPane.getChildren().setAll(pane);
+    }
+
 }
