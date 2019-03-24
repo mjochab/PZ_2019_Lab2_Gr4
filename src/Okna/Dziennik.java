@@ -23,6 +23,7 @@ public class Dziennik extends Application {
         //Parent root = FXMLLoader.load(getClass().getResource("Logowanie.fxml"));  
         Parent root = FXMLLoader.load(getClass().getResource("Dyrektor.fxml"));
         //Parent root = FXMLLoader.load(getClass().getResource("NauczycielKlasy.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("Rodzic.fxml"));
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
