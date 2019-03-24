@@ -48,8 +48,9 @@ public class UczenNieobecnosciController implements Initializable {
     }
 
     @FXML
-    private void logout() {
-        //todo 
+    private void logout(ActionEvent event) throws IOException {
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("/Okna/Logowanie.fxml"));
+             rootPane.getChildren().setAll(pane);
     }
 
     //ładujemy okno z ocenami uczenia.

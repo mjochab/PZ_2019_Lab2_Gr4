@@ -40,8 +40,8 @@ public class Dyrektor_rodzicController implements Initializable {
         // TODO
     }    
     @FXML
-    private void Lougout_pan(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("Logowanie.fxml"));
+    private void logout(ActionEvent event) throws IOException {
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("/Okna/Logowanie.fxml"));
              rootPane.getChildren().setAll(pane);
     }
     @FXML

@@ -50,9 +50,10 @@ public class RodzicOcenyController implements Initializable {
     @FXML
     private void handleButtonAction(ActionEvent event) {
     }
-     @FXML
-    private void logout(){
-        //todo
+    @FXML
+    private void logout(ActionEvent event) throws IOException {
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("/Okna/Logowanie.fxml"));
+             rootPane.getChildren().setAll(pane);
     }
     //ładujemy defaultowe okno z usprawiedliwieniami i nieobecnosciami ucznia
         @FXML

@@ -54,7 +54,7 @@
                 <Button fx:id="nauczycielbtn" layoutX="7.0" layoutY="50.0" mnemonicParsing="false" onAction="#LoadNauczyciel" prefHeight="25.0" prefWidth="248.0" text="Nauczyciel" />
                 <Button fx:id="uczenbtn" layoutX="7.0" layoutY="85.0" mnemonicParsing="false" onAction="#LoadUczen" prefHeight="25.0" prefWidth="248.0" text="Uczeń" />
                 <Button fx:id="rodzicbtn" layoutX="7.0" layoutY="120.0" mnemonicParsing="false" onAction="#LoadRodzic" prefHeight="25.0" prefWidth="248.0" text="Rodzic" />
-                <Button fx:id="wylogujbtn" layoutX="7.0" layoutY="171.0" mnemonicParsing="false" onAction="#Lougout_pan" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />
+                <Button fx:id="wylogujbtn" layoutX="7.0" layoutY="171.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />
              </children>
           </AnchorPane>
     </children>

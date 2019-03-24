@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import oknoDyrektor.*;
 
 /**
  * FXML Controller class
@@ -40,22 +41,22 @@ public class LogowanieController implements Initializable {
     }
     @FXML
     private void logDyrektor(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor.fxml"));
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("/oknoDyrektor/Dyrektor.fxml"));
              rootPane.getChildren().setAll(pane);
     }
     @FXML
     private void logNauczyciel(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("NauczycielKlasy.fxml"));
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("/oknoNauczyciel/NauczycielKlasy.fxml"));
              rootPane.getChildren().setAll(pane);
     }
     @FXML
     private void logRodzic(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("Rodzic.fxml"));
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("/oknoRodzic/Rodzic.fxml"));
              rootPane.getChildren().setAll(pane);
     }
     @FXML
     private void logUczen(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("/oknoUczen/UczenOceny.fxml"));
              rootPane.getChildren().setAll(pane);
     }
 
