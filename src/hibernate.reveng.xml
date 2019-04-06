@@ -38,14 +38,14 @@ Version 2 license, then the option applies only if the new code is
 made subject to such option by the copyright holder.
 
 Contributor(s):
---> 
+-->
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="dziennik_elektroniczny"/>
-  <table-filter match-name="klasa"/>
-  <table-filter match-name="uczen"/>
-  <table-filter match-name="przedmiot"/>
-  <table-filter match-name="rodzic"/>
-  <table-filter match-name="nauczyciel"/>
   <table-filter match-name="ocena"/>
+  <table-filter match-name="rodzic"/>
+  <table-filter match-name="uczen"/>
+  <table-filter match-name="klasa"/>
   <table-filter match-name="obecnosc"/>
+  <table-filter match-name="nauczyciel"/>
+  <table-filter match-name="przedmiot"/>
 </hibernate-reverse-engineering>

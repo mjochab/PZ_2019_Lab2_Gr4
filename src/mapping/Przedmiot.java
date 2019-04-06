@@ -1,5 +1,5 @@
 package mapping;
-// Generated 6 kwi 2019, 17:33:07 by Hibernate Tools 4.3.1
+// Generated 6 kwi 2019, 22:02:14 by Hibernate Tools 4.3.1
 
 
 
