@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 6 kwi 2019, 17:33:07 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="mapping.Uczen" table="uczen" catalog="dziennik_elektroniczny" optimistic-lock="version">
+        <id name="pesel" type="int">
+            <column name="pesel" />
+            <generator class="assigned" />
+        </id>
+        <property name="nazwaKlasy" type="string">
+            <column name="nazwa_klasy" length="2" />
+        </property>
+        <property name="imie" type="string">
+            <column name="imie" length="30" />
+        </property>
+        <property name="nazwisko" type="string">
+            <column name="nazwisko" length="30" />
+        </property>
+    </class>
+</hibernate-mapping>
