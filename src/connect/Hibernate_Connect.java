@@ -15,16 +15,9 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
-/**
- * Hibernate Utility class with a convenient method to get Session Factory
- * object.
- *
- * @author Kasia
- */
 public class Hibernate_Connect {
 /*
-    private static final SessionFactory sessionFactory;
-    
+    private static final SessionFactory sessionFactory;   
     static {
         try {
             // Create the SessionFactory from standard (hibernate.cfg.xml) 
@@ -35,14 +28,15 @@ public class Hibernate_Connect {
             System.err.println("Initial SessionFactory creation failed." + ex);
             throw new ExceptionInInitializerError(ex);
         }
-    }
-    
+    } 
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
     */
    public static void main(String[] args) {
         Przedmiot przedmiot1 = new Przedmiot("Matma");
+        Przedmiot przedmiot2 = new Przedmiot("Religia");
+        Przedmiot przedmiot3 = new Przedmiot("Wychowanie fizyczne");
 
         Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
 
@@ -52,8 +46,10 @@ public class Hibernate_Connect {
         Session session = factory.openSession();       
         Transaction transaction = session.beginTransaction();
 
+        przedmiot1.setNazwaPrzedmiotu("Matematyka");
         session.save(przedmiot1);
-
+        session.save(przedmiot2);
+        session.save(przedmiot3);
         transaction.commit();
 
         session.close();        

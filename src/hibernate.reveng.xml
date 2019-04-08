@@ -39,6 +39,10 @@ made subject to such option by the copyright holder.
 
 Contributor(s):
 -->
+<!-- Dzięki temu plikowi stworzyć można dokumenty opisujące odwzorowanie bazy danych. Skorzystano z narządzia 
+generującego POJO i odwzorowania z tabel bazy danych na zasadzie reverse engineering (Hibernate Mapping Files and POJOs from Database).
+Każdej z tabeli z bazy danych przypisano dokument dokładnie opisujący odwzorowanie(pliki z rozszerzeniem hbm.xlm w paczce mapping)-->
+
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="dziennik_elektroniczny"/>
   <table-filter match-name="ocena"/>
