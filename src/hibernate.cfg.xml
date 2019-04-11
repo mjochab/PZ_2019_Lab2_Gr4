@@ -48,6 +48,9 @@ Contributor(s):
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password"/>
+<!--    <property name="hibernate.hbm2ddl.auto">create-drop</property>
+    <property name="hibernate.hbm2ddl.import_files">Dziennik_CREATE.sql</property>-->
+    
     <!-- <property name="hibernate.hbm2ddl.auto">drop</property> -->
     <!-- Mapping resource został wygenerowany automatycznie dla każdej tabeli podanej w bazie danych podczas 
     tworzenia pliku z Hibernate Reverse Engineering Wizard (plik hibernate.reveng.xml)-->
