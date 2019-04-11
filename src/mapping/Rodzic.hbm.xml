@@ -11,11 +11,17 @@
         <property name="dziecko" type="java.lang.Integer">
             <column name="dziecko" />
         </property>
-        <property name="imie" type="string">
-            <column name="imie" length="30" />
+        <property name="imie_ojca" type="string">
+            <column name="imie_ojca" length="30" />
         </property>
-        <property name="nazwisko" type="string">
-            <column name="nazwisko" length="30" />
+        <property name="nazwisko_ojca" type="string">
+            <column name="nazwisko_ojca" length="30" />
+        </property>
+        <property name="imie_matki" type="string">
+            <column name="imie_matki" length="30" />
+        </property>
+        <property name="nazwisko_matki" type="string">
+            <column name="nazwisko_matki" length="30" />
         </property>
     </class>
 </hibernate-mapping>

@@ -11,51 +11,76 @@ public class Rodzic  implements java.io.Serializable {
 
      private int pesel;
      private Integer dziecko;
-     private String imie;
-     private String nazwisko;
+     private String imie_ojca;
+     private String nazwisko_ojca;
+     private String imie_matki;
+     private String nazwisko_matki;
 
     public Rodzic() {
     }
 
-	
-    public Rodzic(int pesel) {
+    public Rodzic(int pesel, Integer dziecko, String imie_ojca, String nazwisko_ojca, String imie_matki, String nazwisko_matki) {
         this.pesel = pesel;
+        this.dziecko = dziecko;
+        this.imie_ojca = imie_ojca;
+        this.nazwisko_ojca = nazwisko_ojca;
+        this.imie_matki = imie_matki;
+        this.nazwisko_matki = nazwisko_matki;
     }
-    public Rodzic(int pesel, Integer dziecko, String imie, String nazwisko) {
-       this.pesel = pesel;
-       this.dziecko = dziecko;
-       this.imie = imie;
-       this.nazwisko = nazwisko;
-    }
+
+	
    
+
     public int getPesel() {
-        return this.pesel;
+        return pesel;
     }
-    
+
+    public Integer getDziecko() {
+        return dziecko;
+    }
+
+    public String getImie_ojca() {
+        return imie_ojca;
+    }
+
+    public String getNazwisko_ojca() {
+        return nazwisko_ojca;
+    }
+
+    public String getImie_matki() {
+        return imie_matki;
+    }
+
+    public String getNazwisko_matki() {
+        return nazwisko_matki;
+    }
+
     public void setPesel(int pesel) {
         this.pesel = pesel;
     }
-    public Integer getDziecko() {
-        return this.dziecko;
-    }
-    
+
     public void setDziecko(Integer dziecko) {
         this.dziecko = dziecko;
     }
-    public String getImie() {
-        return this.imie;
+
+    public void setImie_ojca(String imie_ojca) {
+        this.imie_ojca = imie_ojca;
     }
-    
-    public void setImie(String imie) {
-        this.imie = imie;
+
+    public void setNazwisko_ojca(String nazwisko_ojca) {
+        this.nazwisko_ojca = nazwisko_ojca;
     }
-    public String getNazwisko() {
-        return this.nazwisko;
+
+    public void setImie_matki(String imie_matki) {
+        this.imie_matki = imie_matki;
     }
-    
-    public void setNazwisko(String nazwisko) {
-        this.nazwisko = nazwisko;
+
+    public void setNazwisko_matki(String nazwisko_matki) {
+        this.nazwisko_matki = nazwisko_matki;
     }
+
+   
+ 
 
 
 

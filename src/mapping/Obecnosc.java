@@ -12,7 +12,7 @@ public class Obecnosc  implements java.io.Serializable {
 
      private int pesel;
      private Date data;
-     private Boolean wartosc;
+     private Boolean status;
 
     public Obecnosc() {
     }
@@ -24,7 +24,7 @@ public class Obecnosc  implements java.io.Serializable {
     public Obecnosc(int pesel, Date data, Boolean wartosc) {
        this.pesel = pesel;
        this.data = data;
-       this.wartosc = wartosc;
+       this.status = wartosc;
     }
    
     public int getPesel() {
@@ -41,12 +41,12 @@ public class Obecnosc  implements java.io.Serializable {
     public void setData(Date data) {
         this.data = data;
     }
-    public Boolean getWartosc() {
-        return this.wartosc;
+    public Boolean getStatus() {
+        return this.status;
     }
     
-    public void setWartosc(Boolean wartosc) {
-        this.wartosc = wartosc;
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
 

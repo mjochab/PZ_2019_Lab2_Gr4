@@ -11,8 +11,8 @@
         <property name="data" type="date">
             <column name="data" length="10" />
         </property>
-        <property name="wartosc" type="java.lang.Boolean">
-            <column name="wartosc" />
+        <property name="status" type="java.lang.Boolean">
+            <column name="status" />
         </property>
     </class>
 </hibernate-mapping>

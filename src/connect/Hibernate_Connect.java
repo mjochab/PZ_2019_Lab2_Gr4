@@ -46,7 +46,7 @@ public class Hibernate_Connect {
         Session session = factory.openSession();       
         Transaction transaction = session.beginTransaction();
 
-        przedmiot1.setNazwaPrzedmiotu("Matematyka");
+        przedmiot1.setNazwaPrzedmiotu("rajoczita");
         session.save(przedmiot1);
         session.save(przedmiot2);
         session.save(przedmiot3);

@@ -52,4 +52,5 @@ Każdej z tabeli z bazy danych przypisano dokument dokładnie opisujący odwzoro
   <table-filter match-name="obecnosc"/>
   <table-filter match-name="nauczyciel"/>
   <table-filter match-name="przedmiot"/>
+   <table-filter match-name="przedmiot_pomocnicza"/>
 </hibernate-reverse-engineering>

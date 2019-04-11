@@ -10,7 +10,7 @@ public class Nauczyciel  implements java.io.Serializable {
 
 
      private int pesel;
-     private String nazwaKlasy;
+  
      private String imie;
      private String nazwisko;
      private Boolean czyDyrektor;
@@ -22,9 +22,9 @@ public class Nauczyciel  implements java.io.Serializable {
     public Nauczyciel(int pesel) {
         this.pesel = pesel;
     }
-    public Nauczyciel(int pesel, String nazwaKlasy, String imie, String nazwisko, Boolean czyDyrektor) {
+    public Nauczyciel(int pesel, String imie, String nazwisko, Boolean czyDyrektor) {
        this.pesel = pesel;
-       this.nazwaKlasy = nazwaKlasy;
+      
        this.imie = imie;
        this.nazwisko = nazwisko;
        this.czyDyrektor = czyDyrektor;
@@ -37,13 +37,9 @@ public class Nauczyciel  implements java.io.Serializable {
     public void setPesel(int pesel) {
         this.pesel = pesel;
     }
-    public String getNazwaKlasy() {
-        return this.nazwaKlasy;
-    }
+  
     
-    public void setNazwaKlasy(String nazwaKlasy) {
-        this.nazwaKlasy = nazwaKlasy;
-    }
+   
     public String getImie() {
         return this.imie;
     }

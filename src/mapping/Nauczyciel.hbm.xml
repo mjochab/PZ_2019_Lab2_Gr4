@@ -8,9 +8,7 @@
             <column name="pesel" />
             <generator class="assigned" />
         </id>
-        <property name="nazwaKlasy" type="string">
-            <column name="nazwa_klasy" length="2" />
-        </property>
+
         <property name="imie" type="string">
             <column name="imie" length="30" />
         </property>
