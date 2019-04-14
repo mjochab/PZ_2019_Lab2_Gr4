@@ -48,7 +48,10 @@ Contributor(s):
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password"/>
-    <property name="hibernate.hbm2ddl.auto">update</property>
+    <!-- <property name="hibernate.hbm2ddl.auto">drop</property> -->
+    <!-- Mapping resource został wygenerowany automatycznie dla każdej tabeli podanej w bazie danych podczas 
+    tworzenia pliku z Hibernate Reverse Engineering Wizard (plik hibernate.reveng.xml)-->
+
     <mapping resource="mapping/Ocena.hbm.xml"/>
     <mapping resource="mapping/Uczen.hbm.xml"/>
     <mapping resource="mapping/Klasa.hbm.xml"/>
