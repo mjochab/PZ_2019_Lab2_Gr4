@@ -34,10 +34,10 @@ public class Hibernate_Connect {
     }
     */
    public static void main(String[] args) {
-        Przedmiot przedmiot1 = new Przedmiot("Matma");
+        /*Przedmiot przedmiot1 = new Przedmiot("Matma");
         Przedmiot przedmiot2 = new Przedmiot("Religia");
         Przedmiot przedmiot3 = new Przedmiot("Wychowanie fizyczne");
-
+        */
         Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
 
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().
@@ -46,10 +46,7 @@ public class Hibernate_Connect {
         Session session = factory.openSession();       
         Transaction transaction = session.beginTransaction();
 
-        przedmiot1.setNazwaPrzedmiotu("rajoczita");
-        session.save(przedmiot1);
-        session.save(przedmiot2);
-        session.save(przedmiot3);
+        
         transaction.commit();
 
         session.close();        
