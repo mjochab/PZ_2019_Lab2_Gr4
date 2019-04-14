@@ -44,11 +44,11 @@ Contributor(s):
     <!--Ustawienia względem dialektu języka bazy, adresu url bazy, sterownika - mysqlconnector, 
       użytkownika i hasła wygenerowanie podczas tworzenia i konfigurowania opcji tego pliku-->
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-    <property name="hibernate.connection.url">jdbc:mysql://localhost:80/dziennik_elektroniczny?createDatabaseIfNotExist=true</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/dziennik_elektroniczny?createDatabaseIfNotExist=true</property>
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password"/>
-    <!-- <property name="hibernate.hbm2ddl.auto">drop</property> -->
+    <property name="hibernate.hbm2ddl.auto">create</property>
     <!-- Mapping resource został wygenerowany automatycznie dla każdej tabeli podanej w bazie danych podczas 
     tworzenia pliku z Hibernate Reverse Engineering Wizard (plik hibernate.reveng.xml)-->
 
