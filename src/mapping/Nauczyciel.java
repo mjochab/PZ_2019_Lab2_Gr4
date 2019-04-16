@@ -1,5 +1,5 @@
 package mapping;
-// Generated 6 kwi 2019, 22:02:14 by Hibernate Tools 4.3.1
+// Generated 16 kwi 2019, 17:34:42 by Hibernate Tools 4.3.1
 
 
 
@@ -9,37 +9,30 @@ package mapping;
 public class Nauczyciel  implements java.io.Serializable {
 
 
-     private int pesel;
-  
+     private long pesel;
      private String imie;
      private String nazwisko;
-     private Boolean czyDyrektor;
 
     public Nauczyciel() {
     }
 
 	
-    public Nauczyciel(int pesel) {
+    public Nauczyciel(long pesel) {
         this.pesel = pesel;
     }
-    public Nauczyciel(int pesel, String imie, String nazwisko, Boolean czyDyrektor) {
+    public Nauczyciel(long pesel, String imie, String nazwisko) {
        this.pesel = pesel;
-      
        this.imie = imie;
        this.nazwisko = nazwisko;
-       this.czyDyrektor = czyDyrektor;
     }
    
-    public int getPesel() {
+    public long getPesel() {
         return this.pesel;
     }
     
-    public void setPesel(int pesel) {
+    public void setPesel(long pesel) {
         this.pesel = pesel;
     }
-  
-    
-   
     public String getImie() {
         return this.imie;
     }
@@ -53,13 +46,6 @@ public class Nauczyciel  implements java.io.Serializable {
     
     public void setNazwisko(String nazwisko) {
         this.nazwisko = nazwisko;
-    }
-    public Boolean getCzyDyrektor() {
-        return this.czyDyrektor;
-    }
-    
-    public void setCzyDyrektor(Boolean czyDyrektor) {
-        this.czyDyrektor = czyDyrektor;
     }
 
 

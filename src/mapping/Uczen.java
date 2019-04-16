@@ -1,5 +1,5 @@
 package mapping;
-// Generated 6 kwi 2019, 22:02:14 by Hibernate Tools 4.3.1
+// Generated 16 kwi 2019, 17:34:42 by Hibernate Tools 4.3.1
 
 
 
@@ -9,7 +9,7 @@ package mapping;
 public class Uczen  implements java.io.Serializable {
 
 
-     private int pesel;
+     private long pesel;
      private String nazwaKlasy;
      private String imie;
      private String nazwisko;
@@ -18,21 +18,21 @@ public class Uczen  implements java.io.Serializable {
     }
 
 	
-    public Uczen(int pesel) {
+    public Uczen(long pesel) {
         this.pesel = pesel;
     }
-    public Uczen(int pesel, String nazwaKlasy, String imie, String nazwisko) {
+    public Uczen(long pesel, String nazwaKlasy, String imie, String nazwisko) {
        this.pesel = pesel;
        this.nazwaKlasy = nazwaKlasy;
        this.imie = imie;
        this.nazwisko = nazwisko;
     }
    
-    public int getPesel() {
+    public long getPesel() {
         return this.pesel;
     }
     
-    public void setPesel(int pesel) {
+    public void setPesel(long pesel) {
         this.pesel = pesel;
     }
     public String getNazwaKlasy() {

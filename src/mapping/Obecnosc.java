@@ -1,5 +1,5 @@
 package mapping;
-// Generated 6 kwi 2019, 22:02:14 by Hibernate Tools 4.3.1
+// Generated 16 kwi 2019, 17:34:42 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -10,28 +10,28 @@ import java.util.Date;
 public class Obecnosc  implements java.io.Serializable {
 
 
-     private int pesel;
+     private long pesel;
      private Date data;
-     private Boolean status;
+     private Boolean wartosc;
 
     public Obecnosc() {
     }
 
 	
-    public Obecnosc(int pesel) {
+    public Obecnosc(long pesel) {
         this.pesel = pesel;
     }
-    public Obecnosc(int pesel, Date data, Boolean wartosc) {
+    public Obecnosc(long pesel, Date data, Boolean wartosc) {
        this.pesel = pesel;
        this.data = data;
-       this.status = wartosc;
+       this.wartosc = wartosc;
     }
    
-    public int getPesel() {
+    public long getPesel() {
         return this.pesel;
     }
     
-    public void setPesel(int pesel) {
+    public void setPesel(long pesel) {
         this.pesel = pesel;
     }
     public Date getData() {
@@ -41,12 +41,12 @@ public class Obecnosc  implements java.io.Serializable {
     public void setData(Date data) {
         this.data = data;
     }
-    public Boolean getStatus() {
-        return this.status;
+    public Boolean getWartosc() {
+        return this.wartosc;
     }
     
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setWartosc(Boolean wartosc) {
+        this.wartosc = wartosc;
     }
 
 

@@ -1,5 +1,5 @@
 package mapping;
-// Generated 6 kwi 2019, 22:02:14 by Hibernate Tools 4.3.1
+// Generated 16 kwi 2019, 17:34:42 by Hibernate Tools 4.3.1
 
 
 
@@ -9,78 +9,71 @@ package mapping;
 public class Rodzic  implements java.io.Serializable {
 
 
-     private int pesel;
-     private Integer dziecko;
-     private String imie_ojca;
-     private String nazwisko_ojca;
-     private String imie_matki;
-     private String nazwisko_matki;
+     private long pesel;
+     private Long dziecko;
+     private String imieOjca;
+     private String nazwiskoOjca;
+     private String imieMatki;
+     private String nazwiskoMatki;
 
     public Rodzic() {
     }
 
-    public Rodzic(int pesel, Integer dziecko, String imie_ojca, String nazwisko_ojca, String imie_matki, String nazwisko_matki) {
-        this.pesel = pesel;
-        this.dziecko = dziecko;
-        this.imie_ojca = imie_ojca;
-        this.nazwisko_ojca = nazwisko_ojca;
-        this.imie_matki = imie_matki;
-        this.nazwisko_matki = nazwisko_matki;
-    }
-
 	
-   
-
-    public int getPesel() {
-        return pesel;
-    }
-
-    public Integer getDziecko() {
-        return dziecko;
-    }
-
-    public String getImie_ojca() {
-        return imie_ojca;
-    }
-
-    public String getNazwisko_ojca() {
-        return nazwisko_ojca;
-    }
-
-    public String getImie_matki() {
-        return imie_matki;
-    }
-
-    public String getNazwisko_matki() {
-        return nazwisko_matki;
-    }
-
-    public void setPesel(int pesel) {
+    public Rodzic(long pesel) {
         this.pesel = pesel;
     }
-
-    public void setDziecko(Integer dziecko) {
+    public Rodzic(long pesel, Long dziecko, String imieOjca, String nazwiskoOjca, String imieMatki, String nazwiskoMatki) {
+       this.pesel = pesel;
+       this.dziecko = dziecko;
+       this.imieOjca = imieOjca;
+       this.nazwiskoOjca = nazwiskoOjca;
+       this.imieMatki = imieMatki;
+       this.nazwiskoMatki = nazwiskoMatki;
+    }
+   
+    public long getPesel() {
+        return this.pesel;
+    }
+    
+    public void setPesel(long pesel) {
+        this.pesel = pesel;
+    }
+    public Long getDziecko() {
+        return this.dziecko;
+    }
+    
+    public void setDziecko(Long dziecko) {
         this.dziecko = dziecko;
     }
-
-    public void setImie_ojca(String imie_ojca) {
-        this.imie_ojca = imie_ojca;
+    public String getImieOjca() {
+        return this.imieOjca;
     }
-
-    public void setNazwisko_ojca(String nazwisko_ojca) {
-        this.nazwisko_ojca = nazwisko_ojca;
+    
+    public void setImieOjca(String imieOjca) {
+        this.imieOjca = imieOjca;
     }
-
-    public void setImie_matki(String imie_matki) {
-        this.imie_matki = imie_matki;
+    public String getNazwiskoOjca() {
+        return this.nazwiskoOjca;
     }
-
-    public void setNazwisko_matki(String nazwisko_matki) {
-        this.nazwisko_matki = nazwisko_matki;
+    
+    public void setNazwiskoOjca(String nazwiskoOjca) {
+        this.nazwiskoOjca = nazwiskoOjca;
     }
-
-   
- 
+    public String getImieMatki() {
+        return this.imieMatki;
+    }
+    
+    public void setImieMatki(String imieMatki) {
+        this.imieMatki = imieMatki;
+    }
+    public String getNazwiskoMatki() {
+        return this.nazwiskoMatki;
+    }
+    
+    public void setNazwiskoMatki(String nazwiskoMatki) {
+        this.nazwiskoMatki = nazwiskoMatki;
+    }
 
 
 

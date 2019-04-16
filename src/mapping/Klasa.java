@@ -1,5 +1,5 @@
 package mapping;
-// Generated 6 kwi 2019, 22:02:14 by Hibernate Tools 4.3.1
+// Generated 16 kwi 2019, 17:34:42 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -12,7 +12,7 @@ public class Klasa  implements java.io.Serializable {
 
      private String nazwaKlasy;
      private Date rokSzkolny;
-     private Integer wychowawca;
+     private Long wychowawca;
 
     public Klasa() {
     }
@@ -21,7 +21,7 @@ public class Klasa  implements java.io.Serializable {
     public Klasa(String nazwaKlasy) {
         this.nazwaKlasy = nazwaKlasy;
     }
-    public Klasa(String nazwaKlasy, Date rokSzkolny, Integer wychowawca) {
+    public Klasa(String nazwaKlasy, Date rokSzkolny, Long wychowawca) {
        this.nazwaKlasy = nazwaKlasy;
        this.rokSzkolny = rokSzkolny;
        this.wychowawca = wychowawca;
@@ -41,11 +41,11 @@ public class Klasa  implements java.io.Serializable {
     public void setRokSzkolny(Date rokSzkolny) {
         this.rokSzkolny = rokSzkolny;
     }
-    public Integer getWychowawca() {
+    public Long getWychowawca() {
         return this.wychowawca;
     }
     
-    public void setWychowawca(Integer wychowawca) {
+    public void setWychowawca(Long wychowawca) {
         this.wychowawca = wychowawca;
     }
 
