@@ -41,13 +41,13 @@ Contributor(s):
 -->
 <hibernate-configuration>
   <session-factory>
-    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.MariaDBDialect</property>
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/dziennik_elektroniczny?createDatabaseIfNotExist=true</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost/dziennik_elektroniczny?createDatabaseIfNotExist=true</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.hbm2ddl.auto">create</property>
-    <property name="hibernate.dialect">org.hibernate.dialect.MariaDBDialect</property>
-    
+
+ 
     <mapping resource="mapping/Uczen.hbm.xml"/>
     <mapping resource="mapping/Obecnosc.hbm.xml"/>
     <mapping resource="mapping/Klasa.hbm.xml"/>
