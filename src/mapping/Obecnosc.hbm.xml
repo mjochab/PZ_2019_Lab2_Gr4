@@ -4,15 +4,21 @@
 <!-- Generated 16 kwi 2019, 17:34:43 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="mapping.Obecnosc" table="obecnosc" catalog="dziennik_elektroniczny" optimistic-lock="version">
-        <id name="pesel" type="long">
-            <column name="pesel" />
-            <generator class="assigned" />
+        <id name="id" type="long">
+            <column name="id" />
+            <generator class="increment" />
         </id>
+        <property name="pesel" type="long">
+            <column name="pesel" length="11" />
+        </property>
         <property name="data" type="date">
             <column name="data" length="10" />
         </property>
         <property name="wartosc" type="java.lang.Boolean">
             <column name="wartosc" />
+        </property>
+        <property name="przedmiot" type="string">
+              <column name="przedmiot" length="30" />
         </property>
     </class>
 </hibernate-mapping>

@@ -5,6 +5,9 @@
  */
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import mapping.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,11 +15,12 @@ import org.hibernate.Transaction;
 
 public class Hibernate_Connect  {
 
-   public static void main(String[] args) {
-        Przedmiot przedmiot1 = new Przedmiot("Dzialam?");
-        Przedmiot przedmiot2 = new Przedmiot("Religia");
-        Przedmiot przedmiot3 = new Przedmiot("Wychowanie fizyczne");
-        
+   public static void main(String[] args) throws ParseException {
+
+        //long pesel = 32222222221L;
+        //Obecnosc obecny = new Obecnosc(1,pesel,Utils.returnDate("15-12-2019"),true,"algebra_liniowa");
+
+
         //generator faktorii z klasy hibernateutil
         SessionFactory factory = HibernateUtil.getSessionFactory();
         Session session = factory.openSession();       
@@ -24,9 +28,8 @@ public class Hibernate_Connect  {
 
         
 
-        session.save(przedmiot1);
-        session.save(przedmiot1);
-        session.save(przedmiot1);
+        //session.save(obecny);
+
 
         transaction.commit();
         session.close();        
