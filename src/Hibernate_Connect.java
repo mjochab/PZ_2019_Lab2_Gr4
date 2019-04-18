@@ -19,56 +19,24 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 public class Hibernate_Connect  {
-    
-    private static final SessionFactory sessionFactory = buildSessionFactory();
 
-    private static SessionFactory buildSessionFactory() {
-        try {
-            // Create the SessionFactory from hibernate.cfg.xml
-            StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder() .configure("hibernate.cfg.xml").build();
-            Metadata metadata = new MetadataSources(standardRegistry).getMetadataBuilder().build();
-            return metadata.getSessionFactoryBuilder().build();
-        } 
-        catch (Throwable ex) {
-            // Make sure you log the exception, as it might be swallowed
-            System.err.println("Initial SessionFactory creation failed." + ex);
-            throw new ExceptionInInitializerError(ex);
-        }
-    }
-
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
-/*
-    private static final SessionFactory sessionFactory;   
-    static {
-        try {
-            // Create the SessionFactory from standard (hibernate.cfg.xml) 
-            // config file.
-            sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
-        } catch (Throwable ex) {
-            // Log the exception. 
-            System.err.println("Initial SessionFactory creation failed." + ex);
-            throw new ExceptionInInitializerError(ex);
-        }
-    } 
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
-    */
    public static void main(String[] args) {
         Przedmiot przedmiot1 = new Przedmiot("Dzialam?");
         Przedmiot przedmiot2 = new Przedmiot("Religia");
         Przedmiot przedmiot3 = new Przedmiot("Wychowanie fizyczne");
         
+        //generator faktorii z klasy hibernateutil
         SessionFactory factory = HibernateUtil.getSessionFactory();
         Session session = factory.openSession();       
         Transaction transaction = session.beginTransaction();
 
         
 
-//session.save(przedmiot1);
-transaction.commit();
+        session.save(przedmiot1);
+        session.save(przedmiot1);
+        session.save(przedmiot1);
+
+        transaction.commit();
         session.close();        
         factory.close();
 
