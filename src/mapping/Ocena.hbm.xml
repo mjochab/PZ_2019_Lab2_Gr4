@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 16 kwi 2019, 17:34:43 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="mapping.Ocena" table="ocena" catalog="dziennik_elektroniczny" optimistic-lock="version">
+        <id name="pesel" type="long">
+            <column name="pesel" />
+            <generator class="assigned" />
+        </id>
+        <property name="przedmiot" type="string">
+            <column name="przedmiot" length="30" />
+        </property>
+        <property name="stopien" type="string">
+            <column name="stopien" length="2" />
+        </property>
+        <property name="data" type="date">
+            <column name="data" length="10" />
+        </property>
+        <property name="opis" type="string">
+            <column name="opis" length="50" />
+        </property>
+    </class>
+</hibernate-mapping>
