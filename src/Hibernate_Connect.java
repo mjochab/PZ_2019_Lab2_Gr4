@@ -17,8 +17,8 @@ public class Hibernate_Connect  {
 
    public static void main(String[] args) throws ParseException {
 
-        //long pesel = 32222222221L;
-        //Obecnosc obecny = new Obecnosc(1,pesel,Utils.returnDate("15-12-2019"),true,"algebra_liniowa");
+        long pesel = 32222222221L;
+        Obecnosc obecny = new Obecnosc(pesel,Utils.returnDate("15-12-2019"),true,"algebra_liniowa");
 
 
         //generator faktorii z klasy hibernateutil
@@ -28,7 +28,7 @@ public class Hibernate_Connect  {
 
         
 
-        //session.save(obecny);
+        session.save(obecny);
 
 
         transaction.commit();
@@ -37,47 +37,7 @@ public class Hibernate_Connect  {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-//        Configuration config = new Configuration();
-//        config.configure();
-//        serviceRegistry = new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
-//        factory = config.buildSessionFactory(serviceRegistry);
-//        
-//        
-//        Session session = factory.openSession();
-//        Transaction tx = null;
-//        
-//        try
-//        {
-//            tx = session.beginTransaction();
-//            Przedmiot przedmiot = new Przedmiot();
-//            przedmiot.setNazwaPrzedmiotu("TestujemyCzyDziala");        
-//            
-//            System.out.println("niby dodano");
-//            tx.commit();
-//            session.save(przedmiot);
-//        } 
-//        catch (HibernateException ex)
-//        {
-//            if(tx != null)
-//                System.out.println("gowno");
-//        }
-//        finally
-//        {
-//            session.close();
-//        }
-//        
-//        
+   
         
   }
 
