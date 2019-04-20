@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 16 kwi 2019, 17:34:43 by Hibernate Tools 4.3.1 -->
+<!-- Generated 20 kwi 2019, 14:16:53 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="mapping.Rodzic" table="rodzic" catalog="dziennik_elektroniczny" optimistic-lock="version">
         <id name="pesel" type="long">
             <column name="pesel" />
             <generator class="assigned" />
         </id>
-        <property name="dziecko" type="java.lang.Long">
+        <many-to-one name="uczen" class="mapping.Uczen" fetch="select">
             <column name="dziecko" />
-        </property>
+        </many-to-one>
         <property name="imieOjca" type="string">
             <column name="imie_ojca" length="30" />
         </property>

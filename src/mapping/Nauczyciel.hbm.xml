@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 16 kwi 2019, 17:34:43 by Hibernate Tools 4.3.1 -->
+<!-- Generated 20 kwi 2019, 14:16:53 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="mapping.Nauczyciel" table="nauczyciel" catalog="dziennik_elektroniczny" optimistic-lock="version">
         <id name="pesel" type="long">
@@ -14,5 +14,18 @@
         <property name="nazwisko" type="string">
             <column name="nazwisko" length="30" />
         </property>
+        <set name="klasas" table="klasa" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="wychowawca" />
+            </key>
+            <one-to-many class="mapping.Klasa" />
+        </set>
+        <set name="przedmiotPomocniczas" table="przedmiot_pomocnicza" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="prowadzacy" not-null="true" />
+            </key>
+            <one-to-many class="mapping.PrzedmiotPomocnicza" />
+        </set>
+        <one-to-one name="autoryzacja" class="mapping.Autoryzacja"></one-to-one>
     </class>
 </hibernate-mapping>
