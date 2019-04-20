@@ -61,3 +61,5 @@ Tutoriale:
 
 - Hibernate Criteria (selecty) https://www.mkyong.com/hibernate/hibernate-criteria-examples/
 
+- Hibernate Criteria 409. http://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#fetching
+
