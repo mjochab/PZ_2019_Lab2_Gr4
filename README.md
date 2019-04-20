@@ -57,3 +57,7 @@
 ### Diagram aktywności
 ![Diagram aktywności](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/master/Diagramy/Diagram_aktywnosci.png)
 
+Tutoriale:
+
+- Hibernate Criteria (selecty) https://www.mkyong.com/hibernate/hibernate-criteria-examples/
+
