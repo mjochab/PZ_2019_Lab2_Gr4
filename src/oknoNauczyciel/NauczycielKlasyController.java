@@ -7,6 +7,7 @@ package oknoNauczyciel;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,15 +17,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import utilities.HibernateUtil;
 
 
 
 public class NauczycielKlasyController implements Initializable {
 
     @FXML
-    private Button klasa_1btn;
+    private Button klasa1;
     @FXML
-    private Button klasa_2btn;
+    private Button klasa2;
     @FXML
     private Button wylogujbtn;
     @FXML
@@ -37,6 +39,7 @@ public class NauczycielKlasyController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        zmienNazwyButtonow();
         // TODO
     }
 
@@ -57,5 +60,15 @@ public class NauczycielKlasyController implements Initializable {
         AnchorPane pane = FXMLLoader.load(getClass().getResource("Klasa.fxml"));
         rootPane.getChildren().setAll(pane);
     }
-
+    
+    private void zmienNazwyButtonow(){
+        
+        //prostacko:
+        List<String> zwrocKlasy2 = HibernateUtil.zwrocKlasy2();
+        klasa1.setText(zwrocKlasy2.get(0));
+        klasa2.setText(zwrocKlasy2.get(1));
+        //zmyślnie i domyślnie:
+        //rootPane.getChildren()
+    
+}
 }
