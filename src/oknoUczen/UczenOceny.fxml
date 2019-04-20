@@ -13,13 +13,15 @@
          <children>
             <ScrollPane fx:id="scrollView" layoutX="7.0" prefHeight="580.0" prefWidth="960.0">
                <content>
-                  <TableView prefHeight="575.0" prefWidth="956.0">
+                  <TableView fx:id="tabelaOcen" prefHeight="575.0" prefWidth="956.0">
                     <columns>
-                      <TableColumn prefWidth="95.0" text="j. polski" />
-                      <TableColumn prefWidth="88.0" text="j. niemiecki" />
-                        <TableColumn prefWidth="99.0" text="j. angielski" />
-                        <TableColumn prefWidth="79.0" text="geografia" />
-                        <TableColumn prefWidth="100.0" text="matematyka" />
+                      <TableColumn fx:id="kolumna1" prefWidth="95.0" text="j. polski" />
+                      <TableColumn fx:id="kolumna2" prefWidth="88.0" text="j. niemiecki" />
+                        <TableColumn fx:id="kolumna3" prefWidth="99.0" text="j. angielski" />
+                        <TableColumn fx:id="kolumna4" prefWidth="79.0" text="geografia" />
+                        <TableColumn fx:id="kolumna5" prefWidth="100.0" text="matematyka" />
+                        <TableColumn fx:id="kolumna6" prefWidth="100.0" text="matematyka" />
+                        <TableColumn fx:id="kolumna7" prefWidth="100.0" text="matematyka" />
                     </columns>
                   </TableView>
                </content>
