@@ -23,6 +23,10 @@ import utilities.HibernateUtil;
 
 public class NauczycielKlasyController implements Initializable {
 
+    // do zrobienia dynamicznie
+    //Benton Cos tam
+    static final Long pesel=22222222220L;
+    
     @FXML
     private Button klasa1;
     @FXML
@@ -30,7 +34,7 @@ public class NauczycielKlasyController implements Initializable {
     @FXML
     private Button wylogujbtn;
     @FXML
-    private Text increment;
+    private Text userid;
     @FXML
     private AnchorPane rootPane;
 
@@ -64,7 +68,7 @@ public class NauczycielKlasyController implements Initializable {
     private void zmienNazwyButtonow(){
         
         //prostacko:
-        List<String> zwrocKlasy2 = HibernateUtil.zwrocKlasy2();
+        List<String> zwrocKlasy2 = HibernateUtil.zwrocKlasy();
         klasa1.setText(zwrocKlasy2.get(0));
         klasa2.setText(zwrocKlasy2.get(1));
         //zmyślnie i domyślnie:

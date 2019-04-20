@@ -32,7 +32,7 @@ public class Hibernate_Connect {
 //        transaction.commit();
 //        session.close();
 //        factory.close();
-        List<String> zwrocKlasy2 = utilities.HibernateUtil.zwrocKlasy2();
+        List<String> zwrocKlasy2 = utilities.HibernateUtil.zwrocKlasy();
         
         for (int i=0; i<zwrocKlasy2.size(); i++) {
             System.out.println(zwrocKlasy2.get(i).toString());

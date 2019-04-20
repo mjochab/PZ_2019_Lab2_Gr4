@@ -72,46 +72,32 @@ public class HibernateUtil {
         }
     }
     
-    public String[] zwrocKlasy( ) {
-        
-       Session session = getSessionFactory().openSession();
-       Transaction tx = null;
-       String [] wynik = null;
-       try {
-          tx = session.beginTransaction();
-          Criteria cr = session.createCriteria(Klasa.class);
-          // ponizej mozna dodac restrykcje
-          
-          List klasy = cr.list();
-          int i=0;
-          for (Iterator iterator = klasy.iterator(); iterator.hasNext();){ 
-             Klasa klasa = (Klasa) iterator.next(); 
-             wynik[i]=klasa.getNazwaKlasy();
-             i++;
-             
-          }
-          tx.commit();
-       } catch (HibernateException e) {
-          if (tx!=null) tx.rollback();
-          e.printStackTrace(); 
-       } finally {
-          session.close(); 
-       }
-       return wynik;
-   }
-    
-   public static List<String> zwrocKlasy2(){
+
+   public static List<String> zwrocKlasy(){
     EntityManager entityManager = getSessionFactory().createEntityManager();
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
-CriteriaQuery<String> criteria = builder.createQuery( String.class );
-Root<Klasa> root = criteria.from( Klasa.class );
-criteria.select( root.get("nazwaKlasy"));
-//criteria.where( builder.equal( root.get( Person_.name ), "John Doe" ) );
-
-List<String> klasy = entityManager.createQuery( criteria ).getResultList();
+    CriteriaQuery<String> criteria = builder.createQuery( String.class );
+    Root<Klasa> root = criteria.from( Klasa.class );
+    criteria.select( root.get("nazwaKlasy"));
+    //criteria.where( builder.equal( root.get( Person_.name ), "John Doe" ) );
+    List<String> klasy = entityManager.createQuery( criteria ).getResultList();
        
-return klasy;      
+    return klasy;      
+}
+   public static List<String> zwrocKlasy(Long pesel){
+    EntityManager entityManager = getSessionFactory().createEntityManager();
+    CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+
+    CriteriaQuery<String> criteria = builder.createQuery( String.class );
+    Root<Klasa> root = criteria.from( Klasa.class );
+    criteria.select( root.get("nazwaKlasy"));
+    //criteria.where( builder.equal( root.get( Person_.name ), "John Doe" ) );
+
+    List<String> klasy = entityManager.createQuery( criteria ).getResultList();
+       
+    return klasy;      
+}
 }
 
-}
+
