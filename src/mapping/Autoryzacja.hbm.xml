@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 20 kwi 2019, 14:16:53 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="mapping.Autoryzacja" table="autoryzacja" catalog="dziennik_elektroniczny" optimistic-lock="version">
+        <id name="pesel" type="long">
+            <column name="pesel" />
+            <generator class="foreign">
+                <param name="property">nauczyciel</param>
+            </generator>
+        </id>
+        <one-to-one name="nauczyciel" class="mapping.Nauczyciel" constrained="true"></one-to-one>
+        <one-to-one name="uczen" class="mapping.Uczen" constrained="true"></one-to-one>
+        <property name="login" type="string">
+            <column name="login" length="30" not-null="true" />
+        </property>
+        <property name="haslo" type="string">
+            <column name="haslo" length="30" not-null="true" />
+        </property>
+        <property name="kto" type="string">
+            <column name="kto" length="1" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

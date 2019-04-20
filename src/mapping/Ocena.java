@@ -1,5 +1,5 @@
 package mapping;
-// Generated 16 kwi 2019, 17:34:42 by Hibernate Tools 4.3.1
+// Generated 20 kwi 2019, 14:16:52 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -10,8 +10,9 @@ import java.util.Date;
 public class Ocena  implements java.io.Serializable {
 
 
-     private long pesel;
-     private String przedmiot;
+     private Integer id;
+     private PrzedmiotPomocnicza przedmiotPomocnicza;
+     private Uczen uczen;
      private String stopien;
      private Date data;
      private String opis;
@@ -20,30 +21,37 @@ public class Ocena  implements java.io.Serializable {
     }
 
 	
-    public Ocena(long pesel) {
-        this.pesel = pesel;
+    public Ocena(Uczen uczen) {
+        this.uczen = uczen;
     }
-    public Ocena(long pesel, String przedmiot, String stopien, Date data, String opis) {
-       this.pesel = pesel;
-       this.przedmiot = przedmiot;
+    public Ocena(PrzedmiotPomocnicza przedmiotPomocnicza, Uczen uczen, String stopien, Date data, String opis) {
+       this.przedmiotPomocnicza = przedmiotPomocnicza;
+       this.uczen = uczen;
        this.stopien = stopien;
        this.data = data;
        this.opis = opis;
     }
    
-    public long getPesel() {
-        return this.pesel;
+    public Integer getId() {
+        return this.id;
     }
     
-    public void setPesel(long pesel) {
-        this.pesel = pesel;
+    public void setId(Integer id) {
+        this.id = id;
     }
-    public String getPrzedmiot() {
-        return this.przedmiot;
+    public PrzedmiotPomocnicza getPrzedmiotPomocnicza() {
+        return this.przedmiotPomocnicza;
     }
     
-    public void setPrzedmiot(String przedmiot) {
-        this.przedmiot = przedmiot;
+    public void setPrzedmiotPomocnicza(PrzedmiotPomocnicza przedmiotPomocnicza) {
+        this.przedmiotPomocnicza = przedmiotPomocnicza;
+    }
+    public Uczen getUczen() {
+        return this.uczen;
+    }
+    
+    public void setUczen(Uczen uczen) {
+        this.uczen = uczen;
     }
     public String getStopien() {
         return this.stopien;

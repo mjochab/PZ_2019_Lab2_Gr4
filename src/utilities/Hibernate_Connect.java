@@ -5,8 +5,6 @@ package utilities;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
 import utilities.HibernateUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,32 +14,24 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-public class Hibernate_Connect  {
+public class Hibernate_Connect {
 
-   public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) throws ParseException {
 
         long pesel = 32222222221L;
-        Obecnosc obecny = new Obecnosc(pesel,Utils.returnDate("15-12-2019"),true,"algebra_liniowa");
-
+// do zrobienia konstruktory odpowiednie by ulatwily nam prace.
+        //Obecnosc obecny = new Obecnosc("algebra_liniowa",pesel,Utils.returnDate("15-12-2019"),true);
 
         //generator faktorii z klasy hibernateutil
         SessionFactory factory = HibernateUtil.getSessionFactory();
-        Session session = factory.openSession();       
+        Session session = factory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        
-
-        session.save(obecny);
-
-
+        // session.save(obecny);
         transaction.commit();
-        session.close();        
+        session.close();
         factory.close();
 
-
-
-   
-        
-  }
+    }
 
 }

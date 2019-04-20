@@ -1,18 +1,24 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 16 kwi 2019, 17:34:43 by Hibernate Tools 4.3.1 -->
+<!-- Generated 20 kwi 2019, 14:16:53 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="mapping.Klasa" table="klasa" catalog="dziennik_elektroniczny" optimistic-lock="version">
         <id name="nazwaKlasy" type="string">
             <column name="nazwa_klasy" length="2" />
             <generator class="assigned" />
         </id>
-        <property name="rokSzkolny" type="date">
-            <column name="rok_szkolny" length="0" />
-        </property>
-        <property name="wychowawca" type="java.lang.Long">
+        <many-to-one name="nauczyciel" class="mapping.Nauczyciel" fetch="select">
             <column name="wychowawca" />
+        </many-to-one>
+        <property name="rokSzkolny" type="date">
+            <column name="rok_szkolny" length="10" />
         </property>
+        <set name="uczens" table="uczen" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="nazwa_klasy" length="2" />
+            </key>
+            <one-to-many class="mapping.Uczen" />
+        </set>
     </class>
 </hibernate-mapping>

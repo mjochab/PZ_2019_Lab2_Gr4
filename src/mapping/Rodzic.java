@@ -1,5 +1,5 @@
 package mapping;
-// Generated 16 kwi 2019, 17:34:42 by Hibernate Tools 4.3.1
+// Generated 20 kwi 2019, 14:16:52 by Hibernate Tools 4.3.1
 
 
 
@@ -10,7 +10,7 @@ public class Rodzic  implements java.io.Serializable {
 
 
      private long pesel;
-     private Long dziecko;
+     private Uczen uczen;
      private String imieOjca;
      private String nazwiskoOjca;
      private String imieMatki;
@@ -23,9 +23,9 @@ public class Rodzic  implements java.io.Serializable {
     public Rodzic(long pesel) {
         this.pesel = pesel;
     }
-    public Rodzic(long pesel, Long dziecko, String imieOjca, String nazwiskoOjca, String imieMatki, String nazwiskoMatki) {
+    public Rodzic(long pesel, Uczen uczen, String imieOjca, String nazwiskoOjca, String imieMatki, String nazwiskoMatki) {
        this.pesel = pesel;
-       this.dziecko = dziecko;
+       this.uczen = uczen;
        this.imieOjca = imieOjca;
        this.nazwiskoOjca = nazwiskoOjca;
        this.imieMatki = imieMatki;
@@ -39,12 +39,12 @@ public class Rodzic  implements java.io.Serializable {
     public void setPesel(long pesel) {
         this.pesel = pesel;
     }
-    public Long getDziecko() {
-        return this.dziecko;
+    public Uczen getUczen() {
+        return this.uczen;
     }
     
-    public void setDziecko(Long dziecko) {
-        this.dziecko = dziecko;
+    public void setUczen(Uczen uczen) {
+        this.uczen = uczen;
     }
     public String getImieOjca() {
         return this.imieOjca;
