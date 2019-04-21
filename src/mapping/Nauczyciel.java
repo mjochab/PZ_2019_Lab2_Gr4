@@ -1,5 +1,5 @@
 package mapping;
-// Generated 20 kwi 2019, 14:16:52 by Hibernate Tools 4.3.1
+// Generated 21 kwi 2019, 11:03:06 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -14,8 +14,8 @@ public class Nauczyciel  implements java.io.Serializable {
      private long pesel;
      private String imie;
      private String nazwisko;
+     private Set zajecias = new HashSet(0);
      private Set klasas = new HashSet(0);
-     private Set przedmiotPomocniczas = new HashSet(0);
      private Autoryzacja autoryzacja;
 
     public Nauczyciel() {
@@ -25,12 +25,12 @@ public class Nauczyciel  implements java.io.Serializable {
     public Nauczyciel(long pesel) {
         this.pesel = pesel;
     }
-    public Nauczyciel(long pesel, String imie, String nazwisko, Set klasas, Set przedmiotPomocniczas, Autoryzacja autoryzacja) {
+    public Nauczyciel(long pesel, String imie, String nazwisko, Set zajecias, Set klasas, Autoryzacja autoryzacja) {
        this.pesel = pesel;
        this.imie = imie;
        this.nazwisko = nazwisko;
+       this.zajecias = zajecias;
        this.klasas = klasas;
-       this.przedmiotPomocniczas = przedmiotPomocniczas;
        this.autoryzacja = autoryzacja;
     }
    
@@ -55,19 +55,19 @@ public class Nauczyciel  implements java.io.Serializable {
     public void setNazwisko(String nazwisko) {
         this.nazwisko = nazwisko;
     }
+    public Set getZajecias() {
+        return this.zajecias;
+    }
+    
+    public void setZajecias(Set zajecias) {
+        this.zajecias = zajecias;
+    }
     public Set getKlasas() {
         return this.klasas;
     }
     
     public void setKlasas(Set klasas) {
         this.klasas = klasas;
-    }
-    public Set getPrzedmiotPomocniczas() {
-        return this.przedmiotPomocniczas;
-    }
-    
-    public void setPrzedmiotPomocniczas(Set przedmiotPomocniczas) {
-        this.przedmiotPomocniczas = przedmiotPomocniczas;
     }
     public Autoryzacja getAutoryzacja() {
         return this.autoryzacja;

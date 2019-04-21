@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 20 kwi 2019, 14:16:53 by Hibernate Tools 4.3.1 -->
+<!-- Generated 21 kwi 2019, 11:03:06 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="mapping.Przedmiot" table="przedmiot" catalog="dziennik_elektroniczny" optimistic-lock="version">
         <id name="nazwaPrzedmiotu" type="string">
             <column name="nazwa_przedmiotu" length="30" />
             <generator class="assigned" />
         </id>
-        <set name="przedmiotPomocniczas" table="przedmiot_pomocnicza" inverse="true" lazy="true" fetch="select">
+        <set name="zajecias" table="zajecia" inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="nazwa_przedmiotu" length="30" not-null="true" />
+                <column name="przedmiot" length="30" not-null="true" />
             </key>
-            <one-to-many class="mapping.PrzedmiotPomocnicza" />
+            <one-to-many class="mapping.Zajecia" />
         </set>
     </class>
 </hibernate-mapping>
