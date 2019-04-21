@@ -9,7 +9,9 @@ import utilities.HibernateUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import mapping.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -32,11 +34,7 @@ public class Hibernate_Connect {
 //        transaction.commit();
 //        session.close();
 //        factory.close();
-        List<String> zwrocKlasy2 = utilities.HibernateUtil.zwrocKlasy();
-        
-        for (int i=0; i<zwrocKlasy2.size(); i++) {
-            System.out.println(zwrocKlasy2.get(i).toString());
-        }
+       
         
 
     }

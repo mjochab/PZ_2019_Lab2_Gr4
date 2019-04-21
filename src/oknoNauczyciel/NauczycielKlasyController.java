@@ -7,15 +7,18 @@ package oknoNauczyciel;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import utilities.HibernateUtil;
 
@@ -33,8 +36,9 @@ public class NauczycielKlasyController implements Initializable {
     private Button klasa2;
     @FXML
     private Button wylogujbtn;
-    @FXML
-    private Text userid;
+
+    @FXML 
+    private Pane panelButtonow;
     @FXML
     private AnchorPane rootPane;
 
@@ -43,7 +47,7 @@ public class NauczycielKlasyController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        zmienNazwyButtonow();
+        wybierzKlaseButtony();
         // TODO
     }
 
@@ -64,15 +68,47 @@ public class NauczycielKlasyController implements Initializable {
         AnchorPane pane = FXMLLoader.load(getClass().getResource("Klasa.fxml"));
         rootPane.getChildren().setAll(pane);
     }
-    
-    private void zmienNazwyButtonow(){
+    // do skonczenia
+    EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>() {
+    @Override
+    public void handle(ActionEvent event) {
         
-        //prostacko:
-        List<String> zwrocKlasy2 = HibernateUtil.zwrocKlasy();
-        klasa1.setText(zwrocKlasy2.get(0));
-        klasa2.setText(zwrocKlasy2.get(1));
-        //zmyślnie i domyślnie:
-        //rootPane.getChildren()
+        
+    }
+};
+    
+    
+    
+    
+    private void wybierzKlaseButtony(){
+        int nClicks=0;
+      List<Button> listaButtonow = new ArrayList<>();
+      String [] nazwyKlas = utilities.HibernateUtil.zwrocKlasyKtoreUcze(pesel);    
+        for (int i = 0; i < nazwyKlas.length; i++) {
+            listaButtonow.add(new Button(nazwyKlas[i]));
+            listaButtonow.get(i).setOnAction(buttonHandler);
+            
+//            button.setOnAction(new EventHandler() {
+//    @Override
+//    public void handle(ActionEvent actionEvent) {
+//        //... do something in here.
+//    }
+//});
+       
+            
+        }
+        panelButtonow.getChildren().clear();
+        panelButtonow.getChildren().addAll(listaButtonow);
+        
     
 }
+    
+    
+    
+    
+    
+    private void wstawNazweUzytkownika(){
+        
+        
+    }
 }

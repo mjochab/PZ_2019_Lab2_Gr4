@@ -3,13 +3,12 @@ package utilities;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import mapping.Klasa;
-import mapping.Ocena;
-import mapping.Przedmiot;
+import mapping.*;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -25,7 +24,9 @@ import org.hibernate.persister.entity.AbstractEntityPersister;
 public class HibernateUtil {
 
     private static final SessionFactory sessionFactory = buildSessionFactory();
-
+    private static final EntityManager entityManager = sessionFactory.createEntityManager();
+    private static final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+    
     private static SessionFactory buildSessionFactory() {
         try {
             // Create the SessionFactory from hibernate.cfg.xml
@@ -42,6 +43,8 @@ public class HibernateUtil {
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
+    
+  
 
     public static String[] pobieranieNazwPrzedmiotow() {
 
@@ -73,30 +76,41 @@ public class HibernateUtil {
     }
     
 
-   public static List<String> zwrocKlasy(){
-    EntityManager entityManager = getSessionFactory().createEntityManager();
-    CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+    
 
+   public static List<String> zwrocWszystkieKlasy(){
+    // najpierw co zwracamy
     CriteriaQuery<String> criteria = builder.createQuery( String.class );
+    // skad, z jakiego mapowania
     Root<Klasa> root = criteria.from( Klasa.class );
+    // ktora kolumna
     criteria.select( root.get("nazwaKlasy"));
+    // dodatkowe kryteria
     //criteria.where( builder.equal( root.get( Person_.name ), "John Doe" ) );
+    // zawsze zwraca liste z typem ktory dalismy na samej gorze.
     List<String> klasy = entityManager.createQuery( criteria ).getResultList();
        
     return klasy;      
 }
-   public static List<String> zwrocKlasy(Long pesel){
-    EntityManager entityManager = getSessionFactory().createEntityManager();
-    CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+   public static String[] zwrocKlasyKtoreUcze(Long pesel){
+    
+    CriteriaQuery<Klasa> criteria = builder.createQuery( Klasa.class );
+    Root<Nauczyciel> root = criteria.from( Nauczyciel.class );
+    criteria.select( root.get("klasas"));
+    criteria.where( builder.equal( root.<Set>get("pesel"), pesel ) );
 
-    CriteriaQuery<String> criteria = builder.createQuery( String.class );
-    Root<Klasa> root = criteria.from( Klasa.class );
-    criteria.select( root.get("nazwaKlasy"));
-    //criteria.where( builder.equal( root.get( Person_.name ), "John Doe" ) );
-
-    List<String> klasy = entityManager.createQuery( criteria ).getResultList();
-       
-    return klasy;      
+       List<Klasa> klasy = entityManager.createQuery( criteria ).getResultList();      
+       String nazwyKlas[] = new String[klasy.size()];
+       int i=0;
+            for (Iterator iterator = klasy.iterator(); iterator.hasNext();) {
+                Klasa klasa = (Klasa) iterator.next();
+                
+                nazwyKlas[i]=klasa.getNazwaKlasy();
+                i++;
+            }
+    
+    
+    return nazwyKlas;      
 }
 }
 
