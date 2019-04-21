@@ -17,8 +17,8 @@
             <Label fx:id="userid" layoutX="113.0" layoutY="59.0" prefHeight="17.0" prefWidth="97.0" text="BLAD" />
             <Pane fx:id="panelButtonow" layoutX="5.0" layoutY="208.0" prefHeight="503.0" prefWidth="281.0">
                <children>
-                  <Button fx:id="klasa1" layoutX="16.0" layoutY="45.0" mnemonicParsing="false" onAction="#LoadKlasa" prefHeight="25.0" prefWidth="248.0" text="1B" />
-                  <Button fx:id="klasa2" layoutX="17.0" layoutY="98.0" mnemonicParsing="false" onAction="#LoadKlasa" prefHeight="25.0" prefWidth="248.0" text="2B" />
+<!--                  <Button fx:id="klasa1" layoutX="16.0" layoutY="45.0" mnemonicParsing="false" onAction="#LoadKlasa" prefHeight="25.0" prefWidth="248.0" text="1B" />
+                  <Button fx:id="klasa2" layoutX="17.0" layoutY="98.0" mnemonicParsing="false" onAction="#LoadKlasa" prefHeight="25.0" prefWidth="248.0" text="2B" />-->
                </children>
             </Pane>
             <Button fx:id="wylogujbtn" layoutX="19.0" layoutY="98.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />

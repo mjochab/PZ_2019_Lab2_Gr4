@@ -17,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -69,34 +70,26 @@ public class NauczycielKlasyController implements Initializable {
         rootPane.getChildren().setAll(pane);
     }
     // do skonczenia
-    EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>() {
-    @Override
-    public void handle(ActionEvent event) {
-        
-        
-    }
-};
+
+
     
     
     
     
     private void wybierzKlaseButtony(){
-        int nClicks=0;
-      List<Button> listaButtonow = new ArrayList<>();
-      String [] nazwyKlas = utilities.HibernateUtil.zwrocKlasyKtoreUcze(pesel);    
+      
+      
+      String [] nazwyKlas = utilities.HibernateUtil.zwrocKlasyKtoreUcze(pesel);   
+      Button[] listaButtonow = new Button[nazwyKlas.length];
         for (int i = 0; i < nazwyKlas.length; i++) {
-            listaButtonow.add(new Button(nazwyKlas[i]));
-            listaButtonow.get(i).setOnAction(buttonHandler);
-            
-//            button.setOnAction(new EventHandler() {
-//    @Override
-//    public void handle(ActionEvent actionEvent) {
-//        //... do something in here.
-//    }
-//});
-       
-            
+          Button b = new Button(nazwyKlas[i]);
+          b.setId("klasax"+i);
+          b.setText(nazwyKlas[i]);
+          b.addEventHandler(MouseEvent.MOUSE_CLICKED, 
+                (event -> b.setText("kulke"))); 
+          listaButtonow[i]=b;
         }
+        
         panelButtonow.getChildren().clear();
         panelButtonow.getChildren().addAll(listaButtonow);
         
