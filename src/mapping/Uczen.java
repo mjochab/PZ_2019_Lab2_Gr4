@@ -1,5 +1,5 @@
 package mapping;
-// Generated 20 kwi 2019, 14:16:52 by Hibernate Tools 4.3.1
+// Generated 21 kwi 2019, 11:03:06 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -15,10 +15,11 @@ public class Uczen  implements java.io.Serializable {
      private Klasa klasa;
      private String imie;
      private String nazwisko;
-     private Set obecnoscs = new HashSet(0);
      private Autoryzacja autoryzacja;
-     private Set ocenas = new HashSet(0);
      private Set rodzics = new HashSet(0);
+     private Set ocenas = new HashSet(0);
+     private Set skladKlasies = new HashSet(0);
+     private Set obecnoscs = new HashSet(0);
 
     public Uczen() {
     }
@@ -27,15 +28,16 @@ public class Uczen  implements java.io.Serializable {
     public Uczen(long pesel) {
         this.pesel = pesel;
     }
-    public Uczen(long pesel, Klasa klasa, String imie, String nazwisko, Set obecnoscs, Autoryzacja autoryzacja, Set ocenas, Set rodzics) {
+    public Uczen(long pesel, Klasa klasa, String imie, String nazwisko, Autoryzacja autoryzacja, Set rodzics, Set ocenas, Set skladKlasies, Set obecnoscs) {
        this.pesel = pesel;
        this.klasa = klasa;
        this.imie = imie;
        this.nazwisko = nazwisko;
-       this.obecnoscs = obecnoscs;
        this.autoryzacja = autoryzacja;
-       this.ocenas = ocenas;
        this.rodzics = rodzics;
+       this.ocenas = ocenas;
+       this.skladKlasies = skladKlasies;
+       this.obecnoscs = obecnoscs;
     }
    
     public long getPesel() {
@@ -66,19 +68,19 @@ public class Uczen  implements java.io.Serializable {
     public void setNazwisko(String nazwisko) {
         this.nazwisko = nazwisko;
     }
-    public Set getObecnoscs() {
-        return this.obecnoscs;
-    }
-    
-    public void setObecnoscs(Set obecnoscs) {
-        this.obecnoscs = obecnoscs;
-    }
     public Autoryzacja getAutoryzacja() {
         return this.autoryzacja;
     }
     
     public void setAutoryzacja(Autoryzacja autoryzacja) {
         this.autoryzacja = autoryzacja;
+    }
+    public Set getRodzics() {
+        return this.rodzics;
+    }
+    
+    public void setRodzics(Set rodzics) {
+        this.rodzics = rodzics;
     }
     public Set getOcenas() {
         return this.ocenas;
@@ -87,12 +89,19 @@ public class Uczen  implements java.io.Serializable {
     public void setOcenas(Set ocenas) {
         this.ocenas = ocenas;
     }
-    public Set getRodzics() {
-        return this.rodzics;
+    public Set getSkladKlasies() {
+        return this.skladKlasies;
     }
     
-    public void setRodzics(Set rodzics) {
-        this.rodzics = rodzics;
+    public void setSkladKlasies(Set skladKlasies) {
+        this.skladKlasies = skladKlasies;
+    }
+    public Set getObecnoscs() {
+        return this.obecnoscs;
+    }
+    
+    public void setObecnoscs(Set obecnoscs) {
+        this.obecnoscs = obecnoscs;
     }
 
 

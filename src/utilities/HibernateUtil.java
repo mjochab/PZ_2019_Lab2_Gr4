@@ -3,8 +3,14 @@ package utilities;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import mapping.Klasa;
 import mapping.Ocena;
 import mapping.Przedmiot;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -65,5 +71,33 @@ public class HibernateUtil {
             return nazwa;
         }
     }
+    
 
+   public static List<String> zwrocKlasy(){
+    EntityManager entityManager = getSessionFactory().createEntityManager();
+    CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+
+    CriteriaQuery<String> criteria = builder.createQuery( String.class );
+    Root<Klasa> root = criteria.from( Klasa.class );
+    criteria.select( root.get("nazwaKlasy"));
+    //criteria.where( builder.equal( root.get( Person_.name ), "John Doe" ) );
+    List<String> klasy = entityManager.createQuery( criteria ).getResultList();
+       
+    return klasy;      
 }
+   public static List<String> zwrocKlasy(Long pesel){
+    EntityManager entityManager = getSessionFactory().createEntityManager();
+    CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+
+    CriteriaQuery<String> criteria = builder.createQuery( String.class );
+    Root<Klasa> root = criteria.from( Klasa.class );
+    criteria.select( root.get("nazwaKlasy"));
+    //criteria.where( builder.equal( root.get( Person_.name ), "John Doe" ) );
+
+    List<String> klasy = entityManager.createQuery( criteria ).getResultList();
+       
+    return klasy;      
+}
+}
+
+

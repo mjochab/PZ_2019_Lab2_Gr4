@@ -78,4 +78,6 @@ public class KlasaController implements Initializable {
         rootPane.getChildren().setAll(pane);
     }
     
+
+    
 }

@@ -1,5 +1,5 @@
 package mapping;
-// Generated 20 kwi 2019, 14:16:52 by Hibernate Tools 4.3.1
+// Generated 21 kwi 2019, 11:03:06 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -12,7 +12,7 @@ public class Przedmiot  implements java.io.Serializable {
 
 
      private String nazwaPrzedmiotu;
-     private Set przedmiotPomocniczas = new HashSet(0);
+     private Set zajecias = new HashSet(0);
 
     public Przedmiot() {
     }
@@ -21,9 +21,9 @@ public class Przedmiot  implements java.io.Serializable {
     public Przedmiot(String nazwaPrzedmiotu) {
         this.nazwaPrzedmiotu = nazwaPrzedmiotu;
     }
-    public Przedmiot(String nazwaPrzedmiotu, Set przedmiotPomocniczas) {
+    public Przedmiot(String nazwaPrzedmiotu, Set zajecias) {
        this.nazwaPrzedmiotu = nazwaPrzedmiotu;
-       this.przedmiotPomocniczas = przedmiotPomocniczas;
+       this.zajecias = zajecias;
     }
    
     public String getNazwaPrzedmiotu() {
@@ -33,12 +33,12 @@ public class Przedmiot  implements java.io.Serializable {
     public void setNazwaPrzedmiotu(String nazwaPrzedmiotu) {
         this.nazwaPrzedmiotu = nazwaPrzedmiotu;
     }
-    public Set getPrzedmiotPomocniczas() {
-        return this.przedmiotPomocniczas;
+    public Set getZajecias() {
+        return this.zajecias;
     }
     
-    public void setPrzedmiotPomocniczas(Set przedmiotPomocniczas) {
-        this.przedmiotPomocniczas = przedmiotPomocniczas;
+    public void setZajecias(Set zajecias) {
+        this.zajecias = zajecias;
     }
 
 

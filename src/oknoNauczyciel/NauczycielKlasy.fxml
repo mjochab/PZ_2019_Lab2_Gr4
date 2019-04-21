@@ -15,11 +15,11 @@
             <Text layoutX="18.0" layoutY="198.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wybierz klase">
             </Text>
             <Label layoutX="16.0" layoutY="59.0" prefHeight="17.0" prefWidth="97.0" text="Zalogowano jako" />
-            <Label fx:id="userid" layoutX="113.0" layoutY="59.0" prefHeight="17.0" prefWidth="97.0" text="tu login" />
+            <Label fx:id="userid" layoutX="113.0" layoutY="59.0" prefHeight="17.0" prefWidth="97.0" text="BLAD" />
             <Pane layoutX="5.0" layoutY="208.0" prefHeight="503.0" prefWidth="281.0">
                <children>
-                  <Button fx:id="ocenybtn1" layoutX="16.0" layoutY="45.0" mnemonicParsing="false" onAction="#LoadKlasa" prefHeight="25.0" prefWidth="248.0" text="1B" />
-                  <Button fx:id="ocenybtn11" layoutX="17.0" layoutY="98.0" mnemonicParsing="false" onAction="#LoadKlasa" prefHeight="25.0" prefWidth="248.0" text="2B" />
+                  <Button fx:id="klasa1" layoutX="16.0" layoutY="45.0" mnemonicParsing="false" onAction="#LoadKlasa" prefHeight="25.0" prefWidth="248.0" text="1B" />
+                  <Button fx:id="klasa2" layoutX="17.0" layoutY="98.0" mnemonicParsing="false" onAction="#LoadKlasa" prefHeight="25.0" prefWidth="248.0" text="2B" />
                   <Button fx:id="wylogujbtn" layoutX="16.0" layoutY="152.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />
                </children>
             </Pane>

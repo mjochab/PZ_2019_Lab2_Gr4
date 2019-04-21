@@ -52,7 +52,8 @@ Contributor(s):
     <mapping resource="mapping/Obecnosc.hbm.xml"/>
     <mapping resource="mapping/Klasa.hbm.xml"/>
     <mapping resource="mapping/Autoryzacja.hbm.xml"/>
-    <mapping resource="mapping/PrzedmiotPomocnicza.hbm.xml"/>
+    <mapping resource="mapping/Zajecia.hbm.xml"/>
+    <mapping resource="mapping/SkladKlasy.hbm.xml"/>
     <mapping resource="mapping/Nauczyciel.hbm.xml"/>
     <mapping resource="mapping/Uczen.hbm.xml"/>
   </session-factory>
