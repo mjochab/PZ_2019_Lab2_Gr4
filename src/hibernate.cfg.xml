@@ -45,7 +45,7 @@ Contributor(s):
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="hibernate.connection.url">jdbc:mysql://localhost/dziennik_elektroniczny?createDatabaseIfNotExist=true</property>
     <property name="hibernate.connection.username">root</property>
-    <property name="hibernate.hbm2ddl.auto">create</property>
+    <property name="hibernate.hbm2ddl.auto">update</property>
     <mapping resource="mapping/Ocena.hbm.xml"/>
     <mapping resource="mapping/Rodzic.hbm.xml"/>
     <mapping resource="mapping/Przedmiot.hbm.xml"/>
