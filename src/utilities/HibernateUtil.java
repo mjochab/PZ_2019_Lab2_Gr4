@@ -137,6 +137,7 @@ public class HibernateUtil {
         criteria.select(root.get("przedmiot"));
         criteria.where(builder.equal(root.get("klasa"), klasa));
         criteria.where(builder.equal(root.get("nauczyciel"), pesel));
+        criteria.distinct(true);
         List<Przedmiot> przedmioty = entityManager.createQuery(criteria).getResultList();
         
         return przedmioty;
