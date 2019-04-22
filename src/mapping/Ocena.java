@@ -1,5 +1,5 @@
 package mapping;
-// Generated 21 kwi 2019, 11:03:06 by Hibernate Tools 4.3.1
+// Generated 22 kwi 2019, 16:31:19 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -11,8 +11,8 @@ public class Ocena  implements java.io.Serializable {
 
 
      private Integer id;
+     private Przedmiot przedmiot;
      private Uczen uczen;
-     private Long przedmiot;
      private String stopien;
      private Date data;
      private String opis;
@@ -24,9 +24,9 @@ public class Ocena  implements java.io.Serializable {
     public Ocena(Uczen uczen) {
         this.uczen = uczen;
     }
-    public Ocena(Uczen uczen, Long przedmiot, String stopien, Date data, String opis) {
-       this.uczen = uczen;
+    public Ocena(Przedmiot przedmiot, Uczen uczen, String stopien, Date data, String opis) {
        this.przedmiot = przedmiot;
+       this.uczen = uczen;
        this.stopien = stopien;
        this.data = data;
        this.opis = opis;
@@ -39,19 +39,19 @@ public class Ocena  implements java.io.Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
+    public Przedmiot getPrzedmiot() {
+        return this.przedmiot;
+    }
+    
+    public void setPrzedmiot(Przedmiot przedmiot) {
+        this.przedmiot = przedmiot;
+    }
     public Uczen getUczen() {
         return this.uczen;
     }
     
     public void setUczen(Uczen uczen) {
         this.uczen = uczen;
-    }
-    public Long getPrzedmiot() {
-        return this.przedmiot;
-    }
-    
-    public void setPrzedmiot(Long przedmiot) {
-        this.przedmiot = przedmiot;
     }
     public String getStopien() {
         return this.stopien;

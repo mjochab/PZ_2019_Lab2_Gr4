@@ -1,5 +1,5 @@
 package mapping;
-// Generated 21 kwi 2019, 11:03:06 by Hibernate Tools 4.3.1
+// Generated 22 kwi 2019, 16:31:19 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -11,17 +11,17 @@ public class Obecnosc  implements java.io.Serializable {
 
 
      private Long id;
+     private Przedmiot przedmiot;
      private Uczen uczen;
-     private Long przedmiot;
      private Date data;
      private Boolean wartosc;
 
     public Obecnosc() {
     }
 
-    public Obecnosc(Uczen uczen, Long przedmiot, Date data, Boolean wartosc) {
-       this.uczen = uczen;
+    public Obecnosc(Przedmiot przedmiot, Uczen uczen, Date data, Boolean wartosc) {
        this.przedmiot = przedmiot;
+       this.uczen = uczen;
        this.data = data;
        this.wartosc = wartosc;
     }
@@ -33,19 +33,19 @@ public class Obecnosc  implements java.io.Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+    public Przedmiot getPrzedmiot() {
+        return this.przedmiot;
+    }
+    
+    public void setPrzedmiot(Przedmiot przedmiot) {
+        this.przedmiot = przedmiot;
+    }
     public Uczen getUczen() {
         return this.uczen;
     }
     
     public void setUczen(Uczen uczen) {
         this.uczen = uczen;
-    }
-    public Long getPrzedmiot() {
-        return this.przedmiot;
-    }
-    
-    public void setPrzedmiot(Long przedmiot) {
-        this.przedmiot = przedmiot;
     }
     public Date getData() {
         return this.data;
