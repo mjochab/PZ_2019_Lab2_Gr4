@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,12 +44,15 @@ public class KlasaController implements Initializable {
     List<Uczen> uczniowie = new ArrayList<>();
 
     /**
-     * Initializes the controller class.
+     * platform Run later zeby przekazac zmienne poprawnie
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // dziala niestety po inicjalizacji, wiec nie ustawi username :(
+    public void initialize(URL url, ResourceBundle rb) {    Platform.runLater(() -> {
+
+        //do stuff// dziala niestety po inicjalizacji, wiec nie ustawi username :(
          wstawUseraDoZalogowanoJako(username);
+    });
+        
          
     }
 
