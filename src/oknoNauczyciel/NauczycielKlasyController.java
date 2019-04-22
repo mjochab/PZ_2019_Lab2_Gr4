@@ -121,4 +121,6 @@ public class NauczycielKlasyController implements Initializable {
         st.show();
 
     }
+    
+    
 }

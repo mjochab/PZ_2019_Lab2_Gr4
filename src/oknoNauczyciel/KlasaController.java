@@ -7,6 +7,8 @@ package oknoNauczyciel;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +19,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import mapping.Uczen;
+import static utilities.HibernateUtil.zwrocUczniowZklasy;
 
 public class KlasaController implements Initializable {
 
@@ -36,6 +40,7 @@ public class KlasaController implements Initializable {
     private Label userid;
     private String klasa = null;
     private String username = null;
+    List<Uczen> uczniowie = new ArrayList<>();
 
     /**
      * Initializes the controller class.
@@ -44,6 +49,7 @@ public class KlasaController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // dziala niestety po inicjalizacji, wiec nie ustawi username :(
          wstawUseraDoZalogowanoJako(username);
+         
     }
 
     @FXML
@@ -94,6 +100,7 @@ public class KlasaController implements Initializable {
     public void przekazKlaseIusername(String klasa, String username) {
         this.username = username;
         this.klasa = klasa;
+        this.uczniowie=zwrocUczniowZklasy(klasa);
 
     }
 

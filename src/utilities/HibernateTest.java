@@ -16,12 +16,13 @@ import mapping.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import static utilities.HibernateUtil.zwrocPrzedmiotyKtorychUczeDanaKlase;
 import static utilities.HibernateUtil.zwrocUczniowZklasy;
 
 public class HibernateTest {
 
     public static void main(String[] args) throws ParseException {
-
+    zwrocPrzedmiotyKtorychUczeDanaKlase("1a", 22222222220L);
 
     }
 

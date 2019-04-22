@@ -114,7 +114,7 @@ public class HibernateUtil {
     }
 
     public static List<Uczen> zwrocUczniowZklasy(String klasa) {
-        //private Set skladKlasies = new HashSet(0)
+        
         CriteriaQuery<SkladKlasy> criteria = builder.createQuery(SkladKlasy.class);
         Root<Klasa> root = criteria.from(Klasa.class);
         criteria.select(root.get("skladKlasies"));
@@ -128,5 +128,17 @@ public class HibernateUtil {
         }
         return uczniowie;
     }
+    
+    
+    public static List<Przedmiot> zwrocPrzedmiotyKtorychUczeDanaKlase(String klasa, Long pesel) {
 
+        CriteriaQuery<Przedmiot> criteria = builder.createQuery(Przedmiot.class);
+        Root<Zajecia> root = criteria.from(Zajecia.class);
+        criteria.select(root.get("przedmiot"));
+        criteria.where(builder.equal(root.get("klasa"), klasa));
+        criteria.where(builder.equal(root.get("nauczyciel"), pesel));
+        List<Przedmiot> przedmioty = entityManager.createQuery(criteria).getResultList();
+        
+        return przedmioty;
+    }
 }
