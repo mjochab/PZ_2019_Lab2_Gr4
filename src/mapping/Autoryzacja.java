@@ -1,5 +1,5 @@
 package mapping;
-// Generated 22 kwi 2019, 16:31:19 by Hibernate Tools 4.3.1
+// Generated 22 kwi 2019, 17:35:09 by Hibernate Tools 4.3.1
 
 
 
@@ -11,6 +11,7 @@ public class Autoryzacja  implements java.io.Serializable {
 
      private long pesel;
      private Nauczyciel nauczyciel;
+     private Uczen uczen;
      private String login;
      private String haslo;
      private String kto;
@@ -18,8 +19,9 @@ public class Autoryzacja  implements java.io.Serializable {
     public Autoryzacja() {
     }
 
-    public Autoryzacja(Nauczyciel nauczyciel, String login, String haslo, String kto) {
+    public Autoryzacja(Nauczyciel nauczyciel, Uczen uczen, String login, String haslo, String kto) {
        this.nauczyciel = nauczyciel;
+       this.uczen = uczen;
        this.login = login;
        this.haslo = haslo;
        this.kto = kto;
@@ -38,6 +40,13 @@ public class Autoryzacja  implements java.io.Serializable {
     
     public void setNauczyciel(Nauczyciel nauczyciel) {
         this.nauczyciel = nauczyciel;
+    }
+    public Uczen getUczen() {
+        return this.uczen;
+    }
+    
+    public void setUczen(Uczen uczen) {
+        this.uczen = uczen;
     }
     public String getLogin() {
         return this.login;
