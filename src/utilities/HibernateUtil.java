@@ -89,8 +89,6 @@ public class HibernateUtil {
         return klasy;
     }
 
-
-
     public static List<Klasa> zwrocKlasyKtorychUcze(Long pesel) {
 
         CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
@@ -101,21 +99,20 @@ public class HibernateUtil {
         List<Klasa> klasy = entityManager.createQuery(criteria).getResultList();
         return klasy;
     }
-    
+
     public static String[] zwrocNazwyKlasKtorychUcze(Long pesel) {
 
         List<Klasa> klasy = zwrocKlasyKtorychUcze(pesel);
         String nazwyKlas[] = new String[klasy.size()];
         int i = 0;
-        for (Iterator iterator = klasy.iterator(); iterator.hasNext();) {
-            Klasa klasa = (Klasa) iterator.next();
-
+        for (Klasa klasa : klasy) {
             nazwyKlas[i] = klasa.getNazwaKlasy();
             i++;
         }
 
         return nazwyKlas;
     }
+
     public static List<Uczen> zwrocUczniowZklasy(String klasa) {
         //private Set skladKlasies = new HashSet(0)
         CriteriaQuery<SkladKlasy> criteria = builder.createQuery(SkladKlasy.class);
@@ -124,12 +121,10 @@ public class HibernateUtil {
         criteria.where(builder.equal(root.get("nazwaKlasy"), klasa));
 
         List<SkladKlasy> skladKlasy = entityManager.createQuery(criteria).getResultList();
-       List<Uczen> uczniowie = new ArrayList<Uczen>();
-        for (Iterator iterator = skladKlasy.iterator(); iterator.hasNext();) {
-            SkladKlasy uczen = (SkladKlasy) iterator.next();
+        List<Uczen> uczniowie = new ArrayList<>();
+        
+        for (SkladKlasy uczen : skladKlasy) {
             uczniowie.add(uczen.getUczen());
-            
-
         }
         return uczniowie;
     }

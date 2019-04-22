@@ -71,7 +71,7 @@ public class NauczycielKlasyController implements Initializable {
 
     private void wybierzKlaseButtony() {
 
-        String[] nazwyKlas = utilities.HibernateUtil.zwrocKlasyKtoreUcze(pesel);
+        String[] nazwyKlas = utilities.HibernateUtil.zwrocNazwyKlasKtorychUcze(pesel);
         Button[] listaButtonow = new Button[nazwyKlas.length];
         for (int i = 0; i < nazwyKlas.length; i++) {
             Button b = new Button(nazwyKlas[i]);
