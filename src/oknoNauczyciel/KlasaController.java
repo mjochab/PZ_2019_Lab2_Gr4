@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +20,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import mapping.Uczen;
@@ -32,7 +37,7 @@ public class KlasaController implements Initializable {
     @FXML
     private Button usprawiedliwbtn;
     @FXML
-    private Text increment;
+    private AnchorPane tabPane;
     @FXML
     private AnchorPane rootPane;
     @FXML
@@ -41,6 +46,8 @@ public class KlasaController implements Initializable {
     private Label userid;
     private String klasa = null;
     private String username = null;
+    // do zrobienia po wybraniu taba:
+    private String przedmiot = null;
     List<Uczen> uczniowie = new ArrayList<>();
 
     /**
@@ -49,8 +56,11 @@ public class KlasaController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {    Platform.runLater(() -> {
 
-        //do stuff// dziala niestety po inicjalizacji, wiec nie ustawi username :(
+        
          wstawUseraDoZalogowanoJako(username);
+         setUczniowie();
+         stworzTabeleZocenami("gowno");
+         
     });
         
          
@@ -104,7 +114,7 @@ public class KlasaController implements Initializable {
     public void przekazKlaseIusername(String klasa, String username) {
         this.username = username;
         this.klasa = klasa;
-        this.uczniowie=zwrocUczniowZklasy(klasa);
+        
 
     }
 
@@ -112,4 +122,38 @@ public class KlasaController implements Initializable {
         return klasa;
     }
 
+    public void setUczniowie() {
+        this.uczniowie = zwrocUczniowZklasy(klasa);
+    }
+    
+    
+   private void stworzTabeleZocenami(String przedmiot){
+       
+        TableView<Uczen> table = new TableView<Uczen>();
+        table.setEditable(true);
+ 
+        TableColumn firstNameCol = new TableColumn("Imie");
+        firstNameCol.setMinWidth(100);
+        firstNameCol.setCellValueFactory(
+                new PropertyValueFactory<Uczen, String>("imie"));
+ 
+        TableColumn lastNameCol = new TableColumn("Nazwisko");
+        lastNameCol.setMinWidth(100);
+        lastNameCol.setCellValueFactory(
+                new PropertyValueFactory<Uczen, String>("nazwisko"));
+ 
+//        TableColumn emailCol = new TableColumn("Email");
+//        emailCol.setMinWidth(200);
+//        emailCol.setCellValueFactory(
+//                new PropertyValueFactory<Person, String>("email"));
+        ObservableList<Uczen> data =
+        FXCollections.observableArrayList(uczniowie);
+        table.setItems(data);
+        table.getColumns().addAll(firstNameCol, lastNameCol);
+        
+        tabPane.getChildren().clear();
+        tabPane.getChildren().add(table);
+        
+        
+    }
 }
