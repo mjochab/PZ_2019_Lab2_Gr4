@@ -27,6 +27,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import mapping.Uczen;
 import static utilities.HibernateUtil.zwrocUczniowZklasy;
+import static utilities.Utils.customResize;
 
 public class KlasaController implements Initializable {
 
@@ -152,6 +153,7 @@ public class KlasaController implements Initializable {
         table.getColumns().addAll(firstNameCol, lastNameCol);
         
         tabPane.getChildren().clear();
+        customResize(table);
         tabPane.getChildren().add(table);
         
         
