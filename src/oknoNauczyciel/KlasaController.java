@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,13 +25,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import mapping.Ocena;
+import mapping.Przedmiot;
 import mapping.Uczen;
+import static utilities.HibernateUtil.zwrocPrzedmiotyKtorychUczeDanaKlase;
 import static utilities.HibernateUtil.zwrocUczniowZklasy;
 import static utilities.Utils.customResize;
 
@@ -48,7 +56,7 @@ public class KlasaController implements Initializable {
     private Button powrotbtn;
     @FXML
     private Label userid;
-    private String klasa = null;
+    private static String klasa = null;
     private String username = null;
     // do zrobienia po wybraniu taba:
     private String przedmiot = null;
@@ -58,16 +66,15 @@ public class KlasaController implements Initializable {
      * platform Run later zeby przekazac zmienne poprawnie
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {    Platform.runLater(() -> {
+    public void initialize(URL url, ResourceBundle rb) {
+        Platform.runLater(() -> {
 
-        
-         wstawUseraDoZalogowanoJako(username);
-         setUczniowie();
-         stworzTabeleZocenami("gowno");
-         
-    });
-        
-         
+            wstawUseraDoZalogowanoJako(username);
+            setUczniowie();
+            stworzTabeleZocenami("gowno");
+
+        });
+
     }
 
     @FXML
@@ -118,7 +125,6 @@ public class KlasaController implements Initializable {
     public void przekazKlaseIusername(String klasa, String username) {
         this.username = username;
         this.klasa = klasa;
-        
 
     }
 
@@ -130,45 +136,82 @@ public class KlasaController implements Initializable {
         this.uczniowie = zwrocUczniowZklasy(klasa);
     }
     
+    private void stworzZakladki(){
+        // to do zakladki
+        // https://stackoverflow.com/questions/30656895/javafx-tabbed-pane-with-a-table-view-on-each-tab
+        // buttony
+        // https://stackoverflow.com/questions/29489366/how-to-add-button-in-javafx-table-view
+    }
     
-   private void stworzTabeleZocenami(String przedmiot){
-       
+    private void stworzTabeleZocenami(String przedmiot) {
+
         TableView<Uczen> table = new TableView<Uczen>();
         table.setEditable(true);
- 
+
         TableColumn firstNameCol = new TableColumn("Imie");
         firstNameCol.setMinWidth(100);
         firstNameCol.setCellValueFactory(
                 new PropertyValueFactory<Uczen, String>("imie"));
- 
+
         TableColumn lastNameCol = new TableColumn("Nazwisko");
         lastNameCol.setMinWidth(100);
         lastNameCol.setCellValueFactory(
                 new PropertyValueFactory<Uczen, String>("nazwisko"));
-        
-       for (Uczen uczen:uczniowie) {
-           Set oceny=uczen.getOcenas();
-           ObservableList<Integer> ocenyUcznia = FXCollections.observableArrayList();
-           for(Iterator iterator=oceny.iterator();iterator.hasNext();){
-              Ocena ocena = (Ocena) iterator.next();
-              
-           }
-           
-           
-       }
-//        TableColumn emailCol = new TableColumn("Email");
-//        emailCol.setMinWidth(200);
-//        emailCol.setCellValueFactory(
-//                new PropertyValueFactory<Person, String>("email"));
-        ObservableList<Uczen> data =
-        FXCollections.observableArrayList(uczniowie);
+
+        for (Uczen uczen : uczniowie) {
+            Set oceny = uczen.getOcenas();
+            ObservableList<Integer> ocenyUcznia = FXCollections.observableArrayList();
+            for (Iterator iterator = oceny.iterator(); iterator.hasNext();) {
+                Ocena ocena = (Ocena) iterator.next();
+
+            }
+
+        }
+        TableColumn ocenyCol = new TableColumn("Oceny");
+        ocenyCol.setMinWidth(200);
+
+        ocenyCol.setCellValueFactory(new Callback<CellDataFeatures<Uczen, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(CellDataFeatures<Uczen, String> data) {
+                StringProperty sp = new SimpleStringProperty();
+                Set wszystkieOcenyUcznia;
+                sp.setValue(String.valueOf(
+                        //magic
+                        wyliczOcenyZmojegoPrzedmiotu(data)
+                ));
+                return sp;
+            }
+        });
+        ObservableList<Uczen> data
+                = FXCollections.observableArrayList(uczniowie);
         table.setItems(data);
-        table.getColumns().addAll(firstNameCol, lastNameCol);
-        
+        table.getColumns().addAll(firstNameCol, lastNameCol, ocenyCol);
+
         tabPane.getChildren().clear();
         customResize(table);
         tabPane.getChildren().add(table);
-        
-        
+
+    }
+
+    public static String wyliczOcenyZmojegoPrzedmiotu(CellDataFeatures<Uczen, String> data) {
+        // pesel do dania dynamicznie
+        // przedmiot do wziecia z taba
+        // List<Przedmiot> przedmiot = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa,22222222220L);
+        String przedmiot = "jezyk_angielski";
+        String oceny="";
+        Set wszystkieOcenyUcznia = data.getValue().getOcenas();
+
+        for (Iterator iterator = wszystkieOcenyUcznia.iterator(); iterator.hasNext();) {
+            Ocena ocena = (Ocena) iterator.next();
+            System.out.println(ocena.getPrzedmiot().getNazwaPrzedmiotu());
+            if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(przedmiot)) {
+                System.out.println(ocena.getStopien());
+                
+               oceny=oceny+ocena.getStopien()+", ";
+            }
+
+        }
+
+        return oceny;
     }
 }
