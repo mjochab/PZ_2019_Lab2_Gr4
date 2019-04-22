@@ -16,18 +16,19 @@ import mapping.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import static utilities.HibernateUtil.zwrocKtoZalogowany;
 import static utilities.HibernateUtil.zwrocPrzedmiotyKtorychUczeDanaKlase;
 import static utilities.HibernateUtil.zwrocUczniowZklasy;
 
 public class HibernateTest {
 
     public static void main(String[] args) throws ParseException {
-    List<Przedmiot> przedmioty=zwrocPrzedmiotyKtorychUczeDanaKlase("1a", 22222222221L);
-    
-    for(Przedmiot przedmiot:przedmioty){
-        System.out.println(przedmiot.getNazwaPrzedmiotu());
+        
+        
+        
+          System.out.println(zwrocKtoZalogowany(22222222225L));
     }
 
     }
 
-}
+

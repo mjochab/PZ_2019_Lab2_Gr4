@@ -99,6 +99,18 @@ public class HibernateUtil {
         List<Klasa> klasy = entityManager.createQuery(criteria).getResultList();
         return klasy;
     }
+    
+    public static String zwrocKtoZalogowany(Long pesel){
+        
+         CriteriaQuery<String> criteria = builder.createQuery(String.class);
+        Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
+        criteria.select(root.get("kto"));
+        criteria.where(builder.equal(root.get("pesel"), pesel));
+
+        String kto = entityManager.createQuery(criteria).getSingleResult();
+        return kto;
+        
+    }
 
     public static String[] zwrocNazwyKlasKtorychUcze(Long pesel) {
 
