@@ -8,8 +8,10 @@ package oknoNauczyciel;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,6 +27,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import mapping.Ocena;
 import mapping.Uczen;
 import static utilities.HibernateUtil.zwrocUczniowZklasy;
 import static utilities.Utils.customResize;
@@ -142,7 +145,17 @@ public class KlasaController implements Initializable {
         lastNameCol.setMinWidth(100);
         lastNameCol.setCellValueFactory(
                 new PropertyValueFactory<Uczen, String>("nazwisko"));
- 
+        
+       for (Uczen uczen:uczniowie) {
+           Set oceny=uczen.getOcenas();
+           ObservableList<Integer> ocenyUcznia = FXCollections.observableArrayList();
+           for(Iterator iterator=oceny.iterator();iterator.hasNext();){
+              Ocena ocena = (Ocena) iterator.next();
+              
+           }
+           
+           
+       }
 //        TableColumn emailCol = new TableColumn("Email");
 //        emailCol.setMinWidth(200);
 //        emailCol.setCellValueFactory(
