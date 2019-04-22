@@ -13,14 +13,10 @@
             <Label fx:id="userid1" layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="177.0" text="Dziennik elektroniczny.net" />
          </children>
       </AnchorPane>
-      <Button id="zaloguj_btn" fx:id="zalogujbtn" layoutX="515.0" layoutY="277.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="189.0" text="Zaloguj" />
+      <Button id="zaloguj_btn" fx:id="zalogujbtn" layoutX="515.0" layoutY="277.0" mnemonicParsing="false" onAction="#logowanie" prefHeight="25.0" prefWidth="189.0" text="Zaloguj" />
       <Label layoutX="515.0" layoutY="185.0" text="Login" />
       <Label layoutX="515.0" layoutY="222.0" text="Hasło" />
       <TextField id="login_field" layoutX="558.0" layoutY="181.0" />
       <PasswordField id="password_field" layoutX="558.0" layoutY="218.0" />
-      <Button id="uczen_btn" layoutX="713.0" layoutY="343.0" mnemonicParsing="false" onAction="#logUczen" prefHeight="25.0" prefWidth="73.0" text="Uczeń" />
-      <Button id="dyrektor_btn" layoutX="622.0" layoutY="343.0" mnemonicParsing="false" onAction="#logDyrektor" prefHeight="25.0" prefWidth="73.0" text="Dyrektor" />
-      <Button id="nauczyciel_btn" layoutX="533.0" layoutY="343.0" mnemonicParsing="false" onAction="#logNauczyciel" text="Nauczyciel" />
-      <Button id="rodzic_btn" layoutX="444.0" layoutY="343.0" mnemonicParsing="false" onAction="#logRodzic" prefHeight="25.0" prefWidth="73.0" text="Rodzic" />
    </children>
 </AnchorPane>

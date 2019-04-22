@@ -39,8 +39,9 @@ public class LogowanieController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
+    //tu zrobić logowanie w zależności KTO się loguje
     @FXML
-    private void logDyrektor(ActionEvent event) throws IOException {
+    private void logowanie(ActionEvent event) throws IOException {
             AnchorPane pane = FXMLLoader.load(getClass().getResource("/oknoDyrektor/Dyrektor.fxml"));
              rootPane.getChildren().setAll(pane);
     }
