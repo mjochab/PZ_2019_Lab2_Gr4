@@ -15,7 +15,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import oknoDyrektor.*;
+import mapping.*;
+import utilities.*;
 
 /**
  * FXML Controller class
@@ -44,6 +45,7 @@ public class LogowanieController implements Initializable {
     private void logowanie(ActionEvent event) throws IOException {
             AnchorPane pane = FXMLLoader.load(getClass().getResource("/oknoDyrektor/Dyrektor.fxml"));
              rootPane.getChildren().setAll(pane);
+             
     }
     @FXML
     private void logNauczyciel(ActionEvent event) throws IOException {
