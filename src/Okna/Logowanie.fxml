@@ -16,7 +16,7 @@
       <Button id="zaloguj_btn" fx:id="zalogujbtn" layoutX="515.0" layoutY="277.0" mnemonicParsing="false" onAction="#logNauczyciel" prefHeight="25.0" prefWidth="189.0" text="Zaloguj" />
       <Label layoutX="515.0" layoutY="185.0" text="Login" />
       <Label layoutX="515.0" layoutY="222.0" text="Hasło" />
-      <TextField id="login_field" layoutX="558.0" layoutY="181.0" />
-      <PasswordField id="password_field" layoutX="558.0" layoutY="218.0" />
+      <TextField id="login_field" fx:id="login_field" layoutX="558.0" layoutY="181.0" />
+      <PasswordField id="password_field" fx:id="password_field" layoutX="558.0" layoutY="218.0" />
    </children>
 </AnchorPane>

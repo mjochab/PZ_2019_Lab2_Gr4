@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import mapping.*;
@@ -25,9 +26,9 @@ import utilities.*;
  */
 public class LogowanieController implements Initializable {
     @FXML
-    private Text login;
+    private TextField login_field;
     @FXML
-    private Text haslo;
+    private TextField password_field;
     @FXML
     private Button zalogujbtn;
     @FXML
@@ -38,7 +39,7 @@ public class LogowanieController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+       
     }
     //tu zrobić logowanie w zależności KTO się loguje
     @FXML
@@ -49,8 +50,11 @@ public class LogowanieController implements Initializable {
     }
     @FXML
     private void logNauczyciel(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("/oknoNauczyciel/NauczycielKlasy.fxml"));
-             rootPane.getChildren().setAll(pane);
+        //TextField login_field = new TextField();
+        // login_field.setText("elko");
+         System.out.println(login_field.getText());
+         AnchorPane pane = FXMLLoader.load(getClass().getResource("/oknoNauczyciel/NauczycielKlasy.fxml"));
+         rootPane.getChildren().setAll(pane);
     }
     @FXML
     private void logRodzic(ActionEvent event) throws IOException {
