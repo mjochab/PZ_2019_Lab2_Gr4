@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 21 kwi 2019, 11:03:06 by Hibernate Tools 4.3.1 -->
+<!-- Generated 22 kwi 2019, 16:31:19 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="mapping.Klasa" table="klasa" catalog="dziennik_elektroniczny" optimistic-lock="version">
         <id name="nazwaKlasy" type="string">
@@ -14,17 +14,17 @@
         <property name="rokSzkolny" type="date">
             <column name="rok_szkolny" length="10" />
         </property>
-        <set name="skladKlasies" table="sklad_klasy" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="klasa" length="2" not-null="true" />
-            </key>
-            <one-to-many class="mapping.SkladKlasy" />
-        </set>
         <set name="zajecias" table="zajecia" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="klasa" length="2" not-null="true" />
             </key>
             <one-to-many class="mapping.Zajecia" />
+        </set>
+        <set name="skladKlasies" table="sklad_klasy" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="klasa" length="2" not-null="true" />
+            </key>
+            <one-to-many class="mapping.SkladKlasy" />
         </set>
         <set name="uczens" table="uczen" inverse="true" lazy="true" fetch="select">
             <key>

@@ -18,9 +18,9 @@
       <Label fx:id="userid" layoutX="1161.0" layoutY="16.0" prefHeight="17.0" prefWidth="97.0" text="tu login" />
       <TabPane layoutX="232.0" layoutY="41.0" prefHeight="669.0" prefWidth="1029.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab text="Oceny">
+          <Tab text="tab1">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane fx:id="tabPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <ScrollPane prefHeight="641.0" prefWidth="1029.0">
                            <content>
@@ -31,44 +31,6 @@
                                     <TableColumn prefWidth="255.0" text="Ocena" />
                                     <TableColumn prefWidth="203.0" text="Średnia" />
                                 </columns>
-                              </TableView>
-                           </content>
-                        </ScrollPane>
-                     </children></AnchorPane>
-            </content>
-          </Tab>
-          <Tab text="Nieobecnosci">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <ScrollPane prefHeight="641.0" prefWidth="1029.0">
-                           <content>
-                              <TableView prefHeight="639.0" prefWidth="1013.0">
-                                 <columns>
-                                    <TableColumn prefWidth="167.0" text="Imie" />
-                                    <TableColumn prefWidth="246.0" text="Nazwisko" />
-                                    <TableColumn prefWidth="255.0" text="Data" />
-                                    <TableColumn prefWidth="138.0" text="Usprawiedliwione?" />
-                                 </columns>
-                              </TableView>
-                           </content>
-                        </ScrollPane>
-                     </children></AnchorPane>
-            </content>
-          </Tab>
-          <Tab text="Usprawiedliwnia">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <ScrollPane prefHeight="641.0" prefWidth="1029.0">
-                           <content>
-                              <TableView prefHeight="639.0" prefWidth="1013.0">
-                                 <columns>
-                                    <TableColumn prefWidth="167.0" text="Imie" />
-                                    <TableColumn prefWidth="246.0" text="Nazwisko" />
-                                    <TableColumn prefWidth="255.0" text="Data" />
-                                    <TableColumn prefWidth="138.0" text="Rodzic" />
-                                 </columns>
                               </TableView>
                            </content>
                         </ScrollPane>
