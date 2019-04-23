@@ -25,6 +25,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -51,6 +53,8 @@ public class KlasaController implements Initializable {
     @FXML
     private AnchorPane tabPane;
     @FXML
+    private TabPane tabsPane;
+    @FXML
     private AnchorPane rootPane;
     @FXML
     private Button powrotbtn;
@@ -60,6 +64,7 @@ public class KlasaController implements Initializable {
     private String username = null;
     // do zrobienia po wybraniu taba:
     private String przedmiot = null;
+    private Long pesel = null;
     List<Uczen> uczniowie = new ArrayList<>();
 
     /**
@@ -71,8 +76,9 @@ public class KlasaController implements Initializable {
 
             wstawUseraDoZalogowanoJako(username);
             setUczniowie();
-            stworzTabeleZocenami("gowno");
-
+            //stworzTabeleZocenami("gowno");
+            stworzZakladki();
+            System.out.println(pesel);
         });
 
     }
@@ -122,10 +128,11 @@ public class KlasaController implements Initializable {
 
     }
 
-    public void przekazKlaseIusername(String klasa, String username) {
+    public void przekazKlaseIusername(String klasa, String username, Long pesel) {
         this.username = username;
         this.klasa = klasa;
-
+        this.pesel = pesel;
+        
     }
 
     public String getKlasa() {
@@ -135,15 +142,27 @@ public class KlasaController implements Initializable {
     public void setUczniowie() {
         this.uczniowie = zwrocUczniowZklasy(klasa);
     }
-    
-    private void stworzZakladki(){
+
+    private void stworzZakladki() {
         // to do zakladki
         // https://stackoverflow.com/questions/30656895/javafx-tabbed-pane-with-a-table-view-on-each-tab
         // buttony
         // https://stackoverflow.com/questions/29489366/how-to-add-button-in-javafx-table-view
+
+        List<Przedmiot> przedmioty = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa, pesel);
+        for (Przedmiot przedmiot : przedmioty) {
+            Tab tabA = new Tab();
+            tabA.setText(przedmiot.getNazwaPrzedmiotu());
+            tabA.setContent(stworzTabeleZocenami(przedmiot.getNazwaPrzedmiotu()));
+            tabsPane.getTabs().removeAll();
+            tabsPane.getTabs().add(tabA);
+        }
+
+        //Create Tabs
+        //tabPane.getChildren().add(table);
     }
-    
-    private void stworzTabeleZocenami(String przedmiot) {
+
+    private TableView stworzTabeleZocenami(String przedmiot) {
 
         TableView<Uczen> table = new TableView<Uczen>();
         table.setEditable(true);
@@ -177,7 +196,7 @@ public class KlasaController implements Initializable {
                 Set wszystkieOcenyUcznia;
                 sp.setValue(String.valueOf(
                         //magic
-                        wyliczOcenyZmojegoPrzedmiotu(data)
+                        wyliczOcenyZmojegoPrzedmiotu(data, przedmiot)
                 ));
                 return sp;
             }
@@ -186,19 +205,17 @@ public class KlasaController implements Initializable {
                 = FXCollections.observableArrayList(uczniowie);
         table.setItems(data);
         table.getColumns().addAll(firstNameCol, lastNameCol, ocenyCol);
-
-        tabPane.getChildren().clear();
         customResize(table);
-        tabPane.getChildren().add(table);
+        return table;
 
     }
 
-    public static String wyliczOcenyZmojegoPrzedmiotu(CellDataFeatures<Uczen, String> data) {
+    public static String wyliczOcenyZmojegoPrzedmiotu(CellDataFeatures<Uczen, String> data, String przedmiot) {
         // pesel do dania dynamicznie
         // przedmiot do wziecia z taba
         // List<Przedmiot> przedmiot = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa,22222222220L);
-        String przedmiot = "jezyk_angielski";
-        String oceny="";
+        
+        String oceny = "";
         Set wszystkieOcenyUcznia = data.getValue().getOcenas();
 
         for (Iterator iterator = wszystkieOcenyUcznia.iterator(); iterator.hasNext();) {
@@ -206,8 +223,8 @@ public class KlasaController implements Initializable {
             System.out.println(ocena.getPrzedmiot().getNazwaPrzedmiotu());
             if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(przedmiot)) {
                 System.out.println(ocena.getStopien());
-                
-               oceny=oceny+ocena.getStopien()+", ";
+
+                oceny = oceny + ocena.getStopien() + ", ";
             }
 
         }

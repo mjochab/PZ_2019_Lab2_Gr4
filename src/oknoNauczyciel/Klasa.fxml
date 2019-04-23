@@ -16,7 +16,7 @@
       <Label fx:id="userid1" layoutX="24.0" layoutY="24.0" prefHeight="17.0" prefWidth="177.0" text="Dziennik elektroniczny.net" />
       <Label layoutX="1064.0" layoutY="16.0" prefHeight="17.0" prefWidth="97.0" text="Zalogowano jako" />
       <Label fx:id="userid" layoutX="1161.0" layoutY="16.0" prefHeight="17.0" prefWidth="97.0" text="tu login" />
-      <TabPane layoutX="232.0" layoutY="41.0" prefHeight="669.0" prefWidth="1029.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tabsPane" layoutX="232.0" layoutY="41.0" prefHeight="669.0" prefWidth="1029.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="tab1">
             <content>

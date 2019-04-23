@@ -32,7 +32,7 @@ import utilities.HibernateUtil;
 public class NauczycielKlasyController implements Initializable {
 
     //W oczekiwaniu na przekazanie wartosci z logowania, tymczasowe stałe:
-    private Long pesel = 22222222220L;
+    private Long pesel = 22222222226L;
     private String username = "Wojtus";
 
     @FXML
@@ -73,10 +73,12 @@ public class NauczycielKlasyController implements Initializable {
 
         String[] nazwyKlas = utilities.HibernateUtil.zwrocNazwyKlasKtorychUcze(pesel);
         Button[] listaButtonow = new Button[nazwyKlas.length];
+        System.out.println("nazwy klas.length: "+nazwyKlas.length);
         for (int i = 0; i < nazwyKlas.length; i++) {
             Button b = new Button(nazwyKlas[i]);
             b.setId("klasax" + i);
             b.setText(nazwyKlas[i]);
+            System.out.println(b.getText());
             b.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event -> {
                         try {
@@ -115,7 +117,7 @@ public class NauczycielKlasyController implements Initializable {
         st.setScene(scene);
 
         KlasaController mainController = fxmlLoader.<KlasaController>getController();
-        mainController.przekazKlaseIusername(b.getText(),username);
+        mainController.przekazKlaseIusername(b.getText(),username,pesel);
         
 
         st.show();

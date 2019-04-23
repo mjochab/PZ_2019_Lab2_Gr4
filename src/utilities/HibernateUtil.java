@@ -88,19 +88,7 @@ public class HibernateUtil {
 
         return klasy;
     }
-
-    public static List<Klasa> zwrocKlasyKtorychUcze(Long pesel) {
-
-        CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
-        Root<Nauczyciel> root = criteria.from(Nauczyciel.class);
-        criteria.select(root.get("klasas"));
-        criteria.where(builder.equal(root.get("pesel"), pesel));
-
-        List<Klasa> klasy = entityManager.createQuery(criteria).getResultList();
-        return klasy;
-    }
-    
-    public static String zwrocKtoZalogowany(Long pesel){
+  public static String zwrocKtoZalogowany(Long pesel){
         
          CriteriaQuery<String> criteria = builder.createQuery(String.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
@@ -112,13 +100,40 @@ public class HibernateUtil {
         
     }
 
+    public static List<Klasa> zwrocKlaseKtoraWychowuje(Long pesel) {
+
+        CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
+        Root<Nauczyciel> root = criteria.from(Nauczyciel.class);
+        criteria.select(root.get("klasas"));
+        criteria.where(builder.equal(root.get("pesel"), pesel));
+
+        List<Klasa> klasy = entityManager.createQuery(criteria).getResultList();
+        return klasy;
+    }
+  
+        public static List<Klasa> zwrocKlasyKtorychUcze(Long pesel) {
+
+        CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
+        Root<Zajecia> root = criteria.from(Zajecia.class);
+        criteria.select(root.get("klasa"));
+        criteria.where(builder.equal(root.get("nauczyciel"), pesel));
+        criteria.distinct(true);
+        List<Klasa> klasy = entityManager.createQuery(criteria).getResultList();
+        
+        return klasy;
+    }
+
+  
+
     public static String[] zwrocNazwyKlasKtorychUcze(Long pesel) {
 
         List<Klasa> klasy = zwrocKlasyKtorychUcze(pesel);
+       
         String nazwyKlas[] = new String[klasy.size()];
         int i = 0;
         for (Klasa klasa : klasy) {
             nazwyKlas[i] = klasa.getNazwaKlasy();
+            
             i++;
         }
 
@@ -154,4 +169,5 @@ public class HibernateUtil {
         
         return przedmioty;
     }
+
 }
