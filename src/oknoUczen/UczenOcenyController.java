@@ -127,20 +127,18 @@ public class UczenOcenyController implements Initializable {
     }
 
     public List<Integer> zwrocOcenyDlaPrzedmiotu(Set oceny, String nazwaKolumny) {
-        Integer[] lista = new Integer[oceny.size()];
-        int i = 0;
-        List<Integer> listaOcenLocal;
+        List<Integer> lista = new ArrayList<>();
         Iterator<Ocena> it = oceny.iterator();
 
         while (it.hasNext()) {
             Ocena ocena = it.next();
             if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(nazwaKolumny)) {
-                lista[i] = ocena.getStopien();
-                i++;
+                lista.add(ocena.getStopien());
+            } else {
+                
             }
         }
-        listaOcenLocal = Arrays.asList(lista);
-        return listaOcenLocal;
+        return lista;
     }
 
     public void wpisywanieOcen() {
@@ -151,13 +149,16 @@ public class UczenOcenyController implements Initializable {
         }
         for (TableColumn<Integer, Number> kol : kolumna) {
             listaOcen = zwrocOcenyDlaPrzedmiotu(oceny, kol.getText());
-
             if (listaOcen.isEmpty()) {
-                
+
             } else {
+                System.out.println(listaOcen.toString());
+                for (int i = 0; i < listaOcen.size(); i++) {
+                    System.out.println(listaOcen.get(i).toString());                   
+                }
                 kol.setCellValueFactory(cellData -> {
                     Integer rowIndex = cellData.getValue();
-                    return new ReadOnlyIntegerWrapper(listaOcen.get(rowIndex));
+                    return new ReadOnlyIntegerWrapper(listaOcen.get(0));
                 });
             }
 
