@@ -2,11 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
@@ -16,29 +12,7 @@
       <Label fx:id="userid1" layoutX="24.0" layoutY="24.0" prefHeight="17.0" prefWidth="177.0" text="Dziennik elektroniczny.net" />
       <Label layoutX="1064.0" layoutY="16.0" prefHeight="17.0" prefWidth="97.0" text="Zalogowano jako" />
       <Label fx:id="userid" layoutX="1161.0" layoutY="16.0" prefHeight="17.0" prefWidth="97.0" text="tu login" />
-      <TabPane fx:id="tabsPane" layoutX="232.0" layoutY="41.0" prefHeight="669.0" prefWidth="1029.0" tabClosingPolicy="UNAVAILABLE">
-        <tabs>
-          <Tab text="tab1">
-            <content>
-              <AnchorPane fx:id="tabPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <ScrollPane prefHeight="641.0" prefWidth="1029.0">
-                           <content>
-                              <TableView prefHeight="639.0" prefWidth="1013.0">
-                                <columns>
-                                  <TableColumn prefWidth="167.0" text="Imie" />
-                                  <TableColumn prefWidth="246.0" text="Nazwisko" />
-                                    <TableColumn prefWidth="255.0" text="Ocena" />
-                                    <TableColumn prefWidth="203.0" text="Średnia" />
-                                </columns>
-                              </TableView>
-                           </content>
-                        </ScrollPane>
-                     </children></AnchorPane>
-            </content>
-          </Tab>
-        </tabs>
-      </TabPane>
+      <TabPane fx:id="tabsPane" layoutX="232.0" layoutY="41.0" prefHeight="669.0" prefWidth="1029.0" tabClosingPolicy="UNAVAILABLE" />
       <Button fx:id="dodaj_ocenebtn" layoutX="54.0" layoutY="141.0" mnemonicParsing="false" onAction="#LoadDodajOcene" prefHeight="25.0" prefWidth="118.0" text="Dodaj ocene" />
       <Button fx:id="dodaj_nieobecnoscbtn" layoutX="54.0" layoutY="187.0" mnemonicParsing="false" onAction="#LoadDodajNieobecnosc" text="Dodaj nieobecnosc" />
       <Button fx:id="usprawiedliwbtn" layoutX="54.0" layoutY="234.0" mnemonicParsing="false" onAction="#LoadUsprawiedliw" prefHeight="25.0" prefWidth="118.0" text="Usprawiedliw" />

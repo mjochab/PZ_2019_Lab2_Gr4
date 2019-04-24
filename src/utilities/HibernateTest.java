@@ -101,7 +101,9 @@ public class HibernateTest {
 
             i++;
         }
-
+        String gowno = "gowno";
+        String co = gowno.getClass().toString();
+        System.out.println(co);
     }
 
 }

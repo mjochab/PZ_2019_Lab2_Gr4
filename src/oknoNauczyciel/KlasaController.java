@@ -78,7 +78,7 @@ public class KlasaController implements Initializable {
             setUczniowie();
             //stworzTabeleZocenami("gowno");
             stworzZakladki();
-            System.out.println(pesel);
+           
         });
 
     }
@@ -101,7 +101,7 @@ public class KlasaController implements Initializable {
 
         AnchorPane pane = FXMLLoader.load(getClass().getResource("NauczycielKlasy.fxml"));
         rootPane.getChildren().setAll(pane);
-        System.out.println(username);
+        
     }
 
     @FXML
@@ -144,7 +144,6 @@ public class KlasaController implements Initializable {
     }
 
     private void stworzZakladki() {
-        // to do zakladki
         // https://stackoverflow.com/questions/30656895/javafx-tabbed-pane-with-a-table-view-on-each-tab
         // buttony
         // https://stackoverflow.com/questions/29489366/how-to-add-button-in-javafx-table-view
@@ -158,8 +157,7 @@ public class KlasaController implements Initializable {
             tabsPane.getTabs().add(tabA);
         }
 
-        //Create Tabs
-        //tabPane.getChildren().add(table);
+
     }
 
     private TableView stworzTabeleZocenami(String przedmiot) {
@@ -178,11 +176,13 @@ public class KlasaController implements Initializable {
                 new PropertyValueFactory<Uczen, String>("nazwisko"));
 
         for (Uczen uczen : uczniowie) {
+           
             Set oceny = uczen.getOcenas();
-            ObservableList<Integer> ocenyUcznia = FXCollections.observableArrayList();
+            
+            //ObservableList<Integer> ocenyUcznia = FXCollections.observableArrayList();
             for (Iterator iterator = oceny.iterator(); iterator.hasNext();) {
                 Ocena ocena = (Ocena) iterator.next();
-
+                System.out.println(ocena.getUczen().getNazwisko()+" "+ocena.getPrzedmiot().getNazwaPrzedmiotu()+" "+ocena.getStopien());    
             }
 
         }
@@ -192,11 +192,12 @@ public class KlasaController implements Initializable {
         ocenyCol.setCellValueFactory(new Callback<CellDataFeatures<Uczen, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(CellDataFeatures<Uczen, String> data) {
+                //tutaj robic kolejna kolumne w petli zaleznie ile jest ocen
                 StringProperty sp = new SimpleStringProperty();
-                Set wszystkieOcenyUcznia;
+                // jakby przechowac id oceny i robic kolejne kolumny to potem z hibernate moge sie odniesc i zmienic poszczegolne oceny
                 sp.setValue(String.valueOf(
                         //magic
-                        wyliczOcenyZmojegoPrzedmiotu(data, przedmiot)
+                        wyliczOcenyZmojegoPrzedmiotuZapiszJeDoStringa(data, przedmiot)
                 ));
                 return sp;
             }
@@ -210,20 +211,21 @@ public class KlasaController implements Initializable {
 
     }
 
-    public static String wyliczOcenyZmojegoPrzedmiotu(CellDataFeatures<Uczen, String> data, String przedmiot) {
+    public static String wyliczOcenyZmojegoPrzedmiotuZapiszJeDoStringa(CellDataFeatures<Uczen, String> daneZkomorkiTabeli, String przedmiot) {
         // pesel do dania dynamicznie
         // przedmiot do wziecia z taba
         // List<Przedmiot> przedmiot = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa,22222222220L);
         
         String oceny = "";
-        Set wszystkieOcenyUcznia = data.getValue().getOcenas();
+        Set wszystkieOcenyUcznia = daneZkomorkiTabeli.getValue().getOcenas();
+        
 
         for (Iterator iterator = wszystkieOcenyUcznia.iterator(); iterator.hasNext();) {
             Ocena ocena = (Ocena) iterator.next();
-            System.out.println(ocena.getPrzedmiot().getNazwaPrzedmiotu());
+            
             if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(przedmiot)) {
-                System.out.println(ocena.getStopien());
-
+                
+               
                 oceny = oceny + ocena.getStopien() + ", ";
             }
 
