@@ -78,7 +78,7 @@ public class KlasaController implements Initializable {
             setUczniowie();
             //stworzTabeleZocenami("gowno");
             stworzZakladki();
-           
+
         });
 
     }
@@ -101,7 +101,7 @@ public class KlasaController implements Initializable {
 
         AnchorPane pane = FXMLLoader.load(getClass().getResource("NauczycielKlasy.fxml"));
         rootPane.getChildren().setAll(pane);
-        
+
     }
 
     @FXML
@@ -132,7 +132,7 @@ public class KlasaController implements Initializable {
         this.username = username;
         this.klasa = klasa;
         this.pesel = pesel;
-        
+
     }
 
     public String getKlasa() {
@@ -144,6 +144,7 @@ public class KlasaController implements Initializable {
     }
 
     private void stworzZakladki() {
+        // to do zakladki
         // https://stackoverflow.com/questions/30656895/javafx-tabbed-pane-with-a-table-view-on-each-tab
         // buttony
         // https://stackoverflow.com/questions/29489366/how-to-add-button-in-javafx-table-view
@@ -156,7 +157,6 @@ public class KlasaController implements Initializable {
             tabsPane.getTabs().removeAll();
             tabsPane.getTabs().add(tabA);
         }
-
 
     }
 
@@ -176,13 +176,13 @@ public class KlasaController implements Initializable {
                 new PropertyValueFactory<Uczen, String>("nazwisko"));
 
         for (Uczen uczen : uczniowie) {
-           
+
             Set oceny = uczen.getOcenas();
-            
+
             //ObservableList<Integer> ocenyUcznia = FXCollections.observableArrayList();
             for (Iterator iterator = oceny.iterator(); iterator.hasNext();) {
                 Ocena ocena = (Ocena) iterator.next();
-                System.out.println(ocena.getUczen().getNazwisko()+" "+ocena.getPrzedmiot().getNazwaPrzedmiotu()+" "+ocena.getStopien());    
+                System.out.println(ocena.getUczen().getNazwisko() + " " + ocena.getPrzedmiot().getNazwaPrzedmiotu() + " " + ocena.getStopien());
             }
 
         }
@@ -210,22 +210,73 @@ public class KlasaController implements Initializable {
         return table;
 
     }
+    
+    // do roboty
+    private TableView stworzTabeleZkolumnamiOceny(String przedmiot) {
+        
+        
+        //5 kolumn - sprawdzian, kartkowka, odpowiedz, referat, zadanie domowe
 
+        TableView<Uczen> table = new TableView<Uczen>();
+        table.setEditable(true);
+
+        TableColumn firstNameCol = new TableColumn("Imie");
+        firstNameCol.setMinWidth(100);
+        firstNameCol.setCellValueFactory(
+                new PropertyValueFactory<Uczen, String>("imie"));
+
+        TableColumn lastNameCol = new TableColumn("Nazwisko");
+        lastNameCol.setMinWidth(100);
+        lastNameCol.setCellValueFactory(
+                new PropertyValueFactory<Uczen, String>("nazwisko"));
+
+        for (Uczen uczen : uczniowie) {
+
+            Set oceny = uczen.getOcenas();
+
+            //ObservableList<Integer> ocenyUcznia = FXCollections.observableArrayList();
+            for (Iterator iterator = oceny.iterator(); iterator.hasNext();) {
+                Ocena ocena = (Ocena) iterator.next();
+                System.out.println(ocena.getUczen().getNazwisko() + " " + ocena.getPrzedmiot().getNazwaPrzedmiotu() + " " + ocena.getStopien());
+            }
+
+        }
+        TableColumn ocenyCol = new TableColumn("Oceny");
+        ocenyCol.setMinWidth(200);
+
+        ocenyCol.setCellValueFactory(new Callback<CellDataFeatures<Uczen, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(CellDataFeatures<Uczen, String> data) {
+                //tutaj robic kolejna kolumne w petli zaleznie ile jest ocen
+                StringProperty sp = new SimpleStringProperty();
+                // jakby przechowac id oceny i robic kolejne kolumny to potem z hibernate moge sie odniesc i zmienic poszczegolne oceny
+                sp.setValue(String.valueOf(
+                        //magic
+                        wyliczOcenyZmojegoPrzedmiotuZapiszJeDoStringa(data, przedmiot)
+                ));
+                return sp;
+            }
+        });
+        ObservableList<Uczen> data
+                = FXCollections.observableArrayList(uczniowie);
+        table.setItems(data);
+        table.getColumns().addAll(firstNameCol, lastNameCol, ocenyCol);
+        customResize(table);
+        return table;
+
+    }
     public static String wyliczOcenyZmojegoPrzedmiotuZapiszJeDoStringa(CellDataFeatures<Uczen, String> daneZkomorkiTabeli, String przedmiot) {
         // pesel do dania dynamicznie
         // przedmiot do wziecia z taba
         // List<Przedmiot> przedmiot = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa,22222222220L);
-        
         String oceny = "";
         Set wszystkieOcenyUcznia = daneZkomorkiTabeli.getValue().getOcenas();
-        
 
         for (Iterator iterator = wszystkieOcenyUcznia.iterator(); iterator.hasNext();) {
             Ocena ocena = (Ocena) iterator.next();
-            
+
             if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(przedmiot)) {
-                
-               
+
                 oceny = oceny + ocena.getStopien() + ", ";
             }
 
@@ -233,4 +284,27 @@ public class KlasaController implements Initializable {
 
         return oceny;
     }
+
+    private String wyliczOcenyZmojegoPrzedmiotu(String przedmiot) {
+        // pesel do dania dynamicznie
+        // przedmiot do wziecia z taba
+        // List<Przedmiot> przedmiot = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa,22222222220L);
+
+        String oceny = "";
+// muisz zrobic tyle kolumn ile jest ocen w bazie, nie wiecej
+
+        for (Uczen uczen : uczniowie) {
+            Set ocenyUcznia = uczen.getOcenas();
+            for (Iterator it = ocenyUcznia.iterator(); it.hasNext();) {
+                Ocena ocena = (Ocena) it.next();
+                if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(przedmiot)) {
+                    
+//                new PropertyValueFactory<Ocena, Long>("stopien"));
+                }
+            }
+        }
+
+        return oceny;
+    }
+
 }

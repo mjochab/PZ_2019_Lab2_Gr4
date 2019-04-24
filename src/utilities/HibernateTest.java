@@ -17,6 +17,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import mapping.*;
+import utilities.HibernateUtil.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -104,6 +105,11 @@ public class HibernateTest {
         String gowno = "gowno";
         String co = gowno.getClass().toString();
         System.out.println(co);
+        
+        HibernateUtil.zwrocMaxLiczbeOcenZdanegoPrzedmiotu();
     }
+    
+    
+    
 
 }
