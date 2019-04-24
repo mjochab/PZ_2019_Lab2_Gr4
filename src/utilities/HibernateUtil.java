@@ -144,12 +144,14 @@ public class HibernateUtil {
     }
     
     public static Long uzyskajPeselZalogowany(String login, String haslo){
-        CriteriaQuery<String> criteria = builder.createQuery(String.class);
+        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
         criteria.select(root.get("pesel"));
         criteria.where(builder.equal(root.get("login"), login));
         criteria.where(builder.equal(root.get("haslo"), haslo));
-        Long nr_pesel = Long.parseLong(entityManager.createQuery(criteria).getSingleResult());
+       // List<Long> pesele = entityManager.createQuery(criteria).getResultList();      
+        Long nr_pesel = entityManager.createQuery(criteria).getSingleResult();
+        //criteria.where( builder.equal( root.get( Person_.name ), "John Doe" ) );
         
         return nr_pesel;
     }
@@ -158,9 +160,9 @@ public class HibernateUtil {
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
         criteria.select(root.get("kto"));
-        criteria.where(builder.equal(root.get("pesel"), pesel));
+        criteria.where(builder.equal(root.get("pesel"), pesel));      
         String osoba = entityManager.createQuery(criteria).getSingleResult();
-        
+
         return osoba;
     }
       
