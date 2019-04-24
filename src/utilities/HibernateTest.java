@@ -24,6 +24,7 @@ import static utilities.HibernateUtil.zwrocUczniowZklasy;
 public class HibernateTest {
 
     public static void main(String[] args) throws ParseException {
+
     /*List<Przedmiot> przedmioty=zwrocPrzedmiotyKtorychUczeDanaKlase("1a", 22222222221L);
     
     for(Przedmiot przedmiot:przedmioty){
@@ -31,7 +32,6 @@ public class HibernateTest {
     }*/
      System.out.println(uzyskajKtoZalogowany(22222222225L));
      System.out.println(uzyskajPeselZalogowany("login","pass"));
-    }
 
-    
+    }
 }
