@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -16,7 +17,8 @@ import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-
+import org.hibernate.criterion.Projections;
+import org.hibernate.persister.entity.AbstractEntityPersister;
 
 public class HibernateUtil {
 
@@ -84,8 +86,19 @@ public class HibernateUtil {
 
         return klasy;
     }
+  public static String zwrocKtoZalogowany(Long pesel){
+        
+         CriteriaQuery<String> criteria = builder.createQuery(String.class);
+        Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
+        criteria.select(root.get("kto"));
+        criteria.where(builder.equal(root.get("pesel"), pesel));
 
-    public static List<Klasa> zwrocKlasyKtorychUcze(Long pesel) {
+        String kto = entityManager.createQuery(criteria).getSingleResult();
+        return kto;
+        
+    }
+
+    public static List<Klasa> zwrocKlaseKtoraWychowuje(Long pesel) {
 
         CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
         Root<Nauczyciel> root = criteria.from(Nauczyciel.class);
@@ -105,16 +118,31 @@ public class HibernateUtil {
 
         String kto = entityManager.createQuery(criteria).getSingleResult();
         return kto;
+  
+        public static List<Klasa> zwrocKlasyKtorychUcze(Long pesel) {
+
+        CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
+        Root<Zajecia> root = criteria.from(Zajecia.class);
+        criteria.select(root.get("klasa"));
+        criteria.where(builder.equal(root.get("nauczyciel"), pesel));
+        criteria.distinct(true);
+        List<Klasa> klasy = entityManager.createQuery(criteria).getResultList();
+        
+        return klasy;
 
     }
+
+  
 
     public static String[] zwrocNazwyKlasKtorychUcze(Long pesel) {
 
         List<Klasa> klasy = zwrocKlasyKtorychUcze(pesel);
+       
         String nazwyKlas[] = new String[klasy.size()];
         int i = 0;
         for (Klasa klasa : klasy) {
             nazwyKlas[i] = klasa.getNazwaKlasy();
+            
             i++;
         }
 
@@ -145,10 +173,12 @@ public class HibernateUtil {
         criteria.where(builder.equal(root.get("klasa"), klasa));
         criteria.where(builder.equal(root.get("nauczyciel"), pesel));
         criteria.distinct(true);
+        
         List<Przedmiot> przedmioty = entityManager.createQuery(criteria).getResultList();
 
         return przedmioty;
     }
+
 
     public static Uczen zwrocUcznia(Long pesel) {
         CriteriaQuery<Uczen> criteria = builder.createQuery(Uczen.class);
@@ -160,4 +190,37 @@ public class HibernateUtil {
         return uczen;
 
     }
+
+        public static void zwrocMaxLiczbeOcenZdanegoPrzedmiotu() {
+// dorob sprawdzanie dla klasy
+        CriteriaQuery<Tuple> criteria = builder.createQuery(Tuple.class);
+        Root<Ocena> root = criteria.from(Ocena.class);
+        criteria.groupBy(root.get("przedmiot"));
+        //criteria.groupBy(root.get("uczen"));
+        criteria.multiselect(root.get("przedmiot"),builder.count(root.get("stopien")));
+        
+        List<Tuple> tuples = entityManager.createQuery(criteria).getResultList();
+        for (Tuple tuple : tuples ){
+            Przedmiot przedmiotek = (Przedmiot) tuple.get(0);
+            Long count = (Long) tuple.get(1);
+            System.out.println(przedmiotek.getNazwaPrzedmiotu()+" count: "+count);
+        }
+        
+
+//CriteriaQuery<Tuple> criteria = builder.createQuery( Tuple.class );
+//Root<Person> root = criteria.from( Person.class );
+//
+//criteria.groupBy(root.get("address"));
+//criteria.multiselect(root.get("address"), builder.count(root));
+//
+//List<Tuple> tuples = entityManager.createQuery( criteria ).getResultList();
+//
+//for ( Tuple tuple : tuples ) {
+//	String name = (String) tuple.get( 0 );
+//	Long count = (Long) tuple.get( 1 );
+//}
+        
+   
+    }
+  
 }

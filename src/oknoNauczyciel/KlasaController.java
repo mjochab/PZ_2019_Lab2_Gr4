@@ -25,6 +25,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -51,6 +53,8 @@ public class KlasaController implements Initializable {
     @FXML
     private AnchorPane tabPane;
     @FXML
+    private TabPane tabsPane;
+    @FXML
     private AnchorPane rootPane;
     @FXML
     private Button powrotbtn;
@@ -60,6 +64,7 @@ public class KlasaController implements Initializable {
     private String username = null;
     // do zrobienia po wybraniu taba:
     private String przedmiot = null;
+    private Long pesel = null;
     List<Uczen> uczniowie = new ArrayList<>();
 
     /**
@@ -71,7 +76,8 @@ public class KlasaController implements Initializable {
 
             wstawUseraDoZalogowanoJako(username);
             setUczniowie();
-            stworzTabeleZocenami("gowno");
+            //stworzTabeleZocenami("gowno");
+            stworzZakladki();
 
         });
 
@@ -95,7 +101,7 @@ public class KlasaController implements Initializable {
 
         AnchorPane pane = FXMLLoader.load(getClass().getResource("NauczycielKlasy.fxml"));
         rootPane.getChildren().setAll(pane);
-        System.out.println(username);
+
     }
 
     @FXML
@@ -122,9 +128,10 @@ public class KlasaController implements Initializable {
 
     }
 
-    public void przekazKlaseIusername(String klasa, String username) {
+    public void przekazKlaseIusername(String klasa, String username, Long pesel) {
         this.username = username;
         this.klasa = klasa;
+        this.pesel = pesel;
 
     }
 
@@ -135,15 +142,25 @@ public class KlasaController implements Initializable {
     public void setUczniowie() {
         this.uczniowie = zwrocUczniowZklasy(klasa);
     }
-    
-    private void stworzZakladki(){
+
+    private void stworzZakladki() {
         // to do zakladki
         // https://stackoverflow.com/questions/30656895/javafx-tabbed-pane-with-a-table-view-on-each-tab
         // buttony
         // https://stackoverflow.com/questions/29489366/how-to-add-button-in-javafx-table-view
+
+        List<Przedmiot> przedmioty = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa, pesel);
+        for (Przedmiot przedmiot : przedmioty) {
+            Tab tabA = new Tab();
+            tabA.setText(przedmiot.getNazwaPrzedmiotu());
+            tabA.setContent(stworzTabeleZocenami(przedmiot.getNazwaPrzedmiotu()));
+            tabsPane.getTabs().removeAll();
+            tabsPane.getTabs().add(tabA);
+        }
+
     }
-    
-    private void stworzTabeleZocenami(String przedmiot) {
+
+    private TableView stworzTabeleZocenami(String przedmiot) {
 
         TableView<Uczen> table = new TableView<Uczen>();
         table.setEditable(true);
@@ -159,11 +176,13 @@ public class KlasaController implements Initializable {
                 new PropertyValueFactory<Uczen, String>("nazwisko"));
 
         for (Uczen uczen : uczniowie) {
+
             Set oceny = uczen.getOcenas();
-            ObservableList<Integer> ocenyUcznia = FXCollections.observableArrayList();
+
+            //ObservableList<Integer> ocenyUcznia = FXCollections.observableArrayList();
             for (Iterator iterator = oceny.iterator(); iterator.hasNext();) {
                 Ocena ocena = (Ocena) iterator.next();
-
+                System.out.println(ocena.getUczen().getNazwisko() + " " + ocena.getPrzedmiot().getNazwaPrzedmiotu() + " " + ocena.getStopien());
             }
 
         }
@@ -173,11 +192,12 @@ public class KlasaController implements Initializable {
         ocenyCol.setCellValueFactory(new Callback<CellDataFeatures<Uczen, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(CellDataFeatures<Uczen, String> data) {
+                //tutaj robic kolejna kolumne w petli zaleznie ile jest ocen
                 StringProperty sp = new SimpleStringProperty();
-                Set wszystkieOcenyUcznia;
+                // jakby przechowac id oceny i robic kolejne kolumny to potem z hibernate moge sie odniesc i zmienic poszczegolne oceny
                 sp.setValue(String.valueOf(
                         //magic
-                        wyliczOcenyZmojegoPrzedmiotu(data)
+                        wyliczOcenyZmojegoPrzedmiotuZapiszJeDoStringa(data, przedmiot)
                 ));
                 return sp;
             }
@@ -186,32 +206,105 @@ public class KlasaController implements Initializable {
                 = FXCollections.observableArrayList(uczniowie);
         table.setItems(data);
         table.getColumns().addAll(firstNameCol, lastNameCol, ocenyCol);
-
-        tabPane.getChildren().clear();
         customResize(table);
-        tabPane.getChildren().add(table);
+        return table;
 
     }
+    
+    // do roboty
+    private TableView stworzTabeleZkolumnamiOceny(String przedmiot) {
+        
+        
+        //5 kolumn - sprawdzian, kartkowka, odpowiedz, referat, zadanie domowe
 
-    public static String wyliczOcenyZmojegoPrzedmiotu(CellDataFeatures<Uczen, String> data) {
+        TableView<Uczen> table = new TableView<Uczen>();
+        table.setEditable(true);
+
+        TableColumn firstNameCol = new TableColumn("Imie");
+        firstNameCol.setMinWidth(100);
+        firstNameCol.setCellValueFactory(
+                new PropertyValueFactory<Uczen, String>("imie"));
+
+        TableColumn lastNameCol = new TableColumn("Nazwisko");
+        lastNameCol.setMinWidth(100);
+        lastNameCol.setCellValueFactory(
+                new PropertyValueFactory<Uczen, String>("nazwisko"));
+
+        for (Uczen uczen : uczniowie) {
+
+            Set oceny = uczen.getOcenas();
+
+            //ObservableList<Integer> ocenyUcznia = FXCollections.observableArrayList();
+            for (Iterator iterator = oceny.iterator(); iterator.hasNext();) {
+                Ocena ocena = (Ocena) iterator.next();
+                System.out.println(ocena.getUczen().getNazwisko() + " " + ocena.getPrzedmiot().getNazwaPrzedmiotu() + " " + ocena.getStopien());
+            }
+
+        }
+        TableColumn ocenyCol = new TableColumn("Oceny");
+        ocenyCol.setMinWidth(200);
+
+        ocenyCol.setCellValueFactory(new Callback<CellDataFeatures<Uczen, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(CellDataFeatures<Uczen, String> data) {
+                //tutaj robic kolejna kolumne w petli zaleznie ile jest ocen
+                StringProperty sp = new SimpleStringProperty();
+                // jakby przechowac id oceny i robic kolejne kolumny to potem z hibernate moge sie odniesc i zmienic poszczegolne oceny
+                sp.setValue(String.valueOf(
+                        //magic
+                        wyliczOcenyZmojegoPrzedmiotuZapiszJeDoStringa(data, przedmiot)
+                ));
+                return sp;
+            }
+        });
+        ObservableList<Uczen> data
+                = FXCollections.observableArrayList(uczniowie);
+        table.setItems(data);
+        table.getColumns().addAll(firstNameCol, lastNameCol, ocenyCol);
+        customResize(table);
+        return table;
+
+    }
+    public static String wyliczOcenyZmojegoPrzedmiotuZapiszJeDoStringa(CellDataFeatures<Uczen, String> daneZkomorkiTabeli, String przedmiot) {
         // pesel do dania dynamicznie
         // przedmiot do wziecia z taba
         // List<Przedmiot> przedmiot = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa,22222222220L);
-        String przedmiot = "jezyk_angielski";
-        String oceny="";
-        Set wszystkieOcenyUcznia = data.getValue().getOcenas();
+        String oceny = "";
+        Set wszystkieOcenyUcznia = daneZkomorkiTabeli.getValue().getOcenas();
 
         for (Iterator iterator = wszystkieOcenyUcznia.iterator(); iterator.hasNext();) {
             Ocena ocena = (Ocena) iterator.next();
-            System.out.println(ocena.getPrzedmiot().getNazwaPrzedmiotu());
+
             if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(przedmiot)) {
-                System.out.println(ocena.getStopien());
-                
-               oceny=oceny+ocena.getStopien()+", ";
+
+                oceny = oceny + ocena.getStopien() + ", ";
             }
 
         }
 
         return oceny;
     }
+
+    private String wyliczOcenyZmojegoPrzedmiotu(String przedmiot) {
+        // pesel do dania dynamicznie
+        // przedmiot do wziecia z taba
+        // List<Przedmiot> przedmiot = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa,22222222220L);
+
+        String oceny = "";
+// muisz zrobic tyle kolumn ile jest ocen w bazie, nie wiecej
+
+        for (Uczen uczen : uczniowie) {
+            Set ocenyUcznia = uczen.getOcenas();
+            for (Iterator it = ocenyUcznia.iterator(); it.hasNext();) {
+                Ocena ocena = (Ocena) it.next();
+                if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(przedmiot)) {
+                    
+//                new PropertyValueFactory<Ocena, Long>("stopien"));
+                }
+            }
+        }
+
+        return oceny;
+    }
+
 }
