@@ -13,10 +13,11 @@
          <children>
             <ScrollPane fx:id="scrollView" layoutX="7.0" prefHeight="580.0" prefWidth="960.0">
                <content>
-                  <TableView prefHeight="575.0" prefWidth="956.0">
+                  <TableView fx:id="tabelaNieob" prefHeight="575.0" prefWidth="956.0">
                     <columns>
-                      <TableColumn prefWidth="95.0" text="Nieobecność" />
-                      <TableColumn prefWidth="88.0" text="Data" />
+                      <TableColumn fx:id="kolPrzedmiot" prefWidth="300.0" text="Przedmiot" />
+                      <TableColumn fx:id="kolData" prefWidth="260.0" text="Data" />
+                      <TableColumn fx:id="kolWartosc" prefWidth="395.0" text="Obecnosc" />
                     </columns>
                   </TableView>
                </content>

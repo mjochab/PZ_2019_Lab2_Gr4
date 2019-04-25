@@ -205,5 +205,5 @@ public class HibernateUtil {
 
         return rodzajeOcen;
     }
-
+   
 }

@@ -7,17 +7,35 @@ package oknoUczen;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ResourceBundle;
+import java.util.Set;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-
-
+import javafx.util.Callback;
+import mapping.Obecnosc;
+import mapping.Ocena;
+import mapping.Przedmiot;
+import mapping.Uczen;
+import utilities.HibernateUtil;
+import utilities.Utils;
 
 public class UczenNieobecnosciController implements Initializable {
 
@@ -33,13 +51,25 @@ public class UczenNieobecnosciController implements Initializable {
     private Text increment;
     @FXML
     private AnchorPane rootPane;
+    @FXML
+    private TableView tabelaNieob;
+    @FXML
+    private TableColumn<Obecnosc, String> kolPrzedmiot;
+    @FXML
+    private TableColumn<Obecnosc, String> kolData;
+    @FXML
+    private TableColumn<Obecnosc, String> kolWartosc;
+
+    private final long PESEL = 32222222221L;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        wstawNieobecnosci();
+        tabelaNieob.setColumnResizePolicy((param) -> true);
+        Platform.runLater(() -> Utils.customResize(tabelaNieob));
     }
 
     @FXML
@@ -49,8 +79,8 @@ public class UczenNieobecnosciController implements Initializable {
 
     @FXML
     private void logout(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("/Okna/Logowanie.fxml"));
-             rootPane.getChildren().setAll(pane);
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("/Okna/Logowanie.fxml"));
+        rootPane.getChildren().setAll(pane);
     }
 
     //ładujemy okno z ocenami uczenia.
@@ -58,6 +88,9 @@ public class UczenNieobecnosciController implements Initializable {
     private void LoadNieobecnosci(ActionEvent event) throws IOException {
         AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
         rootPane.getChildren().setAll(pane);
+        tabelaNieob.setColumnResizePolicy((param) -> true);
+        Platform.runLater(() -> Utils.customResize(tabelaNieob));
+        wstawNieobecnosci();
     }
 
     @FXML
@@ -70,6 +103,29 @@ public class UczenNieobecnosciController implements Initializable {
     private void LoadUwagi(ActionEvent event) throws IOException {
         AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
         rootPane.getChildren().setAll(pane);
+    }
+
+    public void wstawNieobecnosci() {
+        Uczen uczen = HibernateUtil.zwrocUcznia(PESEL);
+        kolData.setCellValueFactory(new PropertyValueFactory<>("data"));
+        kolWartosc.setCellValueFactory(new PropertyValueFactory<>("wartosc"));
+        kolPrzedmiot.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
+            public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> p) {
+                StringProperty nazwaPrzedmiotu = new SimpleStringProperty();
+                nazwaPrzedmiotu.setValue(p.getValue().getPrzedmiot().getNazwaPrzedmiotu());
+                return nazwaPrzedmiotu;
+            }
+        });
+        Set set = uczen.getObecnoscs();
+        Iterator<Obecnosc> it = set.iterator();
+        ArrayList<Obecnosc> listaNieobecnosci = new ArrayList<Obecnosc>();
+
+        while (it.hasNext()) {
+            Obecnosc ob = it.next();
+            listaNieobecnosci.add(ob);
+        }
+        ObservableList<Obecnosc> dane = FXCollections.observableArrayList(listaNieobecnosci);
+        tabelaNieob.setItems(dane);
     }
 
 }
