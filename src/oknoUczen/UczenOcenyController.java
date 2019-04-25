@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -62,7 +63,7 @@ public class UczenOcenyController implements Initializable {
     public String[] nazwyKolumn;
     public ObservableList<TableColumn> kolumna;
     public Uczen uczen;
-    public List<Integer> listaOcen;
+    //public 
 
     /**
      * Initializes the controller class.
@@ -122,7 +123,6 @@ public class UczenOcenyController implements Initializable {
                 i++;
             }
         } else {
-
         }
     }
 
@@ -135,34 +135,37 @@ public class UczenOcenyController implements Initializable {
             if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(nazwaKolumny)) {
                 lista.add(ocena.getStopien());
             } else {
-                
+
             }
         }
         return lista;
     }
 
+    public void wstawianieOcenDoKolumn(TableColumn<Integer, Number> kol, List<Integer> listaOcen) {
+        kol.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            if (rowIndex >= listaOcen.size()) {
+                return null;
+            } else {
+                return new ReadOnlyIntegerWrapper(listaOcen.get(rowIndex));
+            }
+        });
+    }
+
     public void wpisywanieOcen() {
         uczen = HibernateUtil.zwrocUcznia(pesel);
         Set oceny = uczen.getOcenas();
+
         for (int i = 0; i < oceny.size(); i++) {
             tabelaOcen.getItems().add(i);
         }
         for (TableColumn<Integer, Number> kol : kolumna) {
-            listaOcen = zwrocOcenyDlaPrzedmiotu(oceny, kol.getText());
+
+            List<Integer> listaOcen = zwrocOcenyDlaPrzedmiotu(oceny, kol.getText());
             if (listaOcen.isEmpty()) {
-
             } else {
-                System.out.println(listaOcen.toString());
-                for (int i = 0; i < listaOcen.size(); i++) {
-                    System.out.println(listaOcen.get(i).toString());                   
-                }
-                kol.setCellValueFactory(cellData -> {
-                    Integer rowIndex = cellData.getValue();
-                    return new ReadOnlyIntegerWrapper(listaOcen.get(0));
-                });
+                wstawianieOcenDoKolumn(kol, listaOcen);
             }
-
         }
     }
-
 }
