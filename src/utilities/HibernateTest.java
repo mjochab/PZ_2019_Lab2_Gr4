@@ -29,6 +29,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import static utilities.HibernateUtil.zwrocKlasyKtorychUcze;
 import static utilities.HibernateUtil.zwrocKtoZalogowany;
 import static utilities.HibernateUtil.zwrocPrzedmiotyKtorychUczeDanaKlase;
+import static utilities.HibernateUtil.zwrocRodzajeOcen;
 import static utilities.HibernateUtil.zwrocUczniowZklasy;
 
 public class HibernateTest {
@@ -104,7 +105,7 @@ public class HibernateTest {
         }
             
     public static void main(String[] args) throws ParseException {
-        testyQuery();
+
 
             
         }

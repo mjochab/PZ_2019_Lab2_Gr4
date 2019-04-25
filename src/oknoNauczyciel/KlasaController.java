@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
@@ -38,8 +39,7 @@ import javafx.util.Callback;
 import mapping.Ocena;
 import mapping.Przedmiot;
 import mapping.Uczen;
-import static utilities.HibernateUtil.zwrocPrzedmiotyKtorychUczeDanaKlase;
-import static utilities.HibernateUtil.zwrocUczniowZklasy;
+import static utilities.HibernateUtil.*;
 import static utilities.Utils.customResize;
 
 public class KlasaController implements Initializable {
@@ -153,9 +153,11 @@ public class KlasaController implements Initializable {
         for (Przedmiot przedmiot : przedmioty) {
             Tab tabA = new Tab();
             tabA.setText(przedmiot.getNazwaPrzedmiotu());
-            tabA.setContent(stworzTabeleZocenami(przedmiot.getNazwaPrzedmiotu()));
+            System.out.println("przedmiot do taba:" + przedmiot.getNazwaPrzedmiotu());
+            tabA.setContent(stworzTabeleZkolumnamiOceny(przedmiot.getNazwaPrzedmiotu()));
             tabsPane.getTabs().removeAll();
             tabsPane.getTabs().add(tabA);
+
         }
 
     }
@@ -210,13 +212,11 @@ public class KlasaController implements Initializable {
         return table;
 
     }
-    
+
     // do roboty
     private TableView stworzTabeleZkolumnamiOceny(String przedmiot) {
-        
-        
-        //5 kolumn - sprawdzian, kartkowka, odpowiedz, referat, zadanie domowe
 
+        //5 kolumn - sprawdzian, kartkowka, odpowiedz, referat, zadanie domowe
         TableView<Uczen> table = new TableView<Uczen>();
         table.setEditable(true);
 
@@ -230,41 +230,50 @@ public class KlasaController implements Initializable {
         lastNameCol.setCellValueFactory(
                 new PropertyValueFactory<Uczen, String>("nazwisko"));
 
-        for (Uczen uczen : uczniowie) {
-
-            Set oceny = uczen.getOcenas();
-
-            //ObservableList<Integer> ocenyUcznia = FXCollections.observableArrayList();
-            for (Iterator iterator = oceny.iterator(); iterator.hasNext();) {
-                Ocena ocena = (Ocena) iterator.next();
-                System.out.println(ocena.getUczen().getNazwisko() + " " + ocena.getPrzedmiot().getNazwaPrzedmiotu() + " " + ocena.getStopien());
-            }
-
-        }
-        TableColumn ocenyCol = new TableColumn("Oceny");
-        ocenyCol.setMinWidth(200);
-
-        ocenyCol.setCellValueFactory(new Callback<CellDataFeatures<Uczen, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(CellDataFeatures<Uczen, String> data) {
-                //tutaj robic kolejna kolumne w petli zaleznie ile jest ocen
-                StringProperty sp = new SimpleStringProperty();
-                // jakby przechowac id oceny i robic kolejne kolumny to potem z hibernate moge sie odniesc i zmienic poszczegolne oceny
-                sp.setValue(String.valueOf(
-                        //magic
-                        wyliczOcenyZmojegoPrzedmiotuZapiszJeDoStringa(data, przedmiot)
-                ));
-                return sp;
-            }
-        });
         ObservableList<Uczen> data
                 = FXCollections.observableArrayList(uczniowie);
         table.setItems(data);
-        table.getColumns().addAll(firstNameCol, lastNameCol, ocenyCol);
+        table.getColumns().addAll(firstNameCol, lastNameCol);
+
+        List<String> rodzajeOcen = zwrocRodzajeOcen();
+        List<TableColumn> kolumnyzOcenami = new ArrayList<>();
+        int i = 0;
+        // tworz tyle kolumn ile rodzajow ocen
+        for (String rodzajOceny : rodzajeOcen) {
+            System.out.println("rodzaj oceny: " + rodzajOceny);
+            kolumnyzOcenami.add(new TableColumn(rodzajOceny));
+            // wpisywanie ocen do odpowiednich kolumn
+            kolumnyzOcenami.get(i).setCellValueFactory(new Callback<CellDataFeatures<Uczen, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(CellDataFeatures<Uczen, String> data) {
+                    // dorobic liste ktora przechowuje po kolei obiekty z ocenami
+                    StringProperty ocenyUczniaDoWyswietlenia = new SimpleStringProperty();
+                    SimpleObjectProperty obiektZOcenaUcznia = new SimpleObjectProperty();
+                    // oceny uczniow danej klasy z danego przedmiotu;
+                    Set ocenyUczniowKtorychUcze = data.getValue().getOcenas();
+                    String ocenydoWyswietlenia = "";
+                    for (Iterator iterator = ocenyUczniowKtorychUcze.iterator(); iterator.hasNext();) {
+                        Ocena ocena = (Ocena) iterator.next();
+
+                        if (ocena.getRodzajOceny().getRodzajOceny().equals(rodzajOceny) && ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(przedmiot)) {
+                            ocenydoWyswietlenia = ocenydoWyswietlenia + ocena.getStopien() + ", ";
+                        }
+                    }
+
+                    ocenyUczniaDoWyswietlenia.setValue(ocenydoWyswietlenia);
+                    return ocenyUczniaDoWyswietlenia;
+                }
+            });
+            table.getColumns().add(kolumnyzOcenami.get(i));
+            i++;
+
+        }
+
         customResize(table);
         return table;
 
     }
+
     public static String wyliczOcenyZmojegoPrzedmiotuZapiszJeDoStringa(CellDataFeatures<Uczen, String> daneZkomorkiTabeli, String przedmiot) {
         // pesel do dania dynamicznie
         // przedmiot do wziecia z taba
@@ -298,7 +307,7 @@ public class KlasaController implements Initializable {
             for (Iterator it = ocenyUcznia.iterator(); it.hasNext();) {
                 Ocena ocena = (Ocena) it.next();
                 if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(przedmiot)) {
-                    
+
 //                new PropertyValueFactory<Ocena, Long>("stopien"));
                 }
             }
