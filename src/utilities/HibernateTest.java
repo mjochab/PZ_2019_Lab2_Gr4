@@ -93,31 +93,25 @@ public class HibernateTest {
         
         public static void testyQuery(){
           Query query = entityManager.createQuery(
-              "SELECT e FROM Employee e where e.salary < (SELECT AVG(e2.salary) FROM Employee e2)");
-   List<Uczen> resultList = query.getResultList();
+              "SELECT ocenas.opis from Uczen u JOIN fetch u.ocenas o where u.imie='Gniewomir' and o.stopien=32222222221");
+          //FROM com.abc.model.Review r LEFT JOIN fetch r.employees emp WHERE r.id = 1 AND ( emp.id = 11 )
+//      select p from Person p 
+// inner join p.cars car
+// where car.model = :model
+    String resultList = (String) query.getSingleResult();
+            System.out.println(resultList);
             
         }
             
     public static void main(String[] args) throws ParseException {
+        testyQuery();
 
-        List<Klasa> klasy = zwrocKlasyKtorychUcze(22222222226L);
-        System.out.println(klasy.isEmpty());
-        String nazwyKlas[] = new String[klasy.size()];
-        int i = 0;
-        for (Klasa klasa : klasy) {
             
-            System.out.println(klasa.getNazwaKlasy());
-
-            i++;
         }
-        String gowno = "gowno";
-        String co = gowno.getClass().toString();
-        System.out.println(co);
-        
-        HibernateUtil.zwrocMaxLiczbeOcenZdanegoPrzedmiotu();
+
     }
     
     
     
 
-}
+

@@ -1,5 +1,5 @@
 package mapping;
-// Generated 22 kwi 2019, 17:35:09 by Hibernate Tools 4.3.1
+// Generated 25 kwi 2019, 13:51:48 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -12,10 +12,10 @@ public class Ocena  implements java.io.Serializable {
 
      private Integer id;
      private Przedmiot przedmiot;
+     private RodzajOceny rodzajOceny;
      private Uczen uczen;
      private Integer stopien;
      private Date data;
-     private String opis;
 
     public Ocena() {
     }
@@ -24,12 +24,12 @@ public class Ocena  implements java.io.Serializable {
     public Ocena(Uczen uczen) {
         this.uczen = uczen;
     }
-    public Ocena(Przedmiot przedmiot, Uczen uczen, Integer stopien, Date data, String opis) {
+    public Ocena(Przedmiot przedmiot, RodzajOceny rodzajOceny, Uczen uczen, Integer stopien, Date data) {
        this.przedmiot = przedmiot;
+       this.rodzajOceny = rodzajOceny;
        this.uczen = uczen;
        this.stopien = stopien;
        this.data = data;
-       this.opis = opis;
     }
    
     public Integer getId() {
@@ -45,6 +45,13 @@ public class Ocena  implements java.io.Serializable {
     
     public void setPrzedmiot(Przedmiot przedmiot) {
         this.przedmiot = przedmiot;
+    }
+    public RodzajOceny getRodzajOceny() {
+        return this.rodzajOceny;
+    }
+    
+    public void setRodzajOceny(RodzajOceny rodzajOceny) {
+        this.rodzajOceny = rodzajOceny;
     }
     public Uczen getUczen() {
         return this.uczen;
@@ -66,13 +73,6 @@ public class Ocena  implements java.io.Serializable {
     
     public void setData(Date data) {
         this.data = data;
-    }
-    public String getOpis() {
-        return this.opis;
-    }
-    
-    public void setOpis(String opis) {
-        this.opis = opis;
     }
 
 

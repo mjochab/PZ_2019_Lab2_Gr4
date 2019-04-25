@@ -47,6 +47,7 @@ Contributor(s):
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.hbm2ddl.auto">update</property>
     <mapping resource="mapping/Ocena.hbm.xml"/>
+    <mapping resource="mapping/RodzajOceny.hbm.xml"/>
     <mapping resource="mapping/Rodzic.hbm.xml"/>
     <mapping resource="mapping/Przedmiot.hbm.xml"/>
     <mapping resource="mapping/Obecnosc.hbm.xml"/>

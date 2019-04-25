@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 22 kwi 2019, 17:35:09 by Hibernate Tools 4.3.1 -->
+<!-- Generated 25 kwi 2019, 13:51:48 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="mapping.Autoryzacja" table="autoryzacja" catalog="dziennik_elektroniczny" optimistic-lock="version">
         <id name="pesel" type="long">
@@ -11,7 +11,6 @@
             </generator>
         </id>
         <one-to-one name="nauczyciel" class="mapping.Nauczyciel" constrained="true"></one-to-one>
-        <one-to-one name="uczen" class="mapping.Uczen" constrained="true"></one-to-one>
         <property name="login" type="string">
             <column name="login" length="30" not-null="true" />
         </property>

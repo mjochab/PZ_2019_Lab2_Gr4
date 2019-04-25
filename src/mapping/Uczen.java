@@ -1,5 +1,5 @@
 package mapping;
-// Generated 22 kwi 2019, 17:35:09 by Hibernate Tools 4.3.1
+// Generated 25 kwi 2019, 13:51:48 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -15,7 +15,6 @@ public class Uczen  implements java.io.Serializable {
      private Klasa klasa;
      private String imie;
      private String nazwisko;
-     private Autoryzacja autoryzacja;
      private Set rodzics = new HashSet(0);
      private Set ocenas = new HashSet(0);
      private Set obecnoscs = new HashSet(0);
@@ -28,12 +27,11 @@ public class Uczen  implements java.io.Serializable {
     public Uczen(long pesel) {
         this.pesel = pesel;
     }
-    public Uczen(long pesel, Klasa klasa, String imie, String nazwisko, Autoryzacja autoryzacja, Set rodzics, Set ocenas, Set obecnoscs, Set skladKlasies) {
+    public Uczen(long pesel, Klasa klasa, String imie, String nazwisko, Set rodzics, Set ocenas, Set obecnoscs, Set skladKlasies) {
        this.pesel = pesel;
        this.klasa = klasa;
        this.imie = imie;
        this.nazwisko = nazwisko;
-       this.autoryzacja = autoryzacja;
        this.rodzics = rodzics;
        this.ocenas = ocenas;
        this.obecnoscs = obecnoscs;
@@ -67,13 +65,6 @@ public class Uczen  implements java.io.Serializable {
     
     public void setNazwisko(String nazwisko) {
         this.nazwisko = nazwisko;
-    }
-    public Autoryzacja getAutoryzacja() {
-        return this.autoryzacja;
-    }
-    
-    public void setAutoryzacja(Autoryzacja autoryzacja) {
-        this.autoryzacja = autoryzacja;
     }
     public Set getRodzics() {
         return this.rodzics;
