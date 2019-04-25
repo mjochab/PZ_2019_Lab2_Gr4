@@ -206,19 +206,15 @@ public class HibernateUtil {
         return rodzajeOcen;
     }
     
-        public static void zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(Uczen gagatek, Przedmiot przedmiot) {
+        public static List<Ocena> zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(Uczen gagatek, Przedmiot przedmiot) {
 
         CriteriaQuery<Ocena> criteria = builder.createQuery(Ocena.class);
         Root<Ocena> root = criteria.from(Ocena.class);
         criteria.select(root);
         criteria.where(builder.equal(root.get("uczen"), gagatek),(builder.equal(root.get("przedmiot"), przedmiot)));
         List<Ocena> rodzajeOcen = entityManager.createQuery(criteria).getResultList();
-          for (Ocena ocena : rodzajeOcen) {
-            System.out.println(ocena.getUczen().getNazwisko()+" "+ocena.getStopien());
-            
-          }
-
-        //return rodzajeOcen;
+        return rodzajeOcen;
+         
     }
     
 
