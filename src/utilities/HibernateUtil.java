@@ -1,18 +1,15 @@
 package utilities;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.EntityManager;
+import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import mapping.*;
-import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -20,6 +17,7 @@ import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.criterion.Projections;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 
 public class HibernateUtil {
@@ -74,6 +72,18 @@ public class HibernateUtil {
         }
     }
 
+    public static String zwrocKtoZalogowany(Long pesel) {
+
+        CriteriaQuery<String> criteria = builder.createQuery(String.class);
+        Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
+        criteria.select(root.get("kto"));
+        criteria.where(builder.equal(root.get("pesel"), pesel));
+
+        String kto = entityManager.createQuery(criteria).getSingleResult();
+        return kto;
+
+    }
+
     public static List<String> zwrocWszystkieKlasy() {
         // najpierw co zwracamy
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
@@ -88,9 +98,8 @@ public class HibernateUtil {
 
         return klasy;
     }
-   
-    public static List<Klasa> zwrocKlasyKtorychUcze(Long pesel) {
 
+    public static List<Klasa> zwrocKlaseKtoraWychowuje(Long pesel) {
         CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
         Root<Nauczyciel> root = criteria.from(Nauczyciel.class);
         criteria.select(root.get("klasas"));
@@ -99,26 +108,29 @@ public class HibernateUtil {
         List<Klasa> klasy = entityManager.createQuery(criteria).getResultList();
         return klasy;
     }
-    
-    public static String zwrocKtoZalogowany(Long pesel){
-        
-         CriteriaQuery<String> criteria = builder.createQuery(String.class);
-        Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
-        criteria.select(root.get("kto"));
-        criteria.where(builder.equal(root.get("pesel"), pesel));
 
-        String kto = entityManager.createQuery(criteria).getSingleResult();
-        return kto;
-        
+    public static List<Klasa> zwrocKlasyKtorychUcze(Long pesel) {
+
+        CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
+        Root<Zajecia> root = criteria.from(Zajecia.class);
+        criteria.select(root.get("klasa"));
+        criteria.where(builder.equal(root.get("nauczyciel"), pesel));
+        criteria.distinct(true);
+        List<Klasa> klasy = entityManager.createQuery(criteria).getResultList();
+
+        return klasy;
+
     }
 
     public static String[] zwrocNazwyKlasKtorychUcze(Long pesel) {
 
         List<Klasa> klasy = zwrocKlasyKtorychUcze(pesel);
+
         String nazwyKlas[] = new String[klasy.size()];
         int i = 0;
         for (Klasa klasa : klasy) {
             nazwyKlas[i] = klasa.getNazwaKlasy();
+
             i++;
         }
 
@@ -126,7 +138,7 @@ public class HibernateUtil {
     }
 
     public static List<Uczen> zwrocUczniowZklasy(String klasa) {
-        
+
         CriteriaQuery<SkladKlasy> criteria = builder.createQuery(SkladKlasy.class);
         Root<Klasa> root = criteria.from(Klasa.class);
         criteria.select(root.get("skladKlasies"));
@@ -134,14 +146,13 @@ public class HibernateUtil {
 
         List<SkladKlasy> skladKlasy = entityManager.createQuery(criteria).getResultList();
         List<Uczen> uczniowie = new ArrayList<>();
-        
+
         for (SkladKlasy uczen : skladKlasy) {
             uczniowie.add(uczen.getUczen());
         }
         return uczniowie;
     }
-    
-    
+
     public static List<Przedmiot> zwrocPrzedmiotyKtorychUczeDanaKlase(String klasa, Long pesel) {
 
         CriteriaQuery<Przedmiot> criteria = builder.createQuery(Przedmiot.class);
@@ -150,9 +161,63 @@ public class HibernateUtil {
         criteria.where(builder.equal(root.get("klasa"), klasa));
         criteria.where(builder.equal(root.get("nauczyciel"), pesel));
         criteria.distinct(true);
+
         List<Przedmiot> przedmioty = entityManager.createQuery(criteria).getResultList();
-        
+
         return przedmioty;
+    }
+
+    public static Uczen zwrocUcznia(Long pesel) {
+        CriteriaQuery<Uczen> criteria = builder.createQuery(Uczen.class);
+        Root<Uczen> root = criteria.from(Uczen.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get("pesel"), pesel));
+        Uczen uczen = entityManager.createQuery(criteria).getSingleResult();
+
+        return uczen;
+
+    }
+
+    public static void zwrocMaxLiczbeOcenZdanegoPrzedmiotu() {
+// dorob sprawdzanie dla klasy
+        CriteriaQuery<Tuple> criteria = builder.createQuery(Tuple.class);
+        Root<Ocena> root = criteria.from(Ocena.class);
+        criteria.groupBy(root.get("przedmiot"));
+        //criteria.groupBy(root.get("uczen"));
+        criteria.multiselect(root.get("przedmiot"), builder.count(root.get("stopien")));
+
+        List<Tuple> tuples = entityManager.createQuery(criteria).getResultList();
+        for (Tuple tuple : tuples) {
+            Przedmiot przedmiotek = (Przedmiot) tuple.get(0);
+            Long count = (Long) tuple.get(1);
+            System.out.println(przedmiotek.getNazwaPrzedmiotu() + " count: " + count);
+        }
+    }
+
+    public static List<String> zwrocRodzajeOcen() {
+
+        CriteriaQuery<String> criteria = builder.createQuery(String.class);
+        Root<RodzajOceny> root = criteria.from(RodzajOceny.class);
+        criteria.select(root.get("rodzajOceny"));
+        List<String> rodzajeOcen = entityManager.createQuery(criteria).getResultList();
+
+
+        return rodzajeOcen;
+    }
+    
+        public static void zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(Uczen gagatek, Przedmiot przedmiot) {
+
+        CriteriaQuery<Ocena> criteria = builder.createQuery(Ocena.class);
+        Root<Ocena> root = criteria.from(Ocena.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get("uczen"), gagatek),(builder.equal(root.get("przedmiot"), przedmiot)));
+        List<Ocena> rodzajeOcen = entityManager.createQuery(criteria).getResultList();
+          for (Ocena ocena : rodzajeOcen) {
+            System.out.println(ocena.getUczen().getNazwisko()+" "+ocena.getStopien());
+            
+          }
+
+        //return rodzajeOcen;
     }
     
     public static Long uzyskajPeselZalogowany(String login, String haslo){
@@ -187,4 +252,5 @@ public class HibernateUtil {
         
         return osoba;
     }  
+
 }

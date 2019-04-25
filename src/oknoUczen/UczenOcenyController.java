@@ -8,8 +8,15 @@ package oknoUczen;
 import utilities.HibernateUtil;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,7 +26,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.TableColumn;
-import utilities.Utils;
+import mapping.*;
+import utilities.*;
 
 public class UczenOcenyController implements Initializable {
 
@@ -37,19 +45,25 @@ public class UczenOcenyController implements Initializable {
     @FXML
     private TableView tabelaOcen;
     @FXML
-    private TableColumn kolumna1;
+    private TableColumn<Integer, Number> kolumna1;
     @FXML
-    private TableColumn kolumna2;
+    private TableColumn<Integer, Number> kolumna2;
     @FXML
-    private TableColumn kolumna3;
+    private TableColumn<Integer, Number> kolumna3;
     @FXML
-    private TableColumn kolumna4;
+    private TableColumn<Integer, Number> kolumna4;
     @FXML
-    private TableColumn kolumna5;
+    private TableColumn<Integer, Number> kolumna5;
     @FXML
-    private TableColumn kolumna6;
+    private TableColumn<Integer, Number> kolumna6;
     @FXML
-    private TableColumn kolumna7;
+    private TableColumn<Integer, Number> kolumna7;
+
+    private final long pesel = 32222222221L;
+    public String[] nazwyKolumn;
+    public ObservableList<TableColumn> kolumna;
+    public Uczen uczen;
+    //public 
 
     /**
      * Initializes the controller class.
@@ -59,6 +73,8 @@ public class UczenOcenyController implements Initializable {
         zmianaNazwKolumn();
         tabelaOcen.setColumnResizePolicy((param) -> true);
         Platform.runLater(() -> Utils.customResize(tabelaOcen));
+        wpisywanieOcen();
+
     }
 
     @FXML
@@ -78,7 +94,7 @@ public class UczenOcenyController implements Initializable {
         Platform.runLater(() -> Utils.customResize(tabelaOcen));
         AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
         rootPane.getChildren().setAll(pane);
-        
+        wpisywanieOcen();
 
     }
 
@@ -96,16 +112,60 @@ public class UczenOcenyController implements Initializable {
 
     @FXML
     public void zmianaNazwKolumn() {
-        String[] nazwyKolumn = HibernateUtil.pobieranieNazwPrzedmiotow();
-        ObservableList<TableColumn> kolumna = tabelaOcen.getColumns();
-        
-        int i = 0;
+        nazwyKolumn = HibernateUtil.pobieranieNazwPrzedmiotow();
+        kolumna = tabelaOcen.getColumns();
 
-        for (TableColumn kol : kolumna) {
-            kol.setText(nazwyKolumn[i]);
-            i++;
+        if (nazwyKolumn.length != 0) {
+            int i = 0;
+
+            for (TableColumn kol : kolumna) {
+                kol.setText(nazwyKolumn[i]);
+                i++;
+            }
+        } else {
         }
-
     }
-    
+
+    public List<Integer> zwrocOcenyDlaPrzedmiotu(Set oceny, String nazwaKolumny) {
+        List<Integer> lista = new ArrayList<>();
+        Iterator<Ocena> it = oceny.iterator();
+
+        while (it.hasNext()) {
+            Ocena ocena = it.next();
+            if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(nazwaKolumny)) {
+                lista.add(ocena.getStopien());
+            } else {
+
+            }
+        }
+        return lista;
+    }
+
+    public void wstawianieOcenDoKolumn(TableColumn<Integer, Number> kol, List<Integer> listaOcen) {
+        kol.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            if (rowIndex >= listaOcen.size()) {
+                return null;
+            } else {
+                return new ReadOnlyIntegerWrapper(listaOcen.get(rowIndex));
+            }
+        });
+    }
+
+    public void wpisywanieOcen() {
+        uczen = HibernateUtil.zwrocUcznia(pesel);
+        Set oceny = uczen.getOcenas();
+
+        for (int i = 0; i < oceny.size(); i++) {
+            tabelaOcen.getItems().add(i);
+        }
+        for (TableColumn<Integer, Number> kol : kolumna) {
+
+            List<Integer> listaOcen = zwrocOcenyDlaPrzedmiotu(oceny, kol.getText());
+            if (listaOcen.isEmpty()) {
+            } else {
+                wstawianieOcenDoKolumn(kol, listaOcen);
+            }
+        }
+    }
 }

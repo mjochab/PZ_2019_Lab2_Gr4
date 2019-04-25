@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 import javafx.scene.control.TableView;
+import mapping.Uczen;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -39,5 +40,12 @@ public class Utils {
             });
         }
     }
+    
+      public static void zwrocWartoscStringZKomorki(TableView<Uczen> table, int column, int row) {
+    String a = table.getColumns().get(column).getCellObservableValue(row).getValue().toString(); 
+    System.out.println(a);
+  }
+    
+    
 
 }
