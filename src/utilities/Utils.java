@@ -19,10 +19,10 @@ import mapping.Uczen;
 public class Utils {
 
     //data gotowa do wstawienia przez nauczyciela
-    public static Date returnDate(String data) throws ParseException {
+    public static String returnDate(Date data) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("dd-mm-yyyy");
-        String dateString = data;
-        Date date = format.parse(dateString);
+        Date dateString = data;
+        String date = format.format(dateString);
         return date;
     }
 
