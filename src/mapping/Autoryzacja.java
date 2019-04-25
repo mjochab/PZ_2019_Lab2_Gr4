@@ -11,7 +11,6 @@ public class Autoryzacja  implements java.io.Serializable {
      private String login;
      private String haslo;
      private String kto;
-     private Nauczyciel nauczyciel;
      private Uczen uczen;
      private Rodzic rodzic;
 
@@ -20,7 +19,8 @@ public class Autoryzacja  implements java.io.Serializable {
 
     public Autoryzacja(Nauczyciel nauczyciel, String login, String haslo, String kto) {
        this.nauczyciel = nauczyciel;
-
+    }
+    
     public Autoryzacja(long pesel, String login, String haslo, String kto) {
         this.pesel = pesel;
         this.login = login;
