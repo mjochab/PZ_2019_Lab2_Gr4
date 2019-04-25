@@ -5,6 +5,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="oknoNauczyciel.KlasaController">
@@ -12,12 +13,14 @@
       <Label fx:id="userid1" layoutX="24.0" layoutY="24.0" prefHeight="17.0" prefWidth="177.0" text="Dziennik elektroniczny.net" />
       <Label layoutX="1064.0" layoutY="16.0" prefHeight="17.0" prefWidth="97.0" text="Zalogowano jako" />
       <Label fx:id="userid" layoutX="1161.0" layoutY="16.0" prefHeight="17.0" prefWidth="97.0" text="tu login" />
-      <TabPane fx:id="tabsPane" layoutX="232.0" layoutY="41.0" prefHeight="669.0" prefWidth="1029.0" tabClosingPolicy="UNAVAILABLE" />
+      <TabPane fx:id="tabsPane" layoutX="610.0" layoutY="63.0" prefHeight="626.0" prefWidth="656.0" tabClosingPolicy="UNAVAILABLE" />
       <Button fx:id="dodaj_ocenebtn" layoutX="54.0" layoutY="141.0" mnemonicParsing="false" onAction="#LoadDodajOcene" prefHeight="25.0" prefWidth="118.0" text="Dodaj ocene" />
       <Button fx:id="dodaj_nieobecnoscbtn" layoutX="54.0" layoutY="187.0" mnemonicParsing="false" onAction="#LoadDodajNieobecnosc" text="Dodaj nieobecnosc" />
       <Button fx:id="usprawiedliwbtn" layoutX="54.0" layoutY="234.0" mnemonicParsing="false" onAction="#LoadUsprawiedliw" prefHeight="25.0" prefWidth="118.0" text="Usprawiedliw" />
       <Button fx:id="powrotbtn" layoutX="14.0" layoutY="294.0" mnemonicParsing="false" onAction="#LoadPowrot" prefHeight="25.0" prefWidth="118.0" text="Powrót" />
       <Text layoutX="24.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Klasa" />
       <TextField layoutX="58.0" layoutY="80.0" />
+      <Label fx:id="gagatek" layoutX="416.0" layoutY="80.0" text="Gagatek" />
+      <Pane fx:id="gagatekPane" layoutX="266.0" layoutY="109.0" prefHeight="342.0" prefWidth="344.0" />
    </children>
 </AnchorPane>

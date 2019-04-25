@@ -16,10 +16,13 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -31,10 +34,12 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import mapping.Ocena;
@@ -55,6 +60,10 @@ public class KlasaController implements Initializable {
   private AnchorPane tabPane;
   @FXML
   private TabPane tabsPane;
+  @FXML
+  private Pane gagatekPane;
+  @FXML
+  private Label gagatek;
   @FXML
   private AnchorPane rootPane;
   @FXML
@@ -123,11 +132,6 @@ public class KlasaController implements Initializable {
     rootPane.getChildren().setAll(pane);
   }
 
- 
-
-  
-  
-  
   private void wstawUseraDoZalogowanoJako(String username) {
 
     userid.setText(username);
@@ -159,7 +163,7 @@ public class KlasaController implements Initializable {
     for (Przedmiot przedmiot : przedmioty) {
       Tab tabA = new Tab();
       tabA.setText(przedmiot.getNazwaPrzedmiotu());
-      tabA.setContent(stworzTabeleZkolumnamiOceny(przedmiot.getNazwaPrzedmiotu()));
+      tabA.setContent(stworzTabeleZkolumnamiOceny(przedmiot));
       tabsPane.getTabs().removeAll();
       tabsPane.getTabs().add(tabA);
 
@@ -167,59 +171,11 @@ public class KlasaController implements Initializable {
 
   }
 
-  private TableView stworzTabeleZocenami(String przedmiot) {
-
-    TableView<Uczen> table = new TableView<Uczen>();
-    
-    table.setEditable(true);
-
-    TableColumn firstNameCol = new TableColumn("Imie");
-    firstNameCol.setMinWidth(100);
-    firstNameCol.setCellValueFactory(
-            new PropertyValueFactory<Uczen, String>("imie"));
-
-    TableColumn lastNameCol = new TableColumn("Nazwisko");
-    lastNameCol.setMinWidth(100);
-    lastNameCol.setCellValueFactory(
-            new PropertyValueFactory<Uczen, String>("nazwisko"));
-
-    for (Uczen uczen : uczniowie) {
-
-      Set oceny = uczen.getOcenas();
-
-      //ObservableList<Integer> ocenyUcznia = FXCollections.observableArrayList();
-      for (Iterator iterator = oceny.iterator(); iterator.hasNext();) {
-        Ocena ocena = (Ocena) iterator.next();
-        System.out.println(ocena.getUczen().getNazwisko() + " " + ocena.getPrzedmiot().getNazwaPrzedmiotu() + " " + ocena.getStopien());
-      }
-
-    }
-    TableColumn ocenyCol = new TableColumn("Oceny");
-    ocenyCol.setMinWidth(200);
-
-    ocenyCol.setCellValueFactory(new Callback<CellDataFeatures<Uczen, String>, ObservableValue<String>>() {
-      @Override
-      public ObservableValue<String> call(CellDataFeatures<Uczen, String> data) {
-        //tutaj robic kolejna kolumne w petli zaleznie ile jest ocen
-        StringProperty sp = new SimpleStringProperty();
-        // jakby przechowac id oceny i robic kolejne kolumny to potem z hibernate moge sie odniesc i zmienic poszczegolne oceny
-        sp.setValue(String.valueOf(
-                //magic
-                wyliczOcenyZmojegoPrzedmiotuZapiszJeDoStringa(data, przedmiot)
-        ));
-        return sp;
-      }
-    });
-    ObservableList<Uczen> data
-            = FXCollections.observableArrayList(uczniowie);
-    table.setItems(data);
-    table.getColumns().addAll(firstNameCol, lastNameCol, ocenyCol);
-    customResize(table);
-    return table;
+  // funkcja do testow
+  private static void stworzTabeleGagatka(Uczen gagatek) {
 
   }
 
-  // do roboty
   private TableColumn stworzKolumneUcznia(String tytulIgetter) {
     TableColumn kolumna = new TableColumn(tytulIgetter);
     kolumna.setMinWidth(100);
@@ -229,7 +185,7 @@ public class KlasaController implements Initializable {
     return kolumna;
   }
 
-  private TableView stworzTabeleZkolumnamiOceny(String przedmiot) {
+  private TableView stworzTabeleZkolumnamiOceny(Przedmiot przedmiot) {
 
     //5 kolumn - sprawdzian, kartkowka, odpowiedz, referat, zadanie domowe
     TableView<Uczen> table = new TableView<Uczen>();
@@ -244,7 +200,6 @@ public class KlasaController implements Initializable {
     int i = 0;
     // tworz tyle kolumn ile rodzajow ocen
     for (String rodzajOceny : rodzajeOcen) {
-      System.out.println("rodzaj oceny: " + rodzajOceny);
       kolumnyzOcenami.add(new TableColumn(rodzajOceny));
       // wpisywanie ocen do odpowiednich kolumn
       kolumnyzOcenami.get(i).setCellValueFactory(new Callback<CellDataFeatures<Uczen, String>, ObservableValue<String>>() {
@@ -259,7 +214,7 @@ public class KlasaController implements Initializable {
           for (Iterator iterator = ocenyUczniowKtorychUcze.iterator(); iterator.hasNext();) {
             Ocena ocena = (Ocena) iterator.next();
 
-            if (ocena.getRodzajOceny().getRodzajOceny().equals(rodzajOceny) && ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(przedmiot)) {
+            if (ocena.getRodzajOceny().getRodzajOceny().equals(rodzajOceny) && ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(przedmiot.getNazwaPrzedmiotu())) {
               ocenydoWyswietlenia = ocenydoWyswietlenia + ocena.getStopien() + ", ";
             }
           }
@@ -273,8 +228,56 @@ public class KlasaController implements Initializable {
       i++;
 
     }
+    EventHandler eventHandler = new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        Uczen selectedItem = table.getSelectionModel().getSelectedItem();
+
+        System.out.println("That is selected item : " + selectedItem);
+        gagatek.setText(selectedItem.getNazwisko());
+        zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(selectedItem, przedmiot);
+        if (selectedItem.equals(null)) {
+
+          System.out.println(" No item selected");
+
+        } else {
+          System.out.println("Index to be deleted:" + selectedItem.getNazwisko());
+
+          //Here was my database data retrieving and selectd
+          // item deleted and then table refresh
+          table.refresh();
+
+          return;
+        }
+      }
+    };
+   table.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
+         
 
     customResize(table);
+//    table.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+//      @Override
+//      public void handle(MouseEvent e) {
+//        Uczen selectedItem = table.getSelectionModel().getSelectedItem();
+//
+//        System.out.println("That is selected item : " + selectedItem);
+//        gagatek.setText(selectedItem.getNazwisko());
+//        zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(selectedItem, przedmiot);
+//        if (selectedItem.equals(null)) {
+//
+//          System.out.println(" No item selected");
+//
+//        } else {
+//          System.out.println("Index to be deleted:" + selectedItem.getNazwisko());
+//
+//          //Here was my database data retrieving and selectd
+//          // item deleted and then table refresh
+//          table.refresh();
+//
+//          return;
+//        }
+//      }
+//    });
     table.setEditable(true);
     return table;
 
