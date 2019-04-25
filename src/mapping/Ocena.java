@@ -1,4 +1,5 @@
 package mapping;
+
 // Generated 25 kwi 2019, 13:51:48 by Hibernate Tools 4.3.1
 
 

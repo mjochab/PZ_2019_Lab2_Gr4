@@ -1,13 +1,18 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
 <!-- Generated 25 kwi 2019, 13:51:48 by Hibernate Tools 4.3.1 -->
+
 <hibernate-mapping>
     <class name="mapping.Uczen" table="uczen" catalog="dziennik_elektroniczny" optimistic-lock="version">
         <id name="pesel" type="long">
             <column name="pesel" />
-            <generator class="assigned" />
+            <generator class="foreign">
+                <param name="property">autoryzacja</param>
+            </generator>
         </id>
+        <one-to-one name="autoryzacja" class="mapping.Autoryzacja" constrained="true"></one-to-one>
         <many-to-one name="klasa" class="mapping.Klasa" fetch="select">
             <column name="nazwa_klasy" length="2" />
         </many-to-one>

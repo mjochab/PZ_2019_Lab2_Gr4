@@ -1,4 +1,5 @@
 package mapping;
+
 // Generated 25 kwi 2019, 13:51:48 by Hibernate Tools 4.3.1
 
 
@@ -12,26 +13,24 @@ public class Nauczyciel  implements java.io.Serializable {
 
 
      private long pesel;
+     private Autoryzacja autoryzacja;
      private String imie;
      private String nazwisko;
      private Set klasas = new HashSet(0);
      private Set zajecias = new HashSet(0);
-     private Autoryzacja autoryzacja;
 
     public Nauczyciel() {
     }
-
 	
-    public Nauczyciel(long pesel) {
-        this.pesel = pesel;
+    public Nauczyciel(Autoryzacja autoryzacja) {
+        this.autoryzacja = autoryzacja;
     }
-    public Nauczyciel(long pesel, String imie, String nazwisko, Set klasas, Set zajecias, Autoryzacja autoryzacja) {
-       this.pesel = pesel;
+    public Nauczyciel(Autoryzacja autoryzacja, String imie, String nazwisko, Set klasas, Set zajecias) {
+       this.autoryzacja = autoryzacja;
        this.imie = imie;
        this.nazwisko = nazwisko;
        this.klasas = klasas;
        this.zajecias = zajecias;
-       this.autoryzacja = autoryzacja;
     }
    
     public long getPesel() {
@@ -40,6 +39,13 @@ public class Nauczyciel  implements java.io.Serializable {
     
     public void setPesel(long pesel) {
         this.pesel = pesel;
+    }
+    public Autoryzacja getAutoryzacja() {
+        return this.autoryzacja;
+    }
+    
+    public void setAutoryzacja(Autoryzacja autoryzacja) {
+        this.autoryzacja = autoryzacja;
     }
     public String getImie() {
         return this.imie;
@@ -68,13 +74,6 @@ public class Nauczyciel  implements java.io.Serializable {
     
     public void setZajecias(Set zajecias) {
         this.zajecias = zajecias;
-    }
-    public Autoryzacja getAutoryzacja() {
-        return this.autoryzacja;
-    }
-    
-    public void setAutoryzacja(Autoryzacja autoryzacja) {
-        this.autoryzacja = autoryzacja;
     }
 
 
