@@ -1,17 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 22 kwi 2019, 17:35:09 by Hibernate Tools 4.3.1 -->
+<!-- Generated 25 kwi 2019, 19:22:53 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="mapping.Autoryzacja" table="autoryzacja" catalog="dziennik_elektroniczny" optimistic-lock="version">
         <id name="pesel" type="long">
             <column name="pesel" />
-            <generator class="foreign">
-                <param name="property">nauczyciel</param>
-            </generator>
+            <generator class="assigned" />
         </id>
-        <one-to-one name="nauczyciel" class="mapping.Nauczyciel" constrained="true"></one-to-one>
-        <one-to-one name="uczen" class="mapping.Uczen" constrained="true"></one-to-one>
         <property name="login" type="string">
             <column name="login" length="30" not-null="true" />
         </property>
@@ -21,5 +17,8 @@
         <property name="kto" type="string">
             <column name="kto" length="1" not-null="true" />
         </property>
+        <one-to-one name="nauczyciel" class="mapping.Nauczyciel"></one-to-one>
+        <one-to-one name="uczen" class="mapping.Uczen"></one-to-one>
+        <one-to-one name="rodzic" class="mapping.Rodzic"></one-to-one>
     </class>
 </hibernate-mapping>

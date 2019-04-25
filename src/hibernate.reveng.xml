@@ -41,14 +41,14 @@ Contributor(s):
 -->
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="dziennik_elektroniczny"/>
-  <table-filter match-name="klasa"/>
+  <table-filter match-name="nauczyciel"/>
+  <table-filter match-name="obecnosc"/>
+  <table-filter match-name="sklad_klasy"/>
   <table-filter match-name="uczen"/>
   <table-filter match-name="przedmiot"/>
-  <table-filter match-name="nauczyciel"/>
-  <table-filter match-name="sklad_klasy"/>
   <table-filter match-name="ocena"/>
   <table-filter match-name="rodzic"/>
-  <table-filter match-name="obecnosc"/>
-  <table-filter match-name="zajecia"/>
+  <table-filter match-name="klasa"/>
   <table-filter match-name="autoryzacja"/>
+  <table-filter match-name="zajecia"/>
 </hibernate-reverse-engineering>
