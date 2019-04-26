@@ -47,8 +47,7 @@ public class LogowanieController implements Initializable {
     @FXML
     private void logowani(ActionEvent event) throws IOException {
         AnchorPane pane;
-        String okno;
-        String osoba = podajZalogowanego();
+        String osoba = pobierzKtoJestZalogowany();
         if(osoba.equals("n")){
             pane = FXMLLoader.load(getClass().getResource("/oknoNauczyciel/NauczycielKlasy.fxml"));
         }
@@ -63,7 +62,8 @@ public class LogowanieController implements Initializable {
     }
     @FXML
     private void logNauczyciel(ActionEvent event) throws IOException {
-        
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("/oknoNauczyciel/NauczycielKlasy.fxml"));
+        rootPane.getChildren().setAll(pane);
     }
     @FXML
     private void logRodzic(ActionEvent event) throws IOException {
@@ -78,20 +78,29 @@ public class LogowanieController implements Initializable {
     
     @FXML
     private void logowanie(ActionEvent event) throws IOException {
-        String login = login_field.getText();
-        String haslo = password_field.getText(); 
-        //Long nrPesel = uzyskajPeselZalogowany(login,haslo); 
-       // System.out.println(nrPesel);
-        //System.out.println(login +" "+haslo);
-        System.out.println(podajZalogowanego());
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("/oknoNauczyciel/NauczycielKlasy.fxml"));
+        AnchorPane pane;
+        String osoba = pobierzKtoJestZalogowany();
+        if (osoba.equals("n")){
+            pane = FXMLLoader.load(getClass().getResource("/oknoNauczyciel/NauczycielKlasy.fxml"));
+        }else if (osoba.equals("d")) {
+            pane = FXMLLoader.load(getClass().getResource("/oknoDyrektor/Dyrektor.fxml"));
+        }
+        else if (osoba.equals("u")) {
+            pane = FXMLLoader.load(getClass().getResource("/oknoUczen/UczenOceny.fxml"));
+        }
+        else if (osoba.equals("r")) {
+            pane = FXMLLoader.load(getClass().getResource("/oknoRodzic/Rodzic.fxml"));
+        }
+        else {
+             pane = FXMLLoader.load(getClass().getResource("/okna/Logowanie.fxml"));
+        }
         rootPane.getChildren().setAll(pane);
     }
-    private String podajZalogowanego(){
-        Long nr_pesel = 22222222225L;
+    private String pobierzKtoJestZalogowany(){
+        //Long nr_pesel = 22222222225L;
         String login = login_field.getText();
         String haslo = password_field.getText();
-       // Long nrPesel = uzyskajPeselZalogowany(login,haslo);   
+        Long nr_pesel = uzyskajPeselZalogowany(login,haslo);   
         String ktoZal = uzyskajKtoZalogowany(nr_pesel);
         
         return ktoZal;

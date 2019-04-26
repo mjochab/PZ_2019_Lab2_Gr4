@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import mapping.*;
+import mapping.Autoryzacja;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -201,56 +203,57 @@ public class HibernateUtil {
         criteria.select(root.get("rodzajOceny"));
         List<String> rodzajeOcen = entityManager.createQuery(criteria).getResultList();
 
-
         return rodzajeOcen;
     }
-    
-        public static void zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(Uczen gagatek, Przedmiot przedmiot) {
+
+    public static void zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(Uczen gagatek, Przedmiot przedmiot) {
 
         CriteriaQuery<Ocena> criteria = builder.createQuery(Ocena.class);
         Root<Ocena> root = criteria.from(Ocena.class);
         criteria.select(root);
-        criteria.where(builder.equal(root.get("uczen"), gagatek),(builder.equal(root.get("przedmiot"), przedmiot)));
+        criteria.where(builder.equal(root.get("uczen"), gagatek), (builder.equal(root.get("przedmiot"), przedmiot)));
         List<Ocena> rodzajeOcen = entityManager.createQuery(criteria).getResultList();
-          for (Ocena ocena : rodzajeOcen) {
-            System.out.println(ocena.getUczen().getNazwisko()+" "+ocena.getStopien());
-            
-          }
+        for (Ocena ocena : rodzajeOcen) {
+            System.out.println(ocena.getUczen().getNazwisko() + " " + ocena.getStopien());
+
+        }
 
         //return rodzajeOcen;
     }
-    
-    public static Long uzyskajPeselZalogowany(String login, String haslo){
+
+    public static Long uzyskajPeselZalogowany(String login, String haslo) {
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
         criteria.select(root.get("pesel"));
-        criteria.where(builder.equal(root.get("login"), login));
-        criteria.where(builder.equal(root.get("haslo"), haslo));
-       // List<Long> pesele = entityManager.createQuery(criteria).getResultList();      
+        criteria.where(builder.equal(root.get("login"), login), builder.equal(root.get("haslo"), haslo));
         Long nr_pesel = entityManager.createQuery(criteria).getSingleResult();
-        //criteria.where( builder.equal( root.get( Person_.name ), "John Doe" ) );
-        
+
         return nr_pesel;
     }
-     
-    public static String uzyskajKtoZalogowany(Long pesel){
+
+    public static String uzyskajKtoZalogowany(Long pesel) {
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
         criteria.select(root.get("kto"));
-        criteria.where(builder.equal(root.get("pesel"), pesel));      
+        criteria.where(builder.equal(root.get("pesel"), pesel));
         String osoba = entityManager.createQuery(criteria).getSingleResult();
 
         return osoba;
     }
-      
-    public static String uzyskajLoginZalogowany(Long pesel){
+
+    public static String uzyskajLoginZalogowany(Long pesel) {
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
         criteria.select(root.get("login"));
         criteria.where(builder.equal(root.get("pesel"), pesel));
         String osoba = entityManager.createQuery(criteria).getSingleResult();
-        
+
         return osoba;
-    }  
+    }
+
+    private void sprawdzDaneLogowania() {
+        //trzeba przeprowadzić testy przed cryteria bo występuje wyjątek 
+        //Exception in thread "main" javax.persistence.NoResultException: No entity found for query
+    }
 
 }
