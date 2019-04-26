@@ -204,6 +204,9 @@ public class HibernateUtil {
 
         return rodzajeOcen;
     }
+
+   
+
     
         public static List<Ocena> zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(Uczen gagatek, Przedmiot przedmiot) {
 
