@@ -76,6 +76,7 @@ public class UczenUwagiController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         wstawPlan();
+
     }
 
     @FXML

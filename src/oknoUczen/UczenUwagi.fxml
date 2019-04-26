@@ -13,14 +13,14 @@
          <children>
             <ScrollPane fx:id="scrollView" layoutX="7.0" prefHeight="580.0" prefWidth="960.0">
                <content>
-                  <TableView fx:id="tabelaZajec" prefHeight="575.0" prefWidth="956.0">
+                  <TableView fx:id="tabelaZajec" prefHeight="575.0" prefWidth="950.0">
                      <columns>
-                        <TableColumn fx:id="godzina" prefWidth="150.0" text="Godzina" />
-                        <TableColumn fx:id="pon" prefWidth="150.0" text="Poniedzialek" />
-                        <TableColumn fx:id="wt" prefWidth="150.0" text="Wtorek" />
-                        <TableColumn fx:id="sr" prefWidth="150.0" text="Sroda" />
-                        <TableColumn fx:id="czw" prefWidth="150.0" text="Czwartek" />
-                        <TableColumn fx:id="pt" prefWidth="205.0" text="Piatek" />                       
+                        <TableColumn fx:id="godzina" editable="false" prefWidth="68.0" sortable="false" text="Godzina" />
+                        <TableColumn fx:id="pon" editable="false" prefWidth="176.4" sortable="false" text="Poniedzialek" />
+                        <TableColumn fx:id="wt" editable="false" prefWidth="176.4" sortable="false" text="Wtorek" />
+                        <TableColumn fx:id="sr" editable="false" prefWidth="176.4" sortable="false" text="Sroda" />
+                        <TableColumn fx:id="czw" editable="false" prefWidth="176.4" sortable="false" text="Czwartek" />
+                        <TableColumn fx:id="pt" editable="false" prefWidth="176.4" sortable="false" text="Piatek" />                       
                      </columns>
                   </TableView>
                </content>
