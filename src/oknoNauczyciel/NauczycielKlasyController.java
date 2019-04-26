@@ -35,7 +35,7 @@ import utilities.HibernateUtil;
 public class NauczycielKlasyController implements Initializable {
 
     //W oczekiwaniu na przekazanie wartosci z logowania, tymczasowe stałe:
-    private Long pesel = 22222222220L;
+    private Long pesel = 22222222226L;
     private String username = "Wojtus";
 
     @FXML
