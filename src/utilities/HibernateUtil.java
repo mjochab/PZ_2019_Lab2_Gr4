@@ -139,12 +139,14 @@ public class HibernateUtil {
 
   public static List<Uczen> zwrocUczniowZklasy(String klasa) {
 
-    CriteriaQuery<SkladKlasy> criteria = builder.createQuery(SkladKlasy.class);
+    EntityManager em = sessionFactory.createEntityManager();
+    CriteriaBuilder b = em.getCriteriaBuilder();
+    CriteriaQuery<SkladKlasy> criteria = b.createQuery(SkladKlasy.class);
     Root<Klasa> root = criteria.from(Klasa.class);
     criteria.select(root.get("skladKlasies"));
-    criteria.where(builder.equal(root.get("nazwaKlasy"), klasa));
+    criteria.where(b.equal(root.get("nazwaKlasy"), klasa));
 
-    List<SkladKlasy> skladKlasy = entityManager.createQuery(criteria).getResultList();
+    List<SkladKlasy> skladKlasy = em.createQuery(criteria).getResultList();
     List<Uczen> uczniowie = new ArrayList<>();
 
     for (SkladKlasy uczen : skladKlasy) {

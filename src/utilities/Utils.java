@@ -20,8 +20,9 @@ public class Utils {
 
   //data gotowa do wstawienia przez nauczyciela
   public static Date returnDate(String data) throws ParseException {
-    SimpleDateFormat format = new SimpleDateFormat("dd-mm-yyyy");
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     Date date = format.parse(data);
+    System.out.println("data W FUNKCJI: "+date.toString());
     return date;
   }
 

@@ -35,6 +35,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
@@ -62,14 +63,6 @@ import static utilities.Utils.customResize;
 public class KlasaController implements Initializable {
 
   @FXML
-  private Button dodaj_ocenebtn;
-  @FXML
-  private Button dodaj_nieobecnoscbtn;
-  @FXML
-  private Button usprawiedliwbtn;
-  @FXML
-  private AnchorPane tabPane;
-  @FXML
   private TabPane tabsPane;
   @FXML
   private Pane gagatekPane;
@@ -78,15 +71,12 @@ public class KlasaController implements Initializable {
   @FXML
   private AnchorPane rootPane;
   @FXML
-  private Button powrotbtn;
-  @FXML
   private Label userid;
+  
   private static String klasa = null;
   private String username = null;
-  private String przedmiot = null;
   private Long pesel = null;
   List<Uczen> uczniowie = new ArrayList<>();
-
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
@@ -165,42 +155,32 @@ public class KlasaController implements Initializable {
   private void stworzZakladki() {
 
     List<Przedmiot> przedmioty = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa, pesel);
+    tabsPane.getTabs().clear();
     for (Przedmiot przedmiot : przedmioty) {
-      
-      Tab tabA = new Tab();
-      tabA.setText(przedmiot.getNazwaPrzedmiotu());
-      tabA.setContent(stworzTabeleZkolumnamiOceny(przedmiot, tabA));
-      
-//      tabsPane.getTabs().add(tabA);
       tabsPane.getTabs().add(stworzZakladke(przedmiot));
 
     }
 
   }
-  private Tab stworzZakladke(Przedmiot przedmiot){
+
+  private Tab stworzZakladke(Przedmiot przedmiot) {
     Tab tab = new Tab();
-    
+
     tab.setText(przedmiot.getNazwaPrzedmiotu());
     tab.setContent(stworzTabeleZkolumnamiOceny(przedmiot, tab));
-    
-    
+
     return tab;
   }
-  
-  private void stworzTabeleGagatka(Uczen uczen, Przedmiot przedmiot, TableView<Uczen> staraTabela) {
+
+  private void stworzTabeleGagatka(Uczen uczen, Przedmiot przedmiot, TableView<Uczen> staraTabela, Tab tab) {
     gagatekPane.getChildren().clear();
     gagatek.setVisible(true);
 
     gagatek.setText(uczen.getImie() + " " + uczen.getNazwisko() + " " + uczen.getKlasa().getNazwaKlasy());
 
-    List<Ocena> ocenyGagatka = zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(uczen, przedmiot);
-    // kolumny z Ocena
     TableView<Ocena> table = new TableView<>();
-    for (Ocena ocenka : ocenyGagatka) {
-      System.out.println(ocenka.getData().toString());
-    }
     ObservableList<Ocena> data
-            = FXCollections.observableArrayList(ocenyGagatka);
+            = FXCollections.observableArrayList(zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(uczen, przedmiot));
     table.setItems(data);
 
     TableColumn kolumnaOcena = new TableColumn("Ocena");
@@ -226,7 +206,7 @@ public class KlasaController implements Initializable {
             new PropertyValueFactory<Ocena, Date>("Data"));
     kolumnaData.setCellFactory(column -> {
       TableCell<Ocena, Date> cell = new TableCell<Ocena, Date>() {
-        private SimpleDateFormat format = new SimpleDateFormat("dd-mm-yyyy");
+        private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         @Override
         protected void updateItem(Date item, boolean empty) {
@@ -264,7 +244,8 @@ public class KlasaController implements Initializable {
 
     Button dodajOcene = new Button("Dodaj");
     dodajOcene.setVisible(true);
-    dodajOcene.addEventHandler(MouseEvent.MOUSE_CLICKED, dodajOceneButtonHandler(table, staraTabela, ocenaPole, rodzajPole, dataPole, dodajOcene, uczen, przedmiot));
+    dodajOcene.addEventHandler(MouseEvent.MOUSE_CLICKED, dodajOceneButtonHandler(table, ocenaPole, rodzajPole, dataPole, uczen, przedmiot, tab));
+    //TableView<Ocena> table, TextField ocena, TextField rodzaj, TextField data, Uczen uczen, Przedmiot przedmiot, Tab tab
 
     Button cancel = new Button("Cofnij");
     cancel.setVisible(false);
@@ -285,10 +266,10 @@ public class KlasaController implements Initializable {
     //DOROBIC CHOWANIE BUTTONOW, USUWANIE STAREJ TABELI
   }
 
-  private TableView stworzTabeleZkolumnamiOceny(Przedmiot przedmiot, Tab tabA) {
+  private TableView stworzTabeleZkolumnamiOceny(Przedmiot przedmiot, Tab tab) {
     TableView<Uczen> table = new TableView<Uczen>();
     table = wypelnijTabele(table, przedmiot);
-    table.addEventHandler(MouseEvent.MOUSE_CLICKED, zwrocEventHandleraDlaRekordow(przedmiot, table));
+    table.addEventHandler(MouseEvent.MOUSE_CLICKED, zwrocEventHandleraDlaRekordow(przedmiot, table, tab));
     customResize(table);
     table.setEditable(true);
     return table;
@@ -349,14 +330,14 @@ public class KlasaController implements Initializable {
   }
 
   // HANDLERY ---------------------------
-  private EventHandler zwrocEventHandleraDlaRekordow(Przedmiot przedmiot, TableView<Uczen> table) {
+  private EventHandler zwrocEventHandleraDlaRekordow(Przedmiot przedmiot, TableView<Uczen> table, Tab tab) {
 
     EventHandler eventHandler = new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent e) {
 
         Uczen selectedItem = table.getSelectionModel().getSelectedItem();
-        stworzTabeleGagatka(selectedItem, przedmiot, table);
+        stworzTabeleGagatka(selectedItem, przedmiot, table, tab);
 
       }
     };
@@ -394,7 +375,7 @@ public class KlasaController implements Initializable {
     return eventHandler;
   }
 
-  private EventHandler dodajOceneButtonHandler(TableView<Ocena> table, TableView<Uczen> staraTabela, TextField ocena, TextField rodzaj, TextField data, Button dodaj, Uczen uczen, Przedmiot przedmiot) {
+  private EventHandler dodajOceneButtonHandler(TableView<Ocena> table, TextField ocena, TextField rodzaj, TextField data, Uczen uczen, Przedmiot przedmiot, Tab tab) {
 
     EventHandler eventHandler = new EventHandler<MouseEvent>() {
       @Override
@@ -404,27 +385,40 @@ public class KlasaController implements Initializable {
         obiektOcenaDoWstawienia.setRodzajOceny(new RodzajOceny(rodzaj.getText()));
         obiektOcenaDoWstawienia.setStopien(Integer.valueOf(ocena.getText()));
         obiektOcenaDoWstawienia.setUczen(uczen);
-
-        System.out.println("Obiekt do wstawienia: ");
-        System.out.println(obiektOcenaDoWstawienia.getUczen().getNazwisko());
+        System.out.println("data z gettextu: "+data.getText());
         try {
           obiektOcenaDoWstawienia.setData(utilities.Utils.returnDate(data.getText()));
+          System.out.println("data po powrocie z funkcji: "+obiektOcenaDoWstawienia.getData().toString());
         } catch (ParseException ex) {
           java.util.logging.Logger.getLogger(KlasaController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         wstawOcene(obiektOcenaDoWstawienia);
-        odswiezTabele(table, staraTabela, przedmiot);
+        odswiezTabele(table, przedmiot, tab, uczen);
 
       }
     };
     return eventHandler;
   }
 
-  public void odswiezTabele(TableView<Ocena> tableOcena, TableView<Uczen> tableUczen, Przedmiot przedmiot) {
-    tableUczen.getColumns().clear();
-    tableUczen = wypelnijTabele(tableUczen, przedmiot);
-    tableUczen.setVisible(false);
-    tableUczen.setVisible(true);
+  public void odswiezTabele(TableView<Ocena> tableOcena, Przedmiot przedmiot, Tab tab, Uczen uczen) {
+
+    int ktoryTabJestWybrany = tabsPane.getSelectionModel().getSelectedIndex();
+    //SingleSelectionModel wybierz = new SingleSelectionModel();
+    Tab odswiezonyTab = stworzZakladke(przedmiot);
+    tabsPane.getTabs().remove(ktoryTabJestWybrany);
+    tabsPane.getTabs().add(odswiezonyTab);
+//    Event event = new Event(MouseEvent.MOUSE_CLICKED);
+//    int indexOdswiezonegoTaba = tabsPane.getTabs().indexOf(odswiezonyTab);
+//    Event.fireEvent(tabsPane.getTabs().get(indexOdswiezonegoTaba), event);
+
+    // wybierz nowo dodanego taba
+    SingleSelectionModel<Tab> selectionModel = tabsPane.getSelectionModel();
+    selectionModel.select(odswiezonyTab); //select by object
+
+
+    ObservableList<Ocena> data
+            = FXCollections.observableArrayList(zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(uczen, przedmiot));
+    tableOcena.setItems(data);
 
   }
 
