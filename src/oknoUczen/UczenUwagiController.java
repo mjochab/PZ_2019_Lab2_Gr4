@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
@@ -119,30 +120,22 @@ public class UczenUwagiController implements Initializable {
         Klasa plan = zwrocPlan(uczen.getKlasa().getNazwaKlasy());
         System.out.println(uczen.getKlasa().getNazwaKlasy());
         Set zajecia = plan.getZajecias();
-
         ArrayList<Zajecia> zajeciaPosortowane = posortujZajecia(zajecia);
-
         kolumna = tabelaZajec.getColumns();
         ArrayList<String> zajeciaDnia;
 
         for (int i = 0; i < zajecia.size(); i++) {
             tabelaZajec.getItems().add(i);
         }
+        
         ArrayList<String> godziny = pobierzGodziny(zajeciaPosortowane);
         wstawianieGodziny(godziny, godzina);
-        Iterator<Zajecia> itg = zajeciaPosortowane.iterator();
-        while (itg.hasNext()) {
-           Zajecia o = itg.next();
-            System.out.println(o.getDzien()+" "+o.getPrzedmiot().getNazwaPrzedmiotu()+" "+o.getGodzina().toString());
-        }
+  
         for (TableColumn<Integer, String> kol : kolumna) {
             if (kol.getText().equals("Godzina")) {
 
             } else {
                 zajeciaDnia = pobierzZajeciaDnia(kol.getId(), zajeciaPosortowane, godziny);
-                System.out.println(kol.getId());
-                System.out.println(zajeciaDnia.toString());
-                System.out.println("----------------");
                 wstawianieZajecDoKolumn(kol, zajeciaDnia);
             }
         }
@@ -166,7 +159,6 @@ public class UczenUwagiController implements Initializable {
         while (it.hasNext()) {
             Zajecia ob = it.next();
             if (lista.contains(ob.getGodzina().toString())) {
-                continue;
             } else {
                 lista.add(ob.getGodzina().toString());
             }
@@ -200,19 +192,31 @@ public class UczenUwagiController implements Initializable {
         });
     }
 
-    public ArrayList<String> pobierzZajeciaDnia(String dzien, ArrayList<Zajecia> zajeciaPosortowane, ArrayList<String> godzina) {
+    public ArrayList<String> pobierzZajeciaDnia(String dzien, ArrayList<Zajecia> zajeciaPosortowane, 
+            ArrayList<String> godzina) {
+        
         ArrayList<String> zajeciaDnia = new ArrayList<String>();
+        ArrayList<Zajecia> zajeciaDniaObiekt = new ArrayList<Zajecia>();
         Iterator<Zajecia> it = zajeciaPosortowane.iterator();
         Iterator<String> itG = godzina.iterator();
-        while (it.hasNext() && itG.hasNext()) {
+        // Pobierane są zajęcia z danego dnia.
+        while (it.hasNext()) {
             Zajecia ob = it.next();
-            String x = itG.next();
 
-            if (ob.getDzien().equals(dzien) && ob.getGodzina().toString().equals(x)) {
-                System.out.println(x + ", " + ob.getGodzina().toString());
+            if (ob.getDzien().equals(dzien)) {
+                zajeciaDniaObiekt.add(ob);
+            }
+        }
+        ListIterator<Zajecia> itO = zajeciaDniaObiekt.listIterator();
+        // Sprawdzanie czy dla danej godziny jest przedmiot, jeśli nie wstaw null, jeśli tak dodaj do listy
+        while (itG.hasNext() && itO.hasNext()) {
+            String x = itG.next();
+            Zajecia ob = itO.next();
+            if (ob.getGodzina().toString().equals(x)) {
                 zajeciaDnia.add(ob.getPrzedmiot().getNazwaPrzedmiotu());
-            } else if (ob.getDzien().equals(dzien)) {
+            } else {
                 zajeciaDnia.add(null);
+                itO.previous();
             }
         }
         return zajeciaDnia;
