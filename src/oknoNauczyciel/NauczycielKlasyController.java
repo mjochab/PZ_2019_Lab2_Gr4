@@ -102,9 +102,10 @@ public class NauczycielKlasyController implements Initializable {
 
     }
 
-    public void przekazNazweUzytkownika(String username) {
+    public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
 
         this.username = username;
+        this.pesel = pesel;
 
     }
 

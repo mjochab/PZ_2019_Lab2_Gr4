@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 import javafx.scene.control.TableView;
+import mapping.Uczen;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -18,10 +19,10 @@ import javafx.scene.control.TableView;
 public class Utils {
 
     //data gotowa do wstawienia przez nauczyciela
-    public static Date returnDate(String data) throws ParseException {
+    public static String returnDate(Date data) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("dd-mm-yyyy");
-        String dateString = data;
-        Date date = format.parse(dateString);
+        Date dateString = data;
+        String date = format.format(dateString);
         return date;
     }
 
@@ -39,6 +40,11 @@ public class Utils {
             });
         }
     }
+    
+      public static void zwrocWartoscStringZKomorki(TableView<Uczen> table, int column, int row) {
+    String a = table.getColumns().get(column).getCellObservableValue(row).getValue().toString(); 
+    System.out.println(a);
+  }
     
     
 

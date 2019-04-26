@@ -22,18 +22,21 @@ import utilities.HibernateUtil.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import static utilities.HibernateUtil.zwrocKlasyKtorychUcze;
 import static utilities.HibernateUtil.zwrocKtoZalogowany;
+
+import static utilities.HibernateUtil.uzyskajKtoZalogowany;
+import static utilities.HibernateUtil.uzyskajPeselZalogowany;
 import static utilities.HibernateUtil.zwrocPrzedmiotyKtorychUczeDanaKlase;
 import static utilities.HibernateUtil.zwrocRodzajeOcen;
 import static utilities.HibernateUtil.zwrocUczniowZklasy;
 
 public class HibernateTest {
-
     private static final SessionFactory sessionFactory = buildSessionFactory();
     private static final EntityManager entityManager = sessionFactory.createEntityManager();
     private static final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -106,13 +109,13 @@ public class HibernateTest {
             
     public static void main(String[] args) throws ParseException {
 
-
-            
-        }
+    /*List<Przedmiot> przedmioty=zwrocPrzedmiotyKtorychUczeDanaKlase("1a", 22222222221L);
+    
+    for(Przedmiot przedmiot:przedmioty){
+        System.out.println(przedmiot.getNazwaPrzedmiotu());
+    }*/
+     System.out.println(uzyskajKtoZalogowany(22222222225L));
+     System.out.println(uzyskajPeselZalogowany("login","pass"));
 
     }
-    
-    
-    
-
-
+}

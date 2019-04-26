@@ -7,7 +7,9 @@ package oknoNauczyciel;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -16,13 +18,17 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -31,289 +37,281 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import mapping.Ocena;
 import mapping.Przedmiot;
+import mapping.RodzajOceny;
 import mapping.Uczen;
 import static utilities.HibernateUtil.*;
 import static utilities.Utils.customResize;
 
 public class KlasaController implements Initializable {
 
-    @FXML
-    private Button dodaj_ocenebtn;
-    @FXML
-    private Button dodaj_nieobecnoscbtn;
-    @FXML
-    private Button usprawiedliwbtn;
-    @FXML
-    private AnchorPane tabPane;
-    @FXML
-    private TabPane tabsPane;
-    @FXML
-    private AnchorPane rootPane;
-    @FXML
-    private Button powrotbtn;
-    @FXML
-    private Label userid;
-    private static String klasa = null;
-    private String username = null;
-    // do zrobienia po wybraniu taba:
-    private String przedmiot = null;
-    private Long pesel = null;
-    List<Uczen> uczniowie = new ArrayList<>();
+  @FXML
+  private Button dodaj_ocenebtn;
+  @FXML
+  private Button dodaj_nieobecnoscbtn;
+  @FXML
+  private Button usprawiedliwbtn;
+  @FXML
+  private AnchorPane tabPane;
+  @FXML
+  private TabPane tabsPane;
+  @FXML
+  private Pane gagatekPane;
+  @FXML
+  private Label gagatek;
+  @FXML
+  private AnchorPane rootPane;
+  @FXML
+  private Button powrotbtn;
+  @FXML
+  private Label userid;
+  private static String klasa = null;
+  private String username = null;
+  // do zrobienia po wybraniu taba:
+  private String przedmiot = null;
+  private Long pesel = null;
+  List<Uczen> uczniowie = new ArrayList<>();
 
-    /**
-     * platform Run later zeby przekazac zmienne poprawnie
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        Platform.runLater(() -> {
+  /**
+   * platform Run later zeby przekazac zmienne poprawnie
+   */
+  @Override
+  public void initialize(URL url, ResourceBundle rb) {
 
-            wstawUseraDoZalogowanoJako(username);
-            setUczniowie();
-            //stworzTabeleZocenami("gowno");
-            stworzZakladki();
+    Platform.runLater(() -> {
 
-        });
+      wstawUseraDoZalogowanoJako(username);
+      setUczniowie();
+      //stworzTabeleZocenami("gowno");
+      stworzZakladki();
+
+    });
+
+  }
+
+  @FXML
+  private void handleButtonAction(ActionEvent event) throws IOException {
+
+  }
+
+  @FXML
+  private void logout(ActionEvent event) throws IOException {
+    AnchorPane pane = FXMLLoader.load(getClass().getResource("/Okna/Logowanie.fxml"));
+    rootPane.getChildren().setAll(pane);
+
+  }
+
+  //ładujemy okno z ocenami uczenia.
+  @FXML
+  private void LoadPowrot(ActionEvent event) throws IOException {
+
+    AnchorPane pane = FXMLLoader.load(getClass().getResource("NauczycielKlasy.fxml"));
+    rootPane.getChildren().setAll(pane);
+
+  }
+
+  @FXML
+  private void LoadDodajOcene(ActionEvent event) throws IOException {
+    AnchorPane pane = FXMLLoader.load(getClass().getResource("DodajOcene.fxml"));
+    rootPane.getChildren().setAll(pane);
+  }
+
+  @FXML
+  private void LoadDodajNieobecnosc(ActionEvent event) throws IOException {
+    AnchorPane pane = FXMLLoader.load(getClass().getResource("DodajNieobecnosc.fxml"));
+    rootPane.getChildren().setAll(pane);
+  }
+
+  @FXML
+  private void LoadUsprawiedliw(ActionEvent event) throws IOException {
+    AnchorPane pane = FXMLLoader.load(getClass().getResource("DodajUsprawiedliwienie.fxml"));
+    rootPane.getChildren().setAll(pane);
+  }
+
+  private void wstawUseraDoZalogowanoJako(String username) {
+
+    userid.setText(username);
+
+  }
+
+  public void przekazKlaseIusername(String klasa, String username, Long pesel) {
+    this.username = username;
+    this.klasa = klasa;
+    this.pesel = pesel;
+
+  }
+
+  public String getKlasa() {
+    return klasa;
+  }
+
+  public void setUczniowie() {
+    this.uczniowie = zwrocUczniowZklasy(klasa);
+  }
+
+  private void stworzZakladki() {
+    // to do zakladki
+    // https://stackoverflow.com/questions/30656895/javafx-tabbed-pane-with-a-table-view-on-each-tab
+    // buttony
+    // https://stackoverflow.com/questions/29489366/how-to-add-button-in-javafx-table-view
+
+    List<Przedmiot> przedmioty = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa, pesel);
+    for (Przedmiot przedmiot : przedmioty) {
+      Tab tabA = new Tab();
+      tabA.setText(przedmiot.getNazwaPrzedmiotu());
+      tabA.setContent(stworzTabeleZkolumnamiOceny(przedmiot));
+      tabsPane.getTabs().removeAll();
+      tabsPane.getTabs().add(tabA);
 
     }
 
-    @FXML
-    private void handleButtonAction(ActionEvent event) throws IOException {
+  }
 
+  // funkcja do testow
+  private void stworzTabeleGagatka(Uczen uczen, Przedmiot przedmiot) {
+    gagatek.setVisible(true);
+
+    gagatek.setText(uczen.getImie() + " " + uczen.getNazwisko() + " " + uczen.getKlasa().getNazwaKlasy());
+
+    List<Ocena> ocenyGagatka = zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(uczen, przedmiot);
+    // kolumny z Ocena
+    TableView<Ocena> table = new TableView<>();
+    for (Ocena ocenka : ocenyGagatka) {
+      System.out.println(ocenka.getData().toString());
     }
+    ObservableList<Ocena> data
+            = FXCollections.observableArrayList(ocenyGagatka);
+    table.setItems(data);
 
-    @FXML
-    private void logout(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("/Okna/Logowanie.fxml"));
-        rootPane.getChildren().setAll(pane);
+    TableColumn kolumnaOcena = new TableColumn("Ocena");
+    kolumnaOcena.setMinWidth(100);
+    kolumnaOcena.setCellValueFactory(
+            new PropertyValueFactory<Ocena, Integer>("Stopien"));
 
-    }
+    TableColumn kolumnaRodzaj = new TableColumn("Rodzaj");
+    kolumnaRodzaj.setMinWidth(100);
+    kolumnaRodzaj.setCellValueFactory(new Callback<CellDataFeatures<Ocena, String>, ObservableValue<String>>() {
+      @Override
+      public ObservableValue<String> call(CellDataFeatures<Ocena, String> data) {
+        StringProperty ocenyUczniaDoWyswietlenia = new SimpleStringProperty();
+        ocenyUczniaDoWyswietlenia.setValue(data.getValue().getRodzajOceny().getRodzajOceny());
 
-    //ładujemy okno z ocenami uczenia.
-    @FXML
-    private void LoadPowrot(ActionEvent event) throws IOException {
+        return ocenyUczniaDoWyswietlenia;
+      }
+    });
 
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("NauczycielKlasy.fxml"));
-        rootPane.getChildren().setAll(pane);
+    TableColumn kolumnaData = new TableColumn("Data");
+    kolumnaData.setMinWidth(100);
+    kolumnaData.setCellValueFactory(
+            new PropertyValueFactory<Ocena, Date>("Data"));
+    kolumnaData.setCellFactory(column -> {
+      TableCell<Ocena, Date> cell = new TableCell<Ocena, Date>() {
+        private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
-    }
-
-    @FXML
-    private void LoadDodajOcene(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("DodajOcene.fxml"));
-        rootPane.getChildren().setAll(pane);
-    }
-
-    @FXML
-    private void LoadDodajNieobecnosc(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("DodajNieobecnosc.fxml"));
-        rootPane.getChildren().setAll(pane);
-    }
-
-    @FXML
-    private void LoadUsprawiedliw(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("DodajUsprawiedliwienie.fxml"));
-        rootPane.getChildren().setAll(pane);
-    }
-
-    private void wstawUseraDoZalogowanoJako(String username) {
-
-        userid.setText(username);
-
-    }
-
-    public void przekazKlaseIusername(String klasa, String username, Long pesel) {
-        this.username = username;
-        this.klasa = klasa;
-        this.pesel = pesel;
-
-    }
-
-    public String getKlasa() {
-        return klasa;
-    }
-
-    public void setUczniowie() {
-        this.uczniowie = zwrocUczniowZklasy(klasa);
-    }
-
-    private void stworzZakladki() {
-        // to do zakladki
-        // https://stackoverflow.com/questions/30656895/javafx-tabbed-pane-with-a-table-view-on-each-tab
-        // buttony
-        // https://stackoverflow.com/questions/29489366/how-to-add-button-in-javafx-table-view
-
-        List<Przedmiot> przedmioty = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa, pesel);
-        for (Przedmiot przedmiot : przedmioty) {
-            Tab tabA = new Tab();
-            tabA.setText(przedmiot.getNazwaPrzedmiotu());
-            System.out.println("przedmiot do taba:" + przedmiot.getNazwaPrzedmiotu());
-            tabA.setContent(stworzTabeleZkolumnamiOceny(przedmiot.getNazwaPrzedmiotu()));
-            tabsPane.getTabs().removeAll();
-            tabsPane.getTabs().add(tabA);
-
+        @Override
+        protected void updateItem(Date item, boolean empty) {
+          super.updateItem(item, empty);
+          if (empty) {
+            setText(null);
+          } else {
+            setText(format.format(item));
+          }
         }
+      };
 
-    }
+      return cell;
+    });
 
-    private TableView stworzTabeleZocenami(String przedmiot) {
+    table.getColumns().addAll(kolumnaOcena, kolumnaRodzaj, kolumnaData);
+    customResize(table);
+    gagatekPane.getChildren().addAll(table);
+    
+    
+    // do dodania tu buttony, add/edit/cancel
+    // listenery biektu ocena zeby od razu wartosci podmienic w textviewach, zedytowac, wyslac do bazy, zrefreshowac tabele glowna.
+    
+    
 
-        TableView<Uczen> table = new TableView<Uczen>();
-        table.setEditable(true);
+  }
 
-        TableColumn firstNameCol = new TableColumn("Imie");
-        firstNameCol.setMinWidth(100);
-        firstNameCol.setCellValueFactory(
-                new PropertyValueFactory<Uczen, String>("imie"));
+  private TableColumn stworzKolumneUczniow(String tytulIgetter) {
+    TableColumn kolumna = new TableColumn(tytulIgetter);
+    kolumna.setMinWidth(100);
+    kolumna.setCellValueFactory(
+            new PropertyValueFactory<Uczen, String>(tytulIgetter));
 
-        TableColumn lastNameCol = new TableColumn("Nazwisko");
-        lastNameCol.setMinWidth(100);
-        lastNameCol.setCellValueFactory(
-                new PropertyValueFactory<Uczen, String>("nazwisko"));
+    return kolumna;
+  }
 
-        for (Uczen uczen : uczniowie) {
+  private TableView stworzTabeleZkolumnamiOceny(Przedmiot przedmiot) {
 
-            Set oceny = uczen.getOcenas();
+    //5 kolumn - sprawdzian, kartkowka, odpowiedz, referat, zadanie domowe
+    TableView<Uczen> table = new TableView<Uczen>();
 
-            //ObservableList<Integer> ocenyUcznia = FXCollections.observableArrayList();
-            for (Iterator iterator = oceny.iterator(); iterator.hasNext();) {
-                Ocena ocena = (Ocena) iterator.next();
-                System.out.println(ocena.getUczen().getNazwisko() + " " + ocena.getPrzedmiot().getNazwaPrzedmiotu() + " " + ocena.getStopien());
-            }
+    ObservableList<Uczen> data
+            = FXCollections.observableArrayList(uczniowie);
+    table.setItems(data);
+    table.getColumns().addAll(stworzKolumneUczniow("Imie"), stworzKolumneUczniow("Nazwisko"));
 
-        }
-        TableColumn ocenyCol = new TableColumn("Oceny");
-        ocenyCol.setMinWidth(200);
-
-        ocenyCol.setCellValueFactory(new Callback<CellDataFeatures<Uczen, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(CellDataFeatures<Uczen, String> data) {
-                //tutaj robic kolejna kolumne w petli zaleznie ile jest ocen
-                StringProperty sp = new SimpleStringProperty();
-                // jakby przechowac id oceny i robic kolejne kolumny to potem z hibernate moge sie odniesc i zmienic poszczegolne oceny
-                sp.setValue(String.valueOf(
-                        //magic
-                        wyliczOcenyZmojegoPrzedmiotuZapiszJeDoStringa(data, przedmiot)
-                ));
-                return sp;
-            }
-        });
-        ObservableList<Uczen> data
-                = FXCollections.observableArrayList(uczniowie);
-        table.setItems(data);
-        table.getColumns().addAll(firstNameCol, lastNameCol, ocenyCol);
-        customResize(table);
-        return table;
-
-    }
-
-    // do roboty
-    private TableView stworzTabeleZkolumnamiOceny(String przedmiot) {
-
-        //5 kolumn - sprawdzian, kartkowka, odpowiedz, referat, zadanie domowe
-        TableView<Uczen> table = new TableView<Uczen>();
-        table.setEditable(true);
-
-        TableColumn firstNameCol = new TableColumn("Imie");
-        firstNameCol.setMinWidth(100);
-        firstNameCol.setCellValueFactory(
-                new PropertyValueFactory<Uczen, String>("imie"));
-
-        TableColumn lastNameCol = new TableColumn("Nazwisko");
-        lastNameCol.setMinWidth(100);
-        lastNameCol.setCellValueFactory(
-                new PropertyValueFactory<Uczen, String>("nazwisko"));
-
-        ObservableList<Uczen> data
-                = FXCollections.observableArrayList(uczniowie);
-        table.setItems(data);
-        table.getColumns().addAll(firstNameCol, lastNameCol);
-
-        List<String> rodzajeOcen = zwrocRodzajeOcen();
-        List<TableColumn> kolumnyzOcenami = new ArrayList<>();
-        int i = 0;
-        // tworz tyle kolumn ile rodzajow ocen
-        for (String rodzajOceny : rodzajeOcen) {
-            System.out.println("rodzaj oceny: " + rodzajOceny);
-            kolumnyzOcenami.add(new TableColumn(rodzajOceny));
-            // wpisywanie ocen do odpowiednich kolumn
-            kolumnyzOcenami.get(i).setCellValueFactory(new Callback<CellDataFeatures<Uczen, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(CellDataFeatures<Uczen, String> data) {
-                    // dorobic liste ktora przechowuje po kolei obiekty z ocenami
-                    StringProperty ocenyUczniaDoWyswietlenia = new SimpleStringProperty();
-                    SimpleObjectProperty obiektZOcenaUcznia = new SimpleObjectProperty();
-                    // oceny uczniow danej klasy z danego przedmiotu;
-                    Set ocenyUczniowKtorychUcze = data.getValue().getOcenas();
-                    String ocenydoWyswietlenia = "";
-                    for (Iterator iterator = ocenyUczniowKtorychUcze.iterator(); iterator.hasNext();) {
-                        Ocena ocena = (Ocena) iterator.next();
-
-                        if (ocena.getRodzajOceny().getRodzajOceny().equals(rodzajOceny) && ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(przedmiot)) {
-                            ocenydoWyswietlenia = ocenydoWyswietlenia + ocena.getStopien() + ", ";
-                        }
-                    }
-
-                    ocenyUczniaDoWyswietlenia.setValue(ocenydoWyswietlenia);
-                    return ocenyUczniaDoWyswietlenia;
-                }
-            });
-            table.getColumns().add(kolumnyzOcenami.get(i));
-            i++;
-
-        }
-
-        customResize(table);
-        return table;
-
-    }
-
-    public static String wyliczOcenyZmojegoPrzedmiotuZapiszJeDoStringa(CellDataFeatures<Uczen, String> daneZkomorkiTabeli, String przedmiot) {
-        // pesel do dania dynamicznie
-        // przedmiot do wziecia z taba
-        // List<Przedmiot> przedmiot = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa,22222222220L);
-        String oceny = "";
-        Set wszystkieOcenyUcznia = daneZkomorkiTabeli.getValue().getOcenas();
-
-        for (Iterator iterator = wszystkieOcenyUcznia.iterator(); iterator.hasNext();) {
+    List<String> rodzajeOcen = zwrocRodzajeOcen();
+    List<TableColumn> kolumnyzOcenami = new ArrayList<>();
+    int i = 0;
+    // tworz tyle kolumn ile rodzajow ocen
+    for (String rodzajOceny : rodzajeOcen) {
+      kolumnyzOcenami.add(new TableColumn(rodzajOceny));
+      // wpisywanie ocen do odpowiednich kolumn
+      kolumnyzOcenami.get(i).setCellValueFactory(new Callback<CellDataFeatures<Uczen, String>, ObservableValue<String>>() {
+        @Override
+        public ObservableValue<String> call(CellDataFeatures<Uczen, String> data) {
+          StringProperty ocenyUczniaDoWyswietlenia = new SimpleStringProperty();
+          // oceny uczniow danej klasy z danego przedmiotu;
+          Set ocenyUczniowKtorychUcze = data.getValue().getOcenas();
+          String ocenydoWyswietlenia = "";
+          for (Iterator iterator = ocenyUczniowKtorychUcze.iterator(); iterator.hasNext();) {
             Ocena ocena = (Ocena) iterator.next();
 
-            if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(przedmiot)) {
-
-                oceny = oceny + ocena.getStopien() + ", ";
+            if (ocena.getRodzajOceny().getRodzajOceny().equals(rodzajOceny) && ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(przedmiot.getNazwaPrzedmiotu())) {
+              ocenydoWyswietlenia = ocenydoWyswietlenia + ocena.getStopien() + ", ";
             }
+          }
 
+          ocenyUczniaDoWyswietlenia.setValue(ocenydoWyswietlenia);
+          return ocenyUczniaDoWyswietlenia;
         }
+      });
 
-        return oceny;
+      table.getColumns().add(kolumnyzOcenami.get(i));
+      i++;
+
     }
 
-    private String wyliczOcenyZmojegoPrzedmiotu(String przedmiot) {
-        // pesel do dania dynamicznie
-        // przedmiot do wziecia z taba
-        // List<Przedmiot> przedmiot = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa,22222222220L);
+    table.addEventHandler(MouseEvent.MOUSE_CLICKED, zwrocEventHandleraDlaRekordow(przedmiot, table));
 
-        String oceny = "";
-// muisz zrobic tyle kolumn ile jest ocen w bazie, nie wiecej
+    customResize(table);
+    table.setEditable(true);
+    return table;
 
-        for (Uczen uczen : uczniowie) {
-            Set ocenyUcznia = uczen.getOcenas();
-            for (Iterator it = ocenyUcznia.iterator(); it.hasNext();) {
-                Ocena ocena = (Ocena) it.next();
-                if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(przedmiot)) {
+  }
 
-//                new PropertyValueFactory<Ocena, Long>("stopien"));
-                }
-            }
-        }
+  private EventHandler zwrocEventHandleraDlaRekordow(Przedmiot przedmiot, TableView<Uczen> table) {
 
-        return oceny;
-    }
+    EventHandler eventHandler = new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        Uczen selectedItem = table.getSelectionModel().getSelectedItem();
+        stworzTabeleGagatka(selectedItem, przedmiot);
 
+      }
+    };
+    return eventHandler;
+  }
 }
