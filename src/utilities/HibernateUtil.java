@@ -237,7 +237,7 @@ public class HibernateUtil {
         criteria.select(root.get("kto"));
         criteria.where(builder.equal(root.get("pesel"), pesel));
         String osoba = entityManager.createQuery(criteria).getSingleResult();
-
+      
         return osoba;
     }
 

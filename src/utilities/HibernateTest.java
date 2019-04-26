@@ -115,7 +115,7 @@ public class HibernateTest {
     for(Przedmiot przedmiot:przedmioty){
         System.out.println(przedmiot.getNazwaPrzedmiotu());
     }*/
-     System.out.println(uzyskajKtoZalogowany(22222222225L));
+     System.out.println(uzyskajKtoZalogowany(22222022225L));
      System.out.println(uzyskajPeselZalogowany("otitmuss","pass"));
      System.out.println(uzyskajLoginZalogowany(22222222225L));
     }
