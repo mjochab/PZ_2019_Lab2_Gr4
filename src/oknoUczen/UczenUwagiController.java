@@ -36,6 +36,7 @@ import mapping.Uczen;
 import mapping.Zajecia;
 import utilities.HibernateUtil;
 import static utilities.HibernateUtil.*;
+import utilities.Utils;
 
 public class UczenUwagiController implements Initializable {
 
@@ -118,9 +119,8 @@ public class UczenUwagiController implements Initializable {
     public void wstawPlan() {
         Uczen uczen = HibernateUtil.zwrocUcznia(PESEL);
         Klasa plan = zwrocPlan(uczen.getKlasa().getNazwaKlasy());
-        System.out.println(uczen.getKlasa().getNazwaKlasy());
         Set zajecia = plan.getZajecias();
-        ArrayList<Zajecia> zajeciaPosortowane = posortujZajecia(zajecia);
+        ArrayList<Zajecia> zajeciaPosortowane = Utils.posortujZajecia(zajecia);
         kolumna = tabelaZajec.getColumns();
         ArrayList<String> zajeciaDnia;
 
@@ -128,97 +128,18 @@ public class UczenUwagiController implements Initializable {
             tabelaZajec.getItems().add(i);
         }
         
-        ArrayList<String> godziny = pobierzGodziny(zajeciaPosortowane);
-        wstawianieGodziny(godziny, godzina);
+        ArrayList<String> godziny = Utils.pobierzGodziny(zajeciaPosortowane);
+        Utils.wstawianieGodziny(godziny, godzina);
   
         for (TableColumn<Integer, String> kol : kolumna) {
             if (kol.getText().equals("Godzina")) {
 
             } else {
-                zajeciaDnia = pobierzZajeciaDnia(kol.getId(), zajeciaPosortowane, godziny);
-                wstawianieZajecDoKolumn(kol, zajeciaDnia);
+                zajeciaDnia = Utils.pobierzZajeciaDnia(kol.getId(), zajeciaPosortowane, godziny);
+                Utils.wstawianieZajecDoKolumn(kol, zajeciaDnia);
             }
         }
     }
 
-    public void wstawianieGodziny(ArrayList<String> godzina, TableColumn<Integer, String> kol) {
-        kol.setCellValueFactory(cellData -> {
-            Integer rowIndex = cellData.getValue();
-            if (rowIndex >= godzina.size()) {
-                return null;
-            } else {
-                return new ReadOnlyStringWrapper(godzina.get(rowIndex));
-            }
-        });
-    }
-
-    public ArrayList<String> pobierzGodziny(ArrayList<Zajecia> zajecia) {
-        ArrayList<String> lista = new ArrayList<String>();
-        Iterator<Zajecia> it = zajecia.iterator();
-
-        while (it.hasNext()) {
-            Zajecia ob = it.next();
-            if (lista.contains(ob.getGodzina().toString())) {
-            } else {
-                lista.add(ob.getGodzina().toString());
-            }
-        }
-        return lista;
-    }
-
-    public ArrayList<Zajecia> posortujZajecia(Set zajecia) {
-        ArrayList<Zajecia> zajeciaPosortowane = new ArrayList<Zajecia>();
-
-        Iterator<Zajecia> it = zajecia.iterator();
-        while (it.hasNext()) {
-            Zajecia ob = it.next();
-            zajeciaPosortowane.add(ob);
-        }
-        Comparator<Zajecia> porownajPoGodzinie = (Zajecia o1, Zajecia o2)
-                -> o1.getGodzina().compareTo(o2.getGodzina());
-
-        Collections.sort(zajeciaPosortowane, porownajPoGodzinie);
-        return zajeciaPosortowane;
-    }
-
-    public void wstawianieZajecDoKolumn(TableColumn<Integer, String> kol, ArrayList<String> dzien) {
-        kol.setCellValueFactory(cellData -> {
-            Integer rowIndex = cellData.getValue();
-            if (rowIndex >= dzien.size()) {
-                return null;
-            } else {
-                return new ReadOnlyStringWrapper(dzien.get(rowIndex));
-            }
-        });
-    }
-
-    public ArrayList<String> pobierzZajeciaDnia(String dzien, ArrayList<Zajecia> zajeciaPosortowane, 
-            ArrayList<String> godzina) {
-        
-        ArrayList<String> zajeciaDnia = new ArrayList<String>();
-        ArrayList<Zajecia> zajeciaDniaObiekt = new ArrayList<Zajecia>();
-        Iterator<Zajecia> it = zajeciaPosortowane.iterator();
-        Iterator<String> itG = godzina.iterator();
-        // Pobierane są zajęcia z danego dnia.
-        while (it.hasNext()) {
-            Zajecia ob = it.next();
-
-            if (ob.getDzien().equals(dzien)) {
-                zajeciaDniaObiekt.add(ob);
-            }
-        }
-        ListIterator<Zajecia> itO = zajeciaDniaObiekt.listIterator();
-        // Sprawdzanie czy dla danej godziny jest przedmiot, jeśli nie wstaw null, jeśli tak dodaj do listy
-        while (itG.hasNext() && itO.hasNext()) {
-            String x = itG.next();
-            Zajecia ob = itO.next();
-            if (ob.getGodzina().toString().equals(x)) {
-                zajeciaDnia.add(ob.getPrzedmiot().getNazwaPrzedmiotu());
-            } else {
-                zajeciaDnia.add(null);
-                itO.previous();
-            }
-        }
-        return zajeciaDnia;
-    }
+    
 }
