@@ -201,55 +201,61 @@ public class HibernateUtil {
         criteria.select(root.get("rodzajOceny"));
         List<String> rodzajeOcen = entityManager.createQuery(criteria).getResultList();
 
-
         return rodzajeOcen;
     }
 
-   
-
-    
-        public static List<Ocena> zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(Uczen gagatek, Przedmiot przedmiot) {
+    public static List<Ocena> zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(Uczen gagatek, Przedmiot przedmiot) {
 
         CriteriaQuery<Ocena> criteria = builder.createQuery(Ocena.class);
         Root<Ocena> root = criteria.from(Ocena.class);
         criteria.select(root);
-        criteria.where(builder.equal(root.get("uczen"), gagatek),(builder.equal(root.get("przedmiot"), przedmiot)));
+        criteria.where(builder.equal(root.get("uczen"), gagatek), (builder.equal(root.get("przedmiot"), przedmiot)));
         List<Ocena> rodzajeOcen = entityManager.createQuery(criteria).getResultList();
         return rodzajeOcen;
-         
+
     }
-    
-    public static Long uzyskajPeselZalogowany(String login, String haslo){
+
+    public static Long uzyskajPeselZalogowany(String login, String haslo) {
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
         criteria.select(root.get("pesel"));
         criteria.where(builder.equal(root.get("login"), login));
         criteria.where(builder.equal(root.get("haslo"), haslo));
-       // List<Long> pesele = entityManager.createQuery(criteria).getResultList();      
+        // List<Long> pesele = entityManager.createQuery(criteria).getResultList();      
         Long nr_pesel = entityManager.createQuery(criteria).getSingleResult();
         //criteria.where( builder.equal( root.get( Person_.name ), "John Doe" ) );
-        
+
         return nr_pesel;
     }
-     
-    public static String uzyskajKtoZalogowany(Long pesel){
+
+    public static String uzyskajKtoZalogowany(Long pesel) {
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
         criteria.select(root.get("kto"));
-        criteria.where(builder.equal(root.get("pesel"), pesel));      
+        criteria.where(builder.equal(root.get("pesel"), pesel));
         String osoba = entityManager.createQuery(criteria).getSingleResult();
 
         return osoba;
     }
-      
-    public static String uzyskajLoginZalogowany(Long pesel){
+
+    public static String uzyskajLoginZalogowany(Long pesel) {
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
         criteria.select(root.get("login"));
         criteria.where(builder.equal(root.get("pesel"), pesel));
         String osoba = entityManager.createQuery(criteria).getSingleResult();
-        
+
         return osoba;
-    }  
+    }
+
+    public static Klasa zwrocPlan(String klasa) {
+        CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
+        Root<Klasa> root = criteria.from(Klasa.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get("nazwaKlasy"), klasa));
+        Klasa plan = entityManager.createQuery(criteria).getSingleResult();
+
+        return plan;
+    }
 
 }

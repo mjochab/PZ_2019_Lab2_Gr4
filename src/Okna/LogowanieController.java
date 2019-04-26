@@ -50,7 +50,7 @@ public class LogowanieController implements Initializable {
         String okno;
         String osoba = podajZalogowanego();
         if(osoba.equals("n")){
-            pane = FXMLLoader.load(getClass().getResource("/oknoNauczyciel/NauczycielKlasy.fxml"));
+            pane = FXMLLoader.load(getClass().getResource("/oknoUczen/UczenOceny.fxml"));
         }
         else{
             return;
@@ -84,7 +84,7 @@ public class LogowanieController implements Initializable {
        // System.out.println(nrPesel);
         //System.out.println(login +" "+haslo);
         System.out.println(podajZalogowanego());
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("/oknoNauczyciel/NauczycielKlasy.fxml"));
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("/oknoUczen/UczenOceny.fxml"));
         rootPane.getChildren().setAll(pane);
     }
     private String podajZalogowanego(){
