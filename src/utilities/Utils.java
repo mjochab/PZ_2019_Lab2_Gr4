@@ -22,7 +22,6 @@ public class Utils {
   public static Date returnDate(String data) throws ParseException {
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     Date date = format.parse(data);
-    System.out.println("data W FUNKCJI: "+date.toString());
     return date;
   }
 
@@ -43,7 +42,6 @@ public class Utils {
 
   public static void zwrocWartoscStringZKomorki(TableView<Uczen> table, int column, int row) {
     String a = table.getColumns().get(column).getCellObservableValue(row).getValue().toString();
-    System.out.println(a);
   }
 
 }

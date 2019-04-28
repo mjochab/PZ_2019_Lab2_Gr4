@@ -27,6 +27,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -72,7 +73,7 @@ public class KlasaController implements Initializable {
   private AnchorPane rootPane;
   @FXML
   private Label userid;
-  
+
   private static String klasa = null;
   private String username = null;
   private Long pesel = null;
@@ -245,7 +246,10 @@ public class KlasaController implements Initializable {
     Button dodajOcene = new Button("Dodaj");
     dodajOcene.setVisible(true);
     dodajOcene.addEventHandler(MouseEvent.MOUSE_CLICKED, dodajOceneButtonHandler(table, ocenaPole, rodzajPole, dataPole, uczen, przedmiot, tab));
-    //TableView<Ocena> table, TextField ocena, TextField rodzaj, TextField data, Uczen uczen, Przedmiot przedmiot, Tab tab
+
+    Button edytujOcene = new Button("Edytuj");
+    edytujOcene.setVisible(false);
+
 
     Button cancel = new Button("Cofnij");
     cancel.setVisible(false);
@@ -255,13 +259,13 @@ public class KlasaController implements Initializable {
     buttony.setSpacing(15);
     buttony.setPadding(new Insets(15, 20, 5, 10));
     buttony.setAlignment(Pos.CENTER);
-    buttony.getChildren().addAll(dodajOcene, cancel);
+    buttony.getChildren().addAll(dodajOcene, edytujOcene, cancel);
 
     ustawiaczPane.getChildren().addAll(table, textfieldy, buttony);
 
     gagatekPane.getChildren().addAll(ustawiaczPane);
 
-    table.addEventHandler(MouseEvent.MOUSE_CLICKED, dodajButtonyWypelnijTextFieldyHandler(table, ocenaPole, rodzajPole, dataPole, dodajOcene, cancel));
+    table.addEventHandler(MouseEvent.MOUSE_CLICKED, dodajButtonyWypelnijTextFieldyHandler(table, ocenaPole, rodzajPole, dataPole, dodajOcene, edytujOcene, cancel, uczen, przedmiot, tab));
 
     //DOROBIC CHOWANIE BUTTONOW, USUWANIE STAREJ TABELI
   }
@@ -344,7 +348,7 @@ public class KlasaController implements Initializable {
     return eventHandler;
   }
 
-  private EventHandler dodajButtonyWypelnijTextFieldyHandler(TableView<Ocena> table, TextField ocena, TextField rodzaj, TextField data, Button dodaj, Button cancel) {
+  private EventHandler dodajButtonyWypelnijTextFieldyHandler(TableView<Ocena> table, TextField ocena, TextField rodzaj, TextField data, Button dodaj, Button edytuj, Button cancel, Uczen uczen, Przedmiot przedmiot, Tab tab) {
 
     EventHandler eventHandler = new EventHandler<MouseEvent>() {
       @Override
@@ -355,17 +359,20 @@ public class KlasaController implements Initializable {
           ocena.setText(selectedItem.getStopien().toString());
           rodzaj.setText(selectedItem.getRodzajOceny().getRodzajOceny());
           data.setText(selectedItem.getData().toString());
-          dodaj.setText("Edytuj");
           cancel.setVisible(true);
+          dodaj.setVisible(false);
+          edytuj.setVisible(true);
+          edytuj.addEventHandler(MouseEvent.MOUSE_CLICKED, edytujOceneButtonHandler(table, ocena, rodzaj, data, uczen, przedmiot, tab, selectedItem, dodaj, cancel, edytuj ));
+   //TableView<Ocena> table, TextField ocena, TextField rodzaj, TextField data, Uczen uczen, Przedmiot przedmiot, Tab tab, Ocena obiektOcenaDoEdycji, Button dodaj, Button cancel
           cancel.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
               ocena.setText("");
               rodzaj.setText("");
               data.setText("");
+              dodaj.setVisible(true);
               cancel.setVisible(false);
-              dodaj.setText("Dodaj");
-
+              edytuj.setVisible(false);
             }
 
           });
@@ -385,15 +392,36 @@ public class KlasaController implements Initializable {
         obiektOcenaDoWstawienia.setRodzajOceny(new RodzajOceny(rodzaj.getText()));
         obiektOcenaDoWstawienia.setStopien(Integer.valueOf(ocena.getText()));
         obiektOcenaDoWstawienia.setUczen(uczen);
-        System.out.println("data z gettextu: "+data.getText());
         try {
           obiektOcenaDoWstawienia.setData(utilities.Utils.returnDate(data.getText()));
-          System.out.println("data po powrocie z funkcji: "+obiektOcenaDoWstawienia.getData().toString());
         } catch (ParseException ex) {
           java.util.logging.Logger.getLogger(KlasaController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         wstawOcene(obiektOcenaDoWstawienia);
         odswiezTabele(table, przedmiot, tab, uczen);
+
+      }
+    };
+    return eventHandler;
+  }
+
+  private EventHandler edytujOceneButtonHandler(TableView<Ocena> table, TextField ocena, TextField rodzaj, TextField data, Uczen uczen, Przedmiot przedmiot, Tab tab, Ocena obiektOcenaDoEdycji, Button dodaj, Button cancel, Button edytuj) {
+
+    EventHandler eventHandler = new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        obiektOcenaDoEdycji.setRodzajOceny(new RodzajOceny(rodzaj.getText()));
+        obiektOcenaDoEdycji.setStopien(Integer.valueOf(ocena.getText()));
+        try {
+          obiektOcenaDoEdycji.setData(utilities.Utils.returnDate(data.getText()));
+        } catch (ParseException ex) {
+          java.util.logging.Logger.getLogger(KlasaController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        edytujOcene(obiektOcenaDoEdycji);
+        odswiezTabele(table, przedmiot, tab, uczen);
+        cancel.setVisible(false);
+        dodaj.setVisible(true);
+        edytuj.setVisible(false);
 
       }
     };
@@ -407,14 +435,10 @@ public class KlasaController implements Initializable {
     Tab odswiezonyTab = stworzZakladke(przedmiot);
     tabsPane.getTabs().remove(ktoryTabJestWybrany);
     tabsPane.getTabs().add(odswiezonyTab);
-//    Event event = new Event(MouseEvent.MOUSE_CLICKED);
-//    int indexOdswiezonegoTaba = tabsPane.getTabs().indexOf(odswiezonyTab);
-//    Event.fireEvent(tabsPane.getTabs().get(indexOdswiezonegoTaba), event);
 
     // wybierz nowo dodanego taba
     SingleSelectionModel<Tab> selectionModel = tabsPane.getSelectionModel();
     selectionModel.select(odswiezonyTab); //select by object
-
 
     ObservableList<Ocena> data
             = FXCollections.observableArrayList(zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(uczen, przedmiot));

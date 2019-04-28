@@ -76,12 +76,10 @@ public class NauczycielKlasyController implements Initializable {
 
         String[] nazwyKlas = utilities.HibernateUtil.zwrocNazwyKlasKtorychUcze(pesel);
         Button[] listaButtonow = new Button[nazwyKlas.length];
-        System.out.println("nazwy klas.length: "+nazwyKlas.length);
         for (int i = 0; i < nazwyKlas.length; i++) {
             Button b = new Button(nazwyKlas[i]);
             b.setId("klasax" + i);
             b.setText(nazwyKlas[i]);
-            System.out.println(b.getText());
             b.addEventHandler(MouseEvent.MOUSE_CLICKED,
                     (event -> {
                         try {

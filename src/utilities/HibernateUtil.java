@@ -34,7 +34,6 @@ public class HibernateUtil {
       return metadata.getSessionFactoryBuilder().build();
     } catch (Throwable ex) {
       // Make sure you log the exception, as it might be swallowed
-      System.err.println("Initial SessionFactory creation failed." + ex);
       throw new ExceptionInInitializerError(ex);
     }
   }
@@ -192,7 +191,6 @@ public class HibernateUtil {
     for (Tuple tuple : tuples) {
       Przedmiot przedmiotek = (Przedmiot) tuple.get(0);
       Long count = (Long) tuple.get(1);
-      System.out.println(przedmiotek.getNazwaPrzedmiotu() + " count: " + count);
     }
   }
 
@@ -253,30 +251,42 @@ public class HibernateUtil {
   public static void wstawOcene(Ocena ocena) {
 
     Session session = sessionFactory.openSession();
-    
-        Transaction tx = null;
-        Integer stId = null;
-        try
-        {
-            tx = session.beginTransaction();
-          
-             
-            session.save(ocena);
-            tx.commit();
-        } 
-        catch (HibernateException ex)
-        {
-            if(tx != null)
-                tx.rollback();
-        }
-        finally
-        {
-            session.close();
-        }
-    
 
+    Transaction tx = null;
+    Integer stId = null;
+    try {
+      tx = session.beginTransaction();
 
+      session.save(ocena);
+      tx.commit();
+    } catch (HibernateException ex) {
+      if (tx != null) {
+        tx.rollback();
+      }
+    } finally {
+      session.close();
+    }
 
+  }
+  
+    public static void edytujOcene(Ocena ocena) {
+
+    Session session = sessionFactory.openSession();
+
+    Transaction tx = null;
+    Integer stId = null;
+    try {
+      tx = session.beginTransaction();
+
+      session.merge(ocena);
+      tx.commit();
+    } catch (HibernateException ex) {
+      if (tx != null) {
+        tx.rollback();
+      }
+    } finally {
+      session.close();
+    }
 
   }
 
