@@ -70,6 +70,8 @@ public class KlasaController implements Initializable {
   @FXML
   private Label gagatek;
   @FXML
+  private Label jakaKlasa;
+  @FXML
   private AnchorPane rootPane;
   @FXML
   private Label userid;
@@ -85,51 +87,13 @@ public class KlasaController implements Initializable {
     Platform.runLater(() -> {
 
       wstawUseraDoZalogowanoJako(username);
+      wstawKlaseDoLabela(klasa);
       setUczniowie();
       //stworzTabeleZocenami("gowno");
-      stworzZakladki();
+      stworzZakladkiOceny();
 
     });
 
-  }
-
-  @FXML
-  private void handleButtonAction(ActionEvent event) throws IOException {
-
-  }
-
-  @FXML
-  private void logout(ActionEvent event) throws IOException {
-    AnchorPane pane = FXMLLoader.load(getClass().getResource("/Okna/Logowanie.fxml"));
-    rootPane.getChildren().setAll(pane);
-
-  }
-
-  //ładujemy okno z ocenami uczenia.
-  @FXML
-  private void LoadPowrot(ActionEvent event) throws IOException {
-
-    AnchorPane pane = FXMLLoader.load(getClass().getResource("NauczycielKlasy.fxml"));
-    rootPane.getChildren().setAll(pane);
-
-  }
-
-  @FXML
-  private void LoadDodajOcene(ActionEvent event) throws IOException {
-    AnchorPane pane = FXMLLoader.load(getClass().getResource("DodajOcene.fxml"));
-    rootPane.getChildren().setAll(pane);
-  }
-
-  @FXML
-  private void LoadDodajNieobecnosc(ActionEvent event) throws IOException {
-    AnchorPane pane = FXMLLoader.load(getClass().getResource("DodajNieobecnosc.fxml"));
-    rootPane.getChildren().setAll(pane);
-  }
-
-  @FXML
-  private void LoadUsprawiedliw(ActionEvent event) throws IOException {
-    AnchorPane pane = FXMLLoader.load(getClass().getResource("DodajUsprawiedliwienie.fxml"));
-    rootPane.getChildren().setAll(pane);
   }
 
   private void wstawUseraDoZalogowanoJako(String username) {
@@ -153,18 +117,19 @@ public class KlasaController implements Initializable {
     this.uczniowie = zwrocUczniowZklasy(klasa);
   }
 
-  private void stworzZakladki() {
+  // OCENY---------------------------
+  private void stworzZakladkiOceny() {
 
     List<Przedmiot> przedmioty = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa, pesel);
     tabsPane.getTabs().clear();
     for (Przedmiot przedmiot : przedmioty) {
-      tabsPane.getTabs().add(stworzZakladke(przedmiot));
+      tabsPane.getTabs().add(stworzPojedynczaZakladke(przedmiot));
 
     }
 
   }
 
-  private Tab stworzZakladke(Przedmiot przedmiot) {
+  private Tab stworzPojedynczaZakladke(Przedmiot przedmiot) {
     Tab tab = new Tab();
 
     tab.setText(przedmiot.getNazwaPrzedmiotu());
@@ -250,7 +215,6 @@ public class KlasaController implements Initializable {
     Button edytujOcene = new Button("Edytuj");
     edytujOcene.setVisible(false);
 
-
     Button cancel = new Button("Cofnij");
     cancel.setVisible(false);
     Event event = new Event(MouseEvent.MOUSE_CLICKED);
@@ -333,7 +297,7 @@ public class KlasaController implements Initializable {
     return table;
   }
 
-  // HANDLERY ---------------------------
+  // HANDLERY OCENY---------------------------
   private EventHandler zwrocEventHandleraDlaRekordow(Przedmiot przedmiot, TableView<Uczen> table, Tab tab) {
 
     EventHandler eventHandler = new EventHandler<MouseEvent>() {
@@ -362,8 +326,8 @@ public class KlasaController implements Initializable {
           cancel.setVisible(true);
           dodaj.setVisible(false);
           edytuj.setVisible(true);
-          edytuj.addEventHandler(MouseEvent.MOUSE_CLICKED, edytujOceneButtonHandler(table, ocena, rodzaj, data, uczen, przedmiot, tab, selectedItem, dodaj, cancel, edytuj ));
-   //TableView<Ocena> table, TextField ocena, TextField rodzaj, TextField data, Uczen uczen, Przedmiot przedmiot, Tab tab, Ocena obiektOcenaDoEdycji, Button dodaj, Button cancel
+          edytuj.addEventHandler(MouseEvent.MOUSE_CLICKED, edytujOceneButtonHandler(table, ocena, rodzaj, data, uczen, przedmiot, tab, selectedItem, dodaj, cancel, edytuj));
+          //TableView<Ocena> table, TextField ocena, TextField rodzaj, TextField data, Uczen uczen, Przedmiot przedmiot, Tab tab, Ocena obiektOcenaDoEdycji, Button dodaj, Button cancel
           cancel.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -428,11 +392,12 @@ public class KlasaController implements Initializable {
     return eventHandler;
   }
 
+  // UTILS---------------------------
   public void odswiezTabele(TableView<Ocena> tableOcena, Przedmiot przedmiot, Tab tab, Uczen uczen) {
 
     int ktoryTabJestWybrany = tabsPane.getSelectionModel().getSelectedIndex();
     //SingleSelectionModel wybierz = new SingleSelectionModel();
-    Tab odswiezonyTab = stworzZakladke(przedmiot);
+    Tab odswiezonyTab = stworzPojedynczaZakladke(przedmiot);
     tabsPane.getTabs().remove(ktoryTabJestWybrany);
     tabsPane.getTabs().add(odswiezonyTab);
 
@@ -445,5 +410,42 @@ public class KlasaController implements Initializable {
     tableOcena.setItems(data);
 
   }
+
+  private void wstawKlaseDoLabela(String klasa) {
+    jakaKlasa.setText(klasa);
+  }
+
+  private void stworzZakladkiZobecnosciami() {
+
+    List<Przedmiot> przedmioty = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa, pesel);
+    tabsPane.getTabs().clear();
+//    for (Przedmiot przedmiot : przedmioty) {
+//      
+//      tabsPane.getTabs().add(stworzPojedynczaZakladke(przedmiot));
+
+    // content: sprawdzanie obecnosci tylko w dniach, w jakich nauczyciel pisze
+    Tab semestr1 = new Tab("Semestr 1");
+    Tab semestr2 = new Tab("Semestr 2");
+    // 1. Wyciagnij z bazy w jakich dniach masz lekcje i zrob z tego daty
+    // to do, przykladowo mam lekcje 3 razy w tyg, zaczynam od pierwszego, lece +1 do kolejnego, save, +1 do kolejnego, save, potem +1 week
+    
+//   LocalDate start = LocalDate.of( 2011 , 11 , 8 );
+//LocalDate stop = LocalDate.of( 2012 , 5 , 1 );
+//List<LocalDate> mondays = new ArrayList<>();
+//LocalDate monday = start.with( TemporalAdjusters.nextOrSame( DayOfWeek.MONDAY ) );
+//while( monday.isBefore( stop ) ) {
+//    mondays.add( monday );
+//    // Set up the next loop.
+//    monday = monday.plusWeeks( 1 );
+//}
+    
+    tabsPane.getTabs().addAll(semestr1,semestr2);
+
+    }
+  
+    
+    
+  
+
 
 }
