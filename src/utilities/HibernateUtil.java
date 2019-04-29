@@ -217,6 +217,7 @@ public class HibernateUtil {
   }
 
 
+
     public static Long uzyskajPeselZalogowany(String login, String haslo) {
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
@@ -314,6 +315,7 @@ public class HibernateUtil {
     }
 
   }
+
       public static Klasa zwrocPlan(String klasa) {
         CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
         Root<Klasa> root = criteria.from(Klasa.class);
@@ -323,5 +325,4 @@ public class HibernateUtil {
 
         return plan;
     }
-
 }
