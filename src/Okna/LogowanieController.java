@@ -94,8 +94,8 @@ public class LogowanieController implements Initializable {
              //pane = FXMLLoader.load(getClass().getResource("/okna/Logowanie.fxml"));
              System.out.println("coś nie pykło");
         }
-       
     }
+  
     private String pobierzKtoJestZalogowany(){
         //Long nr_pesel = 22222222225L;
         String login = login_field.getText();

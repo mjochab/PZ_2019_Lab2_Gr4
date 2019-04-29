@@ -19,7 +19,7 @@
         <property name="data" type="date">
             <column name="data" length="10" />
         </property>
-        <property name="wartosc" type="java.lang.Boolean">
+        <property name="wartosc" type="string">
             <column name="wartosc" />
         </property>
     </class>

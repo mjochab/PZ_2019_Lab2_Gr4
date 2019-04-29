@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import mapping.*;
-import mapping.Autoryzacja;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -205,8 +203,8 @@ public class HibernateUtil {
 
         return rodzajeOcen;
     }
-    
-        public static List<Ocena> zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(Uczen gagatek, Przedmiot przedmiot) {
+
+    public static List<Ocena> zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(Uczen gagatek, Przedmiot przedmiot) {
 
         CriteriaQuery<Ocena> criteria = builder.createQuery(Ocena.class);
         Root<Ocena> root = criteria.from(Ocena.class);
@@ -214,7 +212,17 @@ public class HibernateUtil {
         criteria.where(builder.equal(root.get("uczen"), gagatek), (builder.equal(root.get("przedmiot"), przedmiot)));
         List<Ocena> rodzajeOcen = entityManager.createQuery(criteria).getResultList();
         return rodzajeOcen;
-         
+
+    }
+
+    public static Klasa zwrocPlan(String klasa) {
+        CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
+        Root<Klasa> root = criteria.from(Klasa.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get("nazwaKlasy"), klasa));
+        Klasa plan = entityManager.createQuery(criteria).getSingleResult();
+
+        return plan;
     }
 
     public static Long uzyskajPeselZalogowany(String login, String haslo) {
