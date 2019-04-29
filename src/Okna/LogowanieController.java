@@ -48,19 +48,9 @@ public class LogowanieController implements Initializable {
     }
    
     @FXML
-    private void logowani(ActionEvent event) throws IOException {
-        AnchorPane pane;
-        String osoba = pobierzKtoJestZalogowany();
-        if(osoba.equals("n")){
-            pane = FXMLLoader.load(getClass().getResource("/oknoNauczyciel/NauczycielKlasy.fxml"));
-        }
-        else{
-            return;
-        }
-            rootPane.getChildren().setAll(pane);
-
-        //AnchorPane pane = FXMLLoader.load(getClass().getResource("/oknoDyrektor/Dyrektor.fxml"));
-       //      rootPane.getChildren().setAll(pane);      
+    private void logDyrek(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("/oknoDyrektor/Dyrektor.fxml"));
+        rootPane.getChildren().setAll(pane);      
     }
     
     @FXML
