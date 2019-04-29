@@ -136,4 +136,12 @@ public class Utils {
         }
         return zajeciaDnia;
     }
+    
+     public static String dateToString(Date data) throws ParseException {
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    String date = format.format(data);
+    return date;
+  }
+    
+    
 }

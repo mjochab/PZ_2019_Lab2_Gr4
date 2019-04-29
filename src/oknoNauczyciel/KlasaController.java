@@ -33,12 +33,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -89,8 +91,8 @@ public class KlasaController implements Initializable {
       wstawUseraDoZalogowanoJako(username);
       wstawKlaseDoLabela(klasa);
       setUczniowie();
-      //stworzTabeleZocenami("gowno");
-      stworzZakladkiOceny();
+      //stworzZakladkiOceny();
+      stworzZakladkiZobecnosciami();
 
     });
 
@@ -116,23 +118,64 @@ public class KlasaController implements Initializable {
   public void setUczniowie() {
     this.uczniowie = zwrocUczniowZklasy(klasa);
   }
-  
- // OBECNOSCI
-  
-    private void stworzZakladkiZobecnosciami() {
 
-    List<Przedmiot> przedmioty = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa, pesel);
+  // OBECNOSCI
+  private void stworzZakladkiZobecnosciami() {
     tabsPane.getTabs().clear();
-//    for (Przedmiot przedmiot : przedmioty) {
-//      
-//      tabsPane.getTabs().add(stworzPojedynczaZakladke(przedmiot));
+    List<Przedmiot> przedmioty = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa, pesel);
 
+    for (Przedmiot przedmiot : przedmioty) {
+
+      Tab przedmiotyTab = new Tab(przedmiot.getNazwaPrzedmiotu());
+
+      Tab semestr1 = new Tab("Semestr 1");
+//      
+//      Tab wrzesien = new Tab("wrzesien");
+//      Tab pazdziernik = new Tab("pazdziernik");
+//      Tab listopad = new Tab("listopad");
+//      Tab grudzien = new Tab("grudzien");
+//      Tab styczen = new Tab("styczen");
+      TabPane semestr1Pane = new TabPane();
+      semestr1Pane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+      for (int i = 9; i <= 12; i++) {
+        Tab miesiac = new Tab(String.valueOf(i));
+        semestr1Pane.getTabs().add(miesiac);
+      }
+
+      for (int i = 1; i <= 2; i++) {
+        Tab miesiac = new Tab(String.valueOf(i));
+        semestr1Pane.getTabs().add(miesiac);
+      }
+
+      semestr1.setContent(semestr1Pane);
+
+      Tab semestr2 = new Tab("Semestr 2");
+//
+//      Tab luty = new Tab("luty");
+//      Tab marzec = new Tab("marzec");
+//      Tab kwiecien = new Tab("kwiecien");
+//      Tab maj = new Tab("maj");
+//      Tab czerwiec = new Tab("czerwiec");
+      TabPane semestr2Pane = new TabPane();
+      semestr2Pane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+      for (int i = 1; i <= 6; i++) {
+        Tab miesiac = new Tab(String.valueOf(i));
+        semestr2Pane.getTabs().add(miesiac);
+      }
+
+      semestr2.setContent(semestr2Pane);
+
+      TabPane nowyTabPane = new TabPane(semestr1, semestr2);
+      nowyTabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+      przedmiotyTab.setContent(nowyTabPane);
+
+      tabsPane.getTabs().add(przedmiotyTab);
+
+    }
     // content: sprawdzanie obecnosci tylko w dniach, w jakich nauczyciel pisze
-    Tab semestr1 = new Tab("Semestr 1");
-    Tab semestr2 = new Tab("Semestr 2");
+
     // 1. Wyciagnij z bazy w jakich dniach masz lekcje i zrob z tego daty
     // to do, przykladowo mam lekcje 3 razy w tyg, zaczynam od pierwszego, lece +1 do kolejnego, save, +1 do kolejnego, save, potem +1 week
-    
 //   LocalDate start = LocalDate.of( 2011 , 11 , 8 );
 //LocalDate stop = LocalDate.of( 2012 , 5 , 1 );
 //List<LocalDate> mondays = new ArrayList<>();
@@ -142,10 +185,7 @@ public class KlasaController implements Initializable {
 //    // Set up the next loop.
 //    monday = monday.plusWeeks( 1 );
 //}
-    
-    tabsPane.getTabs().addAll(semestr1,semestr2);
-
-    }
+  }
 
   // OCENY---------------------------
   private void stworzZakladkiOceny() {
@@ -352,7 +392,12 @@ public class KlasaController implements Initializable {
         if (!selectedItem.toString().isEmpty()) {
           ocena.setText(selectedItem.getStopien().toString());
           rodzaj.setText(selectedItem.getRodzajOceny().getRodzajOceny());
-          data.setText(selectedItem.getData().toString());
+          try {
+            data.setText(utilities.Utils.dateToString(selectedItem.getData()));
+          } catch (ParseException ex) {
+            java.util.logging.Logger.getLogger(KlasaController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+          }
+          //data.setText(selectedItem.getData().toString());
           cancel.setVisible(true);
           dodaj.setVisible(false);
           edytuj.setVisible(true);
@@ -430,7 +475,7 @@ public class KlasaController implements Initializable {
     Tab odswiezonyTab = stworzPojedynczaZakladke(przedmiot);
     tabsPane.getTabs().remove(ktoryTabJestWybrany);
     tabsPane.getTabs().add(odswiezonyTab);
-
+    tableOcena.refresh();
     // wybierz nowo dodanego taba
     SingleSelectionModel<Tab> selectionModel = tabsPane.getSelectionModel();
     selectionModel.select(odswiezonyTab); //select by object
@@ -444,12 +489,5 @@ public class KlasaController implements Initializable {
   private void wstawKlaseDoLabela(String klasa) {
     jakaKlasa.setText(klasa);
   }
-
-
-  
-    
-    
-  
-
 
 }
