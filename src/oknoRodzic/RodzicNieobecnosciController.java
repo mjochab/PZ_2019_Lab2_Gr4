@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package oknoUczen;
+package oknoRodzic;
 
+import oknoUczen.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ import mapping.Zajecia;
 import utilities.HibernateUtil;
 import utilities.Utils;
 
-public class UczenNieobecnosciController implements Initializable {
+public class RodzicNieobecnosciController implements Initializable {
 
     @FXML
     private Button ocenybtn;

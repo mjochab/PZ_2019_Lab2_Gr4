@@ -55,7 +55,7 @@ public class Utils {
         System.out.println(a);
     }
 
-    // ------------- WSTAWIANIE PLANU ZAJEĆ DO TABELKI ------------------------------------------- //
+    // ------------------------- WSTAWIANIE PLANU ZAJEĆ DO TABELKI ------------------------- //
     public static void wstawianieGodziny(ArrayList<String> godzina, TableColumn<Integer, String> kol) {
         kol.setCellValueFactory(cellData -> {
             Integer rowIndex = cellData.getValue();

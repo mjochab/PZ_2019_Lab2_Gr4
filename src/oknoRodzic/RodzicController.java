@@ -5,67 +5,168 @@
  */
 package oknoRodzic;
 
+import oknoUczen.*;
+import utilities.HibernateUtil;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
+import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
+import javafx.scene.control.TableColumn;
+import mapping.*;
+import utilities.*;
 
-/**
- * FXML Controller class
- *
- * @author Veth
- */
 public class RodzicController implements Initializable {
 
-    
-   
+    private final long PESEL = 32222222220L;
     @FXML
-    private Button uczenbtn;
+    private AnchorPane rootPane;
+    @FXML
+    private Button ocenybtn;
     @FXML
     private Button nieobecnoscibtn;
     @FXML
-    private Button kontaktbtn;
+    private Button uwagibtn;
     @FXML
     private Button wylogujbtn;
     @FXML
-    private Text increment;
+    private TableView tabelaOcen;
     @FXML
-    private Button usprawiedliwbtn;
+    private TableColumn<Integer, Number> kolumna1;
     @FXML
-    private AnchorPane rootPane;
-   
+    private TableColumn<Integer, Number> kolumna2;
+    @FXML
+    private TableColumn<Integer, Number> kolumna3;
+    @FXML
+    private TableColumn<Integer, Number> kolumna4;
+    @FXML
+    private TableColumn<Integer, Number> kolumna5;
+    @FXML
+    private TableColumn<Integer, Number> kolumna6;
+    @FXML
+    private TableColumn<Integer, Number> kolumna7;
+
+    private final long pesel = 32222222221L;
+    public String[] nazwyKolumn;
+    public ObservableList<TableColumn> kolumna;
+    public Uczen uczen;
+    //public 
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-
-    @FXML
-    private void handleButtonAction(ActionEvent event) throws IOException {
+        zmianaNazwKolumn();
+        tabelaOcen.setColumnResizePolicy((param) -> true);
+        Platform.runLater(() -> Utils.customResize(tabelaOcen));
+        wpisywanieOcen();
 
     }
-    
+
+    @FXML
+    private void handleButtonAction(ActionEvent event) {
+    }
+
     @FXML
     private void logout(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("/Okna/Logowanie.fxml"));
-             rootPane.getChildren().setAll(pane);
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("/Okna/Logowanie.fxml"));
+        rootPane.getChildren().setAll(pane);
     }
-    
-    //ładujemy okno z ocenami uczenia.
+
+    //ładujemy defaultowe okno z ocenami ucznia
     @FXML
-      private void LoadUczen(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("RodzicOceny.fxml"));
-             rootPane.getChildren().setAll(pane);
+    private void LoadOceny(ActionEvent event) throws IOException {
+        tabelaOcen.setColumnResizePolicy((param) -> true);
+        Platform.runLater(() -> Utils.customResize(tabelaOcen));
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
+        rootPane.getChildren().setAll(pane);
+        wpisywanieOcen();
+
     }
-    
+
+    @FXML
+    private void LoadNieobecnosci(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
+        rootPane.getChildren().setAll(pane);
+    }
+
+    @FXML
+    private void LoadUwagi(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
+        rootPane.getChildren().setAll(pane);
+    }
+
+    @FXML
+    public void zmianaNazwKolumn() {
+        nazwyKolumn = HibernateUtil.pobieranieNazwPrzedmiotow();
+        kolumna = tabelaOcen.getColumns();
+
+        if (nazwyKolumn.length != 0) {
+            int i = 0;
+
+            for (TableColumn kol : kolumna) {
+                kol.setText(nazwyKolumn[i]);
+                i++;
+            }
+        } else {
+        }
+    }
+
+    public List<Integer> zwrocOcenyDlaPrzedmiotu(Set oceny, String nazwaKolumny) {
+        List<Integer> lista = new ArrayList<>();
+        Iterator<Ocena> it = oceny.iterator();
+
+        while (it.hasNext()) {
+            Ocena ocena = it.next();
+            if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(nazwaKolumny)) {
+                lista.add(ocena.getStopien());
+            } else {
+
+            }
+        }
+        return lista;
+    }
+
+    public void wstawianieOcenDoKolumn(TableColumn<Integer, Number> kol, List<Integer> listaOcen) {
+        kol.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            if (rowIndex >= listaOcen.size()) {
+                return null;
+            } else {
+                return new ReadOnlyIntegerWrapper(listaOcen.get(rowIndex));
+            }
+        });
+    }
+
+    public void wpisywanieOcen() {
+        uczen = HibernateUtil.zwrocUcznia(pesel);
+        Set oceny = uczen.getOcenas();
+
+        for (int i = 0; i < oceny.size(); i++) {
+            tabelaOcen.getItems().add(i);
+        }
+        for (TableColumn<Integer, Number> kol : kolumna) {
+
+            List<Integer> listaOcen = zwrocOcenyDlaPrzedmiotu(oceny, kol.getText());
+            if (listaOcen.isEmpty()) {
+            } else {
+                wstawianieOcenDoKolumn(kol, listaOcen);
+            }
+        }
+    }
 }
