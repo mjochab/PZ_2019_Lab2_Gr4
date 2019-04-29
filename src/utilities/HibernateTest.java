@@ -109,5 +109,4 @@ public class HibernateTest {
      System.out.println(uzyskajLoginZalogowany(22222222225L));
      System.out.println(uzyskajPeselZalogowany("",""));
     }
-
 }
