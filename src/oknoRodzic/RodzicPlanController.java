@@ -3,21 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package oknoUczen;
+package oknoRodzic;
 
+import oknoUczen.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.ResourceBundle;
 import java.util.Set;
-import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,21 +26,20 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import javafx.util.Callback;
+import mapping.Klasa;
 import mapping.Obecnosc;
-import mapping.Ocena;
 import mapping.Przedmiot;
 import mapping.Uczen;
 import mapping.Zajecia;
 import utilities.HibernateUtil;
+import static utilities.HibernateUtil.*;
 import utilities.Utils;
 
-public class UczenNieobecnosciController implements Initializable {
+public class RodzicPlanController implements Initializable {
 
     @FXML
     private Button ocenybtn;
@@ -55,24 +54,30 @@ public class UczenNieobecnosciController implements Initializable {
     @FXML
     private AnchorPane rootPane;
     @FXML
-    private TableView tabelaNieob;
+    private TableView tabelaZajec;
     @FXML
-    private TableColumn<Obecnosc, String> kolPrzedmiot;
+    private TableColumn<Integer, String> godzina;
     @FXML
-    private TableColumn<Obecnosc, String> kolData;
+    private TableColumn<Integer, String> pon;
     @FXML
-    private TableColumn<Obecnosc, String> kolWartosc;
+    private TableColumn<Integer, String> wt;
+    @FXML
+    private TableColumn<Integer, String> sr;
+    @FXML
+    private TableColumn<Integer, String> czw;
+    @FXML
+    private TableColumn<Integer, String> pt;
 
     private final long PESEL = 32222222221L;
+    private ObservableList<TableColumn> kolumna;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        wstawNieobecnosci();
-        tabelaNieob.setColumnResizePolicy((param) -> true);
-        Platform.runLater(() -> Utils.customResize(tabelaNieob));
+        wstawPlan();
+
     }
 
     @FXML
@@ -91,9 +96,6 @@ public class UczenNieobecnosciController implements Initializable {
     private void LoadNieobecnosci(ActionEvent event) throws IOException {
         AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
         rootPane.getChildren().setAll(pane);
-        tabelaNieob.setColumnResizePolicy((param) -> true);
-        Platform.runLater(() -> Utils.customResize(tabelaNieob));
-        wstawNieobecnosci();
     }
 
     @FXML
@@ -108,39 +110,38 @@ public class UczenNieobecnosciController implements Initializable {
         rootPane.getChildren().setAll(pane);
     }
 
-    public void wstawNieobecnosci() {
-        Uczen uczen = HibernateUtil.zwrocUcznia(PESEL);
-        kolData.setCellValueFactory(new PropertyValueFactory<>("data"));
-        kolWartosc.setCellValueFactory(new PropertyValueFactory<>("wartosc"));
-        kolPrzedmiot.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
-            public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> p) {
-                StringProperty nazwaPrzedmiotu = new SimpleStringProperty();
-                nazwaPrzedmiotu.setValue(p.getValue().getPrzedmiot().getNazwaPrzedmiotu());
-                return nazwaPrzedmiotu;
-            }
-        });
-        Set nieobecnosciSet = uczen.getObecnoscs();
-        ArrayList<Obecnosc> listaNieobecnosci = posortujNieobecnosci(nieobecnosciSet);
-
-        ObservableList<Obecnosc> dane = FXCollections.observableArrayList(listaNieobecnosci);
-        tabelaNieob.setItems(dane);
+    public void ustawIdKolumn() {
+        pon.setId("pon");
+        wt.setId("wt");
+        sr.setId("sr");
+        czw.setId("czw");
+        pt.setId("pt");
     }
 
-    public ArrayList<Obecnosc> posortujNieobecnosci(Set nieobecnosciSet) {
-        ArrayList<Obecnosc> obecnosci = new ArrayList<Obecnosc>();
-        Iterator<Obecnosc> it = nieobecnosciSet.iterator();
+    public void wstawPlan() {
+        Uczen uczen = HibernateUtil.zwrocUcznia(PESEL);
+        Klasa plan = zwrocPlan(uczen.getKlasa().getNazwaKlasy());
+        Set zajecia = plan.getZajecias();
+        ArrayList<Zajecia> zajeciaPosortowane = Utils.posortujZajecia(zajecia);
+        kolumna = tabelaZajec.getColumns();
+        ArrayList<String> zajeciaDnia;
 
-        while (it.hasNext()) {
-            Obecnosc ob = it.next();
-            if (ob.getWartosc().equals("nieobecny")) {
-                obecnosci.add(ob);
+        for (int i = 0; i < zajecia.size(); i++) {
+            tabelaZajec.getItems().add(i);
+        }
+        
+        ArrayList<String> godziny = Utils.pobierzGodziny(zajeciaPosortowane);
+        Utils.wstawianieGodziny(godziny, godzina);
+  
+        for (TableColumn<Integer, String> kol : kolumna) {
+            if (kol.getText().equals("Godzina")) {
+
+            } else {
+                zajeciaDnia = Utils.pobierzZajeciaDnia(kol.getId(), zajeciaPosortowane, godziny);
+                Utils.wstawianieZajecDoKolumn(kol, zajeciaDnia);
             }
         }
-        Comparator<Obecnosc> porownajPoGodzinie = (Obecnosc o1, Obecnosc o2)
-                -> o1.getData().compareTo(o2.getData());
-        Collections.sort(obecnosci, porownajPoGodzinie);
-
-        return obecnosci;
     }
 
+    
 }

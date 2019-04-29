@@ -14,12 +14,12 @@ public class Obecnosc  implements java.io.Serializable {
      private Przedmiot przedmiot;
      private Uczen uczen;
      private Date data;
-     private Boolean wartosc;
+     private String wartosc;
 
     public Obecnosc() {
     }
 
-    public Obecnosc(Przedmiot przedmiot, Uczen uczen, Date data, Boolean wartosc) {
+    public Obecnosc(Przedmiot przedmiot, Uczen uczen, Date data, String wartosc) {
        this.przedmiot = przedmiot;
        this.uczen = uczen;
        this.data = data;
@@ -54,11 +54,11 @@ public class Obecnosc  implements java.io.Serializable {
     public void setData(Date data) {
         this.data = data;
     }
-    public Boolean getWartosc() {
+    public String getWartosc() {
         return this.wartosc;
     }
     
-    public void setWartosc(Boolean wartosc) {
+    public void setWartosc(String wartosc) {
         this.wartosc = wartosc;
     }
 
