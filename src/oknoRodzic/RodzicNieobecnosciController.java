@@ -5,7 +5,6 @@
  */
 package oknoRodzic;
 
-import oknoUczen.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
@@ -26,6 +26,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
@@ -63,8 +64,11 @@ public class RodzicNieobecnosciController implements Initializable {
     private TableColumn<Obecnosc, String> kolData;
     @FXML
     private TableColumn<Obecnosc, String> kolWartosc;
+    @FXML
+    private Button usprawiedliwBtn;
 
     private final long PESEL = 32222222221L;
+    ArrayList<Obecnosc> listaNieobecnosci;
 
     /**
      * Initializes the controller class.
@@ -90,7 +94,7 @@ public class RodzicNieobecnosciController implements Initializable {
     //ładujemy okno z ocenami uczenia.
     @FXML
     private void LoadNieobecnosci(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("RodzicNieobecnosci.fxml"));
         rootPane.getChildren().setAll(pane);
         tabelaNieob.setColumnResizePolicy((param) -> true);
         Platform.runLater(() -> Utils.customResize(tabelaNieob));
@@ -99,13 +103,13 @@ public class RodzicNieobecnosciController implements Initializable {
 
     @FXML
     private void LoadOceny(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("Rodzic.fxml"));
         rootPane.getChildren().setAll(pane);
     }
 
     @FXML
     private void LoadUwagi(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("RodzicPlan.fxml"));
         rootPane.getChildren().setAll(pane);
     }
 
@@ -121,10 +125,11 @@ public class RodzicNieobecnosciController implements Initializable {
             }
         });
         Set nieobecnosciSet = uczen.getObecnoscs();
-        ArrayList<Obecnosc> listaNieobecnosci = posortujNieobecnosci(nieobecnosciSet);
+        listaNieobecnosci = posortujNieobecnosci(nieobecnosciSet);
 
         ObservableList<Obecnosc> dane = FXCollections.observableArrayList(listaNieobecnosci);
         tabelaNieob.setItems(dane);
+        addButtonToTable();
     }
 
     public ArrayList<Obecnosc> posortujNieobecnosci(Set nieobecnosciSet) {
@@ -133,7 +138,7 @@ public class RodzicNieobecnosciController implements Initializable {
 
         while (it.hasNext()) {
             Obecnosc ob = it.next();
-            if (ob.getWartosc().equals("nieobecny")) {
+            if (ob.getWartosc().equals("nieobecny") || ob.getWartosc().equals("oczekujace") || ob.getWartosc().equals("usprawiedliwione")) {
                 obecnosci.add(ob);
             }
         }
@@ -143,5 +148,66 @@ public class RodzicNieobecnosciController implements Initializable {
 
         return obecnosci;
     }
+    @FXML
+    public void usprawiedliwNieobecnosc(ActionEvent event) throws IOException {
+        Iterator<Obecnosc> it = listaNieobecnosci.iterator();
+        while (it.hasNext()) {
+            Obecnosc ob = it.next();
+            if (ob.getWartosc().equals("nieobecny")) {
+                ob.setWartosc("oczekujace");
+                HibernateUtil.edytujNieobecnosc(ob);
+                tabelaNieob.refresh();
+            }
+        }
+    }
 
+    private void addButtonToTable() {
+        TableColumn<Obecnosc, Obecnosc> colBtn = new TableColumn("");
+
+        Callback<TableColumn<Obecnosc, Obecnosc>, TableCell<Obecnosc, Obecnosc>> cellFactory = new Callback<TableColumn<Obecnosc, Obecnosc>, TableCell<Obecnosc, Obecnosc>>() {
+            @Override
+            public TableCell<Obecnosc, Obecnosc> call(final TableColumn<Obecnosc, Obecnosc> param) {
+                final TableCell<Obecnosc, Obecnosc> cell = new TableCell<Obecnosc, Obecnosc>() {
+
+                    private final Button btn = new Button("Usprawiedliw");
+
+                    {
+                        btn.setOnAction((ActionEvent event) -> {
+                            Obecnosc data = getTableView().getItems().get(getIndex());
+                            if (data.getWartosc().equals("nieobecny")) {
+                                data.setWartosc("oczekujace");
+                                HibernateUtil.edytujNieobecnosc(data);
+                                tabelaNieob.refresh();
+                                btn.setDisable(true);
+                            } else {
+                                btn.setDisable(true);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Obecnosc item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            if (!item.getWartosc().equals("nieobecny")) {
+                                btn.setDisable(true);
+                                setGraphic(btn);
+                            } else {
+                                setGraphic(btn);
+                            }
+                        }
+                    }
+
+                };
+
+                return cell;
+            }
+        };
+        colBtn.setCellFactory(cellFactory);
+        colBtn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<Obecnosc>(data.getValue()));
+        tabelaNieob.getColumns().add(colBtn);
+    }
 }

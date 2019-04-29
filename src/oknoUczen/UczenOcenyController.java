@@ -5,6 +5,7 @@
  */
 package oknoUczen;
 
+import Okna.LogowanieController;
 import utilities.HibernateUtil;
 import java.io.IOException;
 import java.net.URL;
@@ -59,7 +60,7 @@ public class UczenOcenyController implements Initializable {
     @FXML
     private TableColumn<Integer, Number> kolumna7;
 
-    private final long pesel = 32222222221L;
+    private long pesel = 32222222221L;
     public String[] nazwyKolumn;
     public ObservableList<TableColumn> kolumna;
     public Uczen uczen;
@@ -153,6 +154,9 @@ public class UczenOcenyController implements Initializable {
     }
 
     public void wpisywanieOcen() {
+        //String login = LogowanieController.getPassword_field().getText();
+      //  String haslo = LogowanieController.getLogin_field().getText();
+       // pesel = HibernateUtil.uzyskajPeselZalogowany(login, haslo);
         uczen = HibernateUtil.zwrocUcznia(pesel);
         Set oceny = uczen.getOcenas();
 

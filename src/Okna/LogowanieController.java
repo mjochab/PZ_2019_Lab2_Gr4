@@ -32,6 +32,8 @@ public class LogowanieController implements Initializable {
     private TextField login_field;
     @FXML
     private TextField password_field;
+
+
     @FXML
     private Button zalogujbtn;
     @FXML

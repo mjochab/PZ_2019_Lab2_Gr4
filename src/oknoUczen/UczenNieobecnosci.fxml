@@ -15,9 +15,9 @@
                <content>
                   <TableView fx:id="tabelaNieob" prefHeight="575.0" prefWidth="956.0">
                     <columns>
-                      <TableColumn fx:id="kolPrzedmiot" prefWidth="300.0" text="Przedmiot" />
-                      <TableColumn fx:id="kolData" prefWidth="260.0" text="Data" />
-                      <TableColumn fx:id="kolWartosc" prefWidth="395.0" text="Obecnosc" />
+                      <TableColumn fx:id="kolPrzedmiot" prefWidth="205.0" text="Przedmiot" />
+                      <TableColumn fx:id="kolData" prefWidth="227.0" text="Data" />
+                      <TableColumn fx:id="kolWartosc" prefWidth="299.0" text="Obecnosc" />
                     </columns>
                   </TableView>
                </content>

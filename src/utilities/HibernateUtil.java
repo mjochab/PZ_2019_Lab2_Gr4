@@ -1,13 +1,17 @@
 package utilities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Root;
 import mapping.*;
 import org.hibernate.HibernateException;
@@ -130,7 +134,6 @@ public class HibernateUtil {
     int i = 0;
     for (Klasa klasa : klasy) {
       nazwyKlas[i] = klasa.getNazwaKlasy();
-
       i++;
     }
 
@@ -216,63 +219,58 @@ public class HibernateUtil {
 
   }
 
-
-
-    public static Long uzyskajPeselZalogowany(String login, String haslo) {
-        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
-        Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
-        criteria.select(root.get("pesel"));
-        criteria.where(builder.equal(root.get("login"), login), builder.equal(root.get("haslo"), haslo));
-        Long nr_pesel=null;
-        try{
-        nr_pesel  = entityManager.createQuery(criteria).getSingleResult();
-        }
-        catch(NoResultException e){
-            System.out.println("nic nie pasuje");
-        }
-        //Long nr_pesel = entityManager.createQuery(criteria).getSingleResult();
-
-        return nr_pesel;
+  public static Long uzyskajPeselZalogowany(String login, String haslo) {
+    CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+    Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
+    criteria.select(root.get("pesel"));
+    criteria.where(builder.equal(root.get("login"), login), builder.equal(root.get("haslo"), haslo));
+    Long nr_pesel = null;
+    try {
+      nr_pesel = entityManager.createQuery(criteria).getSingleResult();
+    } catch (NoResultException e) {
+      System.out.println("nic nie pasuje");
     }
+    //Long nr_pesel = entityManager.createQuery(criteria).getSingleResult();
 
-    public static String uzyskajKtoZalogowany(Long pesel) {
-        CriteriaQuery<String> criteria = builder.createQuery(String.class);
-        Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
-        criteria.select(root.get("kto"));
-        criteria.where(builder.equal(root.get("pesel"), pesel));
-        String osoba = null;
-        try{
-        osoba = entityManager.createQuery(criteria).getSingleResult();
-        }
-        catch(NoResultException e){
-            System.out.println("nic nie pasuje");
-        }
-       // String osoba = entityManager.createQuery(criteria).getSingleResult();
- 
-        return osoba;
+    return nr_pesel;
+  }
+
+  public static String uzyskajKtoZalogowany(Long pesel) {
+    CriteriaQuery<String> criteria = builder.createQuery(String.class);
+    Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
+    criteria.select(root.get("kto"));
+    criteria.where(builder.equal(root.get("pesel"), pesel));
+    String osoba = null;
+    try {
+      osoba = entityManager.createQuery(criteria).getSingleResult();
+    } catch (NoResultException e) {
+      System.out.println("nic nie pasuje");
     }
+    // String osoba = entityManager.createQuery(criteria).getSingleResult();
 
-    public static String uzyskajLoginZalogowany(Long pesel) {
-        CriteriaQuery<String> criteria = builder.createQuery(String.class);
-        Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
-        criteria.select(root.get("login"));
-        criteria.where(builder.equal(root.get("pesel"), pesel));
-         String osoba = null;
-        try{
-        osoba = entityManager.createQuery(criteria).getSingleResult();
-        }
-        catch(NoResultException e){
-            System.out.println("nic nie pasuje");
-        }
-        //String osoba = entityManager.createQuery(criteria).getSingleResult();
+    return osoba;
+  }
 
-        return osoba;
+  public static String uzyskajLoginZalogowany(Long pesel) {
+    CriteriaQuery<String> criteria = builder.createQuery(String.class);
+    Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
+    criteria.select(root.get("login"));
+    criteria.where(builder.equal(root.get("pesel"), pesel));
+    String osoba = null;
+    try {
+      osoba = entityManager.createQuery(criteria).getSingleResult();
+    } catch (NoResultException e) {
+      System.out.println("nic nie pasuje");
     }
+    //String osoba = entityManager.createQuery(criteria).getSingleResult();
 
-    private void sprawdzDaneLogowania() {
-        //trzeba przeprowadzić testy przed cryteria bo występuje wyjątek 
-        //Exception in thread "main" javax.persistence.NoResultException: No entity found for query
-    }
+    return osoba;
+  }
+
+  private void sprawdzDaneLogowania() {
+    //trzeba przeprowadzić testy przed cryteria bo występuje wyjątek 
+    //Exception in thread "main" javax.persistence.NoResultException: No entity found for query
+  }
 
   public static void wstawOcene(Ocena ocena) {
 
@@ -294,8 +292,8 @@ public class HibernateUtil {
     }
 
   }
-  
-    public static void edytujOcene(Ocena ocena) {
+
+  public static void edytujOcene(Ocena ocena) {
 
     Session session = sessionFactory.openSession();
 
@@ -315,7 +313,117 @@ public class HibernateUtil {
     }
 
   }
+  public static Klasa zwrocPlan(String klasa) {
+    CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
+    Root<Klasa> root = criteria.from(Klasa.class);
+    criteria.select(root);
+    criteria.where(builder.equal(root.get("nazwaKlasy"), klasa));
+    Klasa plan = entityManager.createQuery(criteria).getSingleResult();
 
+    return plan;
+  }
+
+  public static List<Obecnosc> zwrocObecnosciMoichUczniowZmojegoPrzedmiotu(Przedmiot przedmiot, Klasa klasa) {
+    List<Obecnosc> obecnosci = new ArrayList<>();
+
+    return obecnosci;
+  }
+
+    public static Nauczyciel zwrocNauczyciela(Long pesel) {
+
+    CriteriaQuery<Nauczyciel> criteria = builder.createQuery(Nauczyciel.class);
+    Root<Nauczyciel> root = criteria.from(Nauczyciel.class);
+    criteria.select(root);
+    criteria.where(builder.equal(root.get("pesel"), pesel));
+    Nauczyciel nauczyciel = entityManager.createQuery(criteria).getSingleResult();
+
+    return nauczyciel;
+  }
+
+    
+    // DO SKONCZENIA do wstawiania 2 buttonow jak mam 2 zajecia w danym dniu
+  public static void zwrocIleMamZajecWdanymDniu(Long pesel, Przedmiot przedmiot) {
+ // DO SKONCZENIA
+    //Przedmiot przedmiot = new Przedmiot("algebra_liniowa");
+    CriteriaQuery<Tuple> criteria = builder.createQuery(Tuple.class);
+    Root<Zajecia> root = criteria.from(Zajecia.class);
+    criteria.multiselect(root.get("godzina"), root.get("dzien"));
+    criteria.where(builder.equal(root.get("nauczyciel"), zwrocNauczyciela(pesel)), (builder.equal(root.get("przedmiot"), przedmiot)));
+    List<Tuple> tuples = entityManager.createQuery(criteria).getResultList();
+    Set<Integer> linkedHashSet = new LinkedHashSet<>();
+    for (Tuple tuple : tuples) {
+      Date godzina = (Date) tuple.get(0);
+      String dzien = (String) tuple.get(1);
+    }
+
+  }
+  
+  public static List<Integer> zwrocWJakieDniTygodniaMamZajecia(Long pesel, Przedmiot przedmiot) {
+
+    
+    CriteriaQuery<String> criteria = builder.createQuery(String.class);
+    Root<Zajecia> root = criteria.from(Zajecia.class);
+    criteria.select(root.get("dzien"));
+    criteria.where(builder.equal(root.get("nauczyciel"), zwrocNauczyciela(pesel)), (builder.equal(root.get("przedmiot"), przedmiot)));
+    criteria.distinct(true);
+    List<String> kiedyZajecia = entityManager.createQuery(criteria).getResultList();
+    List<Integer> zwrocDniTygodnia = new ArrayList<>();
+    for (String x : kiedyZajecia) {
+
+      if (x.equals("pon")) {
+        zwrocDniTygodnia.add(1);
+      } else if (x.equals("wt")) {
+        zwrocDniTygodnia.add(2);
+      } else if (x.equals("sr")) {
+        zwrocDniTygodnia.add(3);
+      } else if (x.equals("czw")) {
+        zwrocDniTygodnia.add(4);
+      } else if (x.equals("pt")) {
+        zwrocDniTygodnia.add(5);
+      }
+
+    }
+    return zwrocDniTygodnia;
+
+  }
+  
+   public static List<Obecnosc> zwrocObecnosciZprzedmiotu (Przedmiot przedmiot, List<Uczen> uczniowie ) {
+
+    
+    
+    
+    CriteriaQuery<Obecnosc> criteria = builder.createQuery(Obecnosc.class);
+    Root<Obecnosc> root = criteria.from(Obecnosc.class);
+    criteria.select(root);
+     criteria.where(root.get("uczen").in(uczniowie));
+    criteria.where(builder.equal(root.get("przedmiot"), przedmiot));
+    List<Obecnosc> obecnosci = entityManager.createQuery(criteria).getResultList();
+     for (Obecnosc obecnosc : obecnosci) {
+       
+     }
+    return obecnosci;
+
+  }
+   public static void edytujNieobecnosc(Obecnosc obecnosc) {
+        Session session = sessionFactory.openSession();
+
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+
+            session.merge(obecnosc);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+
+    }
+}
       public static Klasa zwrocPlan(String klasa) {
         CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
         Root<Klasa> root = criteria.from(Klasa.class);
@@ -325,4 +433,5 @@ public class HibernateUtil {
 
         return plan;
     }
+
 }
