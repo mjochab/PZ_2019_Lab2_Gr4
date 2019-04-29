@@ -408,6 +408,26 @@ public class HibernateUtil {
     return obecnosci;
 
   }
+   public static void edytujNieobecnosc(Obecnosc obecnosc) {
+        Session session = sessionFactory.openSession();
+
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+
+            session.merge(obecnosc);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+
+    }
+}
   
   
 }

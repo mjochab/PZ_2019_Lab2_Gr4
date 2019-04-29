@@ -49,7 +49,6 @@ public class Utils {
         col.setPrefWidth(col.getWidth() + ((tableWidth - width.get()) / view.getColumns().size()));
       });
     }
-
   }
 
   public static void zwrocWartoscStringZKomorki(TableView<Uczen> table, int column, int row) {

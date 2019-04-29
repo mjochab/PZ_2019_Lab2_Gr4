@@ -39,6 +39,9 @@ import static utilities.HibernateUtil.zwrocKtoZalogowany;
 import static utilities.HibernateUtil.uzyskajKtoZalogowany;
 import static utilities.HibernateUtil.uzyskajLoginZalogowany;
 import static utilities.HibernateUtil.uzyskajPeselZalogowany;
+import static utilities.HibernateUtil.zwrocPrzedmiotyKtorychUczeDanaKlase;
+import static utilities.HibernateUtil.zwrocRodzajeOcen;
+import static utilities.HibernateUtil.zwrocUczniowZklasy;
 import static utilities.HibernateUtil.zwrocNauczyciela;
 import static utilities.HibernateUtil.zwrocPrzedmiotyKtorychUczeDanaKlase;
 import static utilities.HibernateUtil.zwrocRodzajeOcen;
@@ -81,7 +84,17 @@ public class HibernateTest {
     return klasy;
   }
 
- 
+  public static List<Klasa> zwrocObecnosci(Long pesel) {
+
+    CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
+    Root<Zajecia> root = criteria.from(Zajecia.class);
+    criteria.select(root.get("klasa"));
+    criteria.where(builder.equal(root.get("nauczyciel"), pesel));
+    criteria.distinct(true);
+    List<Klasa> klasy = entityManager.createQuery(criteria).getResultList();
+
+    return klasy;
+  }
 
   public static void testyQuery() {
     Query query = entityManager.createQuery(
