@@ -116,6 +116,36 @@ public class KlasaController implements Initializable {
   public void setUczniowie() {
     this.uczniowie = zwrocUczniowZklasy(klasa);
   }
+  
+ // OBECNOSCI
+  
+    private void stworzZakladkiZobecnosciami() {
+
+    List<Przedmiot> przedmioty = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa, pesel);
+    tabsPane.getTabs().clear();
+//    for (Przedmiot przedmiot : przedmioty) {
+//      
+//      tabsPane.getTabs().add(stworzPojedynczaZakladke(przedmiot));
+
+    // content: sprawdzanie obecnosci tylko w dniach, w jakich nauczyciel pisze
+    Tab semestr1 = new Tab("Semestr 1");
+    Tab semestr2 = new Tab("Semestr 2");
+    // 1. Wyciagnij z bazy w jakich dniach masz lekcje i zrob z tego daty
+    // to do, przykladowo mam lekcje 3 razy w tyg, zaczynam od pierwszego, lece +1 do kolejnego, save, +1 do kolejnego, save, potem +1 week
+    
+//   LocalDate start = LocalDate.of( 2011 , 11 , 8 );
+//LocalDate stop = LocalDate.of( 2012 , 5 , 1 );
+//List<LocalDate> mondays = new ArrayList<>();
+//LocalDate monday = start.with( TemporalAdjusters.nextOrSame( DayOfWeek.MONDAY ) );
+//while( monday.isBefore( stop ) ) {
+//    mondays.add( monday );
+//    // Set up the next loop.
+//    monday = monday.plusWeeks( 1 );
+//}
+    
+    tabsPane.getTabs().addAll(semestr1,semestr2);
+
+    }
 
   // OCENY---------------------------
   private void stworzZakladkiOceny() {
@@ -415,33 +445,7 @@ public class KlasaController implements Initializable {
     jakaKlasa.setText(klasa);
   }
 
-  private void stworzZakladkiZobecnosciami() {
 
-    List<Przedmiot> przedmioty = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa, pesel);
-    tabsPane.getTabs().clear();
-//    for (Przedmiot przedmiot : przedmioty) {
-//      
-//      tabsPane.getTabs().add(stworzPojedynczaZakladke(przedmiot));
-
-    // content: sprawdzanie obecnosci tylko w dniach, w jakich nauczyciel pisze
-    Tab semestr1 = new Tab("Semestr 1");
-    Tab semestr2 = new Tab("Semestr 2");
-    // 1. Wyciagnij z bazy w jakich dniach masz lekcje i zrob z tego daty
-    // to do, przykladowo mam lekcje 3 razy w tyg, zaczynam od pierwszego, lece +1 do kolejnego, save, +1 do kolejnego, save, potem +1 week
-    
-//   LocalDate start = LocalDate.of( 2011 , 11 , 8 );
-//LocalDate stop = LocalDate.of( 2012 , 5 , 1 );
-//List<LocalDate> mondays = new ArrayList<>();
-//LocalDate monday = start.with( TemporalAdjusters.nextOrSame( DayOfWeek.MONDAY ) );
-//while( monday.isBefore( stop ) ) {
-//    mondays.add( monday );
-//    // Set up the next loop.
-//    monday = monday.plusWeeks( 1 );
-//}
-    
-    tabsPane.getTabs().addAll(semestr1,semestr2);
-
-    }
   
     
     
