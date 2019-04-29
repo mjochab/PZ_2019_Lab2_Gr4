@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
@@ -132,7 +133,6 @@ public class RodzicNieobecnosciController implements Initializable {
 
         ObservableList<Obecnosc> dane = FXCollections.observableArrayList(listaNieobecnosci);
         tabelaNieob.setItems(dane);
-
         addButtonToTable();
     }
 
@@ -156,7 +156,6 @@ public class RodzicNieobecnosciController implements Initializable {
     @FXML
     public void usprawiedliwNieobecnosc(ActionEvent event) throws IOException {
         Iterator<Obecnosc> it = listaNieobecnosci.iterator();
-
         while (it.hasNext()) {
             Obecnosc ob = it.next();
             if (ob.getWartosc().equals("nieobecny")) {
@@ -174,10 +173,10 @@ public class RodzicNieobecnosciController implements Initializable {
             @Override
             public TableCell<Obecnosc, Obecnosc> call(final TableColumn<Obecnosc, Obecnosc> param) {
                 final TableCell<Obecnosc, Obecnosc> cell = new TableCell<Obecnosc, Obecnosc>() {
-                    
+
                     private final Button btn = new Button("Usprawiedliw");
 
-                    {   
+                    {
                         btn.setOnAction((ActionEvent event) -> {
                             Obecnosc data = getTableView().getItems().get(getIndex());
                             if (data.getWartosc().equals("nieobecny")) {
@@ -185,7 +184,7 @@ public class RodzicNieobecnosciController implements Initializable {
                                 HibernateUtil.edytujNieobecnosc(data);
                                 tabelaNieob.refresh();
                                 btn.setDisable(true);
-                            } else {                              
+                            } else {
                                 btn.setDisable(true);
                             }
                         });
@@ -194,20 +193,27 @@ public class RodzicNieobecnosciController implements Initializable {
                     @Override
                     public void updateItem(Obecnosc item, boolean empty) {
                         super.updateItem(item, empty);
+
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            setGraphic(btn);
+                            if (!item.getWartosc().equals("nieobecny")) {
+                                btn.setDisable(true);
+                                setGraphic(btn);
+                            } else {
+                                setGraphic(btn);
+                            }
                         }
                     }
+
                 };
 
                 return cell;
             }
         };
         colBtn.setCellFactory(cellFactory);
+        colBtn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<Obecnosc>(data.getValue()));
         tabelaNieob.getColumns().add(colBtn);
-
     }
 
 }
