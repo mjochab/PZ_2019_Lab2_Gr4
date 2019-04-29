@@ -5,6 +5,7 @@
  */
 package oknoRodzic;
 
+import oknoUczen.*;
 import utilities.HibernateUtil;
 import java.io.IOException;
 import java.net.URL;

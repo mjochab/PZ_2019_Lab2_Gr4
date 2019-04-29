@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -27,18 +29,19 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -53,6 +56,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import mapping.Obecnosc;
 import mapping.Ocena;
 import mapping.Przedmiot;
 import mapping.RodzajOceny;
@@ -60,6 +64,7 @@ import mapping.Uczen;
 import org.jboss.logging.Logger;
 import static utilities.HibernateUtil.*;
 import static utilities.Utils.customResize;
+import static utilities.Utils.zwrocDatyWktorychMamZajecia;
 
 public class KlasaController implements Initializable {
 
@@ -75,6 +80,11 @@ public class KlasaController implements Initializable {
   private AnchorPane rootPane;
   @FXML
   private Label userid;
+  @FXML
+  private Button przejdzDoOcen;
+  @FXML
+  private Button przejdzDoObecnosci;
+  
 
   private static String klasa = null;
   private String username = null;
@@ -89,9 +99,10 @@ public class KlasaController implements Initializable {
       wstawUseraDoZalogowanoJako(username);
       wstawKlaseDoLabela(klasa);
       setUczniowie();
-      //stworzTabeleZocenami("gowno");
-      stworzZakladkiOceny();
-
+      //stworzZakladkiOceny();
+      //stworzZakladkiZobecnosciami();
+      przejdzDoObecnosci.addEventHandler(MouseEvent.MOUSE_CLICKED, stworzTabeleObecnosci());
+      przejdzDoOcen.addEventHandler(MouseEvent.MOUSE_CLICKED, stworzTabeleOceny());
     });
 
   }
@@ -115,6 +126,132 @@ public class KlasaController implements Initializable {
 
   public void setUczniowie() {
     this.uczniowie = zwrocUczniowZklasy(klasa);
+  }
+
+  // OBECNOSCI
+  private void stworzZakladkiZobecnosciami() {
+
+    tabsPane.getTabs().clear();
+    List<Przedmiot> przedmioty = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa, pesel);
+
+    for (Przedmiot przedmiot : przedmioty) {
+
+      Tab przedmiotyTab = new Tab(przedmiot.getNazwaPrzedmiotu());
+
+      // SEMESTR 1
+      Tab semestr1 = new Tab("Półrocze 1");
+      TabPane semestr1Pane = new TabPane();
+
+      semestr1Pane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+      for (int i = 9; i <= 12; i++) {
+        Tab miesiac = new Tab(String.valueOf(i));
+        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i));
+        semestr1Pane.getTabs().add(miesiac);
+
+      }
+
+      for (int i = 1; i < 2; i++) {
+        Tab miesiac = new Tab(String.valueOf(i));
+        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i));
+        semestr1Pane.getTabs().add(miesiac);
+
+      }
+
+      semestr1.setContent(semestr1Pane);
+
+      // SEMESTR 2
+      Tab semestr2 = new Tab("Półrocze 2");
+
+      TabPane semestr2Pane = new TabPane();
+      semestr2Pane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+
+      for (int i = 2; i <= 6; i++) {
+        Tab miesiac = new Tab(String.valueOf(i));
+        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i));
+        semestr2Pane.getTabs().add(miesiac);
+
+      }
+
+      semestr2.setContent(semestr2Pane);
+
+      TabPane nowyTabPane = new TabPane(semestr1, semestr2);
+      nowyTabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+      przedmiotyTab.setContent(nowyTabPane);
+
+      tabsPane.getTabs().add(przedmiotyTab);
+
+    }
+  }
+
+  private TableView stworzTabeleZobecnosciami(Przedmiot przedmiot, int i) {
+    TableView<Obecnosc> table = new TableView<>();
+
+    ObservableList<Obecnosc> data
+            = FXCollections.observableArrayList(zwrocObecnosciZprzedmiotu(przedmiot, uczniowie));
+    table.setItems(data);
+
+    TableColumn kolumnaImie = new TableColumn("Imie");
+    kolumnaImie.setMinWidth(50);
+    kolumnaImie.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
+      @Override
+      public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> data) {
+        StringProperty imieUcznia = new SimpleStringProperty();
+        imieUcznia.setValue(data.getValue().getUczen().getImie());
+
+        return imieUcznia;
+      }
+    });
+    TableColumn kolumnaNazwisko = new TableColumn("Nazwisko");
+    kolumnaNazwisko.setMinWidth(50);
+    kolumnaNazwisko.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
+      @Override
+      public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> data) {
+        StringProperty nazwiskoUcznia = new SimpleStringProperty();
+        nazwiskoUcznia.setValue(data.getValue().getUczen().getNazwisko());
+
+        return nazwiskoUcznia;
+      }
+    });
+    table.getColumns().addAll(kolumnaImie, kolumnaNazwisko);
+
+    int year = 2019;
+    if (i < 9) {
+      year = 2020;
+    }
+    final int rok = year;
+    List<Integer> dniTygodniaZajecia = zwrocWJakieDniTygodniaMamZajecia(pesel, przedmiot);
+    List<Integer> dniMiesiacaZajecia = zwrocDatyWktorychMamZajecia(year, i, dniTygodniaZajecia);
+
+    for (Integer zajeciaWmiesiacu : dniMiesiacaZajecia) {
+
+      //dany dzien
+      TableColumn nowaKolumna = new TableColumn(zajeciaWmiesiacu.toString());
+      // WRZUCIC FUNKCJE Z HIBERNATE UTILS DO SRP{AWDZANIA ILE MAM ZAJEC W DANYM DNIU I ZROBIC NESTED COLUMNS/2buttony
+      // hibernate jesli uczen ma x2 obecnosc w tym dniu to zrob dwa butony w srodku, do zrobienia funkcja hibernate
+      nowaKolumna.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
+        @Override
+        public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> data) {
+          StringProperty stanObecnosciUcznia = new SimpleStringProperty();
+
+          Date dataWkomorce = null;
+          try {
+            dataWkomorce = utilities.Utils.returnDate(rok + "-" + i + "-" + zajeciaWmiesiacu);
+          } catch (ParseException ex) {
+            java.util.logging.Logger.getLogger(KlasaController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+          }
+
+          if (data.getValue().getData().equals(dataWkomorce)) {
+            stanObecnosciUcznia.setValue(data.getValue().getWartosc());
+          }
+
+          return stanObecnosciUcznia;
+        }
+      });
+      table.getColumns().add(nowaKolumna);
+
+    }
+
+    return table;
   }
 
   // OCENY---------------------------
@@ -217,8 +354,7 @@ public class KlasaController implements Initializable {
 
     Button cancel = new Button("Cofnij");
     cancel.setVisible(false);
-    Event event = new Event(MouseEvent.MOUSE_CLICKED);
-    Event.fireEvent(cancel, event);
+
     HBox buttony = new HBox();
     buttony.setSpacing(15);
     buttony.setPadding(new Insets(15, 20, 5, 10));
@@ -322,7 +458,12 @@ public class KlasaController implements Initializable {
         if (!selectedItem.toString().isEmpty()) {
           ocena.setText(selectedItem.getStopien().toString());
           rodzaj.setText(selectedItem.getRodzajOceny().getRodzajOceny());
-          data.setText(selectedItem.getData().toString());
+          try {
+            data.setText(utilities.Utils.dateToString(selectedItem.getData()));
+          } catch (ParseException ex) {
+            java.util.logging.Logger.getLogger(KlasaController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+          }
+          //data.setText(selectedItem.getData().toString());
           cancel.setVisible(true);
           dodaj.setVisible(false);
           edytuj.setVisible(true);
@@ -392,6 +533,34 @@ public class KlasaController implements Initializable {
     return eventHandler;
   }
 
+  private EventHandler stworzTabeleOceny() {
+
+    EventHandler eventHandler = new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        stworzZakladkiOceny();
+         gagatekPane.setVisible(true);
+         gagatek.setVisible(true);
+      }
+    };
+    return eventHandler;
+  }
+
+  private EventHandler stworzTabeleObecnosci() {
+
+    EventHandler eventHandler = new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+
+        stworzZakladkiZobecnosciami();
+        gagatekPane.setVisible(false);
+        gagatek.setVisible(false);
+      }
+    };
+    
+    return eventHandler;
+  }
+
   // UTILS---------------------------
   public void odswiezTabele(TableView<Ocena> tableOcena, Przedmiot przedmiot, Tab tab, Uczen uczen) {
 
@@ -400,7 +569,7 @@ public class KlasaController implements Initializable {
     Tab odswiezonyTab = stworzPojedynczaZakladke(przedmiot);
     tabsPane.getTabs().remove(ktoryTabJestWybrany);
     tabsPane.getTabs().add(odswiezonyTab);
-
+    tableOcena.refresh();
     // wybierz nowo dodanego taba
     SingleSelectionModel<Tab> selectionModel = tabsPane.getSelectionModel();
     selectionModel.select(odswiezonyTab); //select by object
@@ -414,38 +583,5 @@ public class KlasaController implements Initializable {
   private void wstawKlaseDoLabela(String klasa) {
     jakaKlasa.setText(klasa);
   }
-
-  private void stworzZakladkiZobecnosciami() {
-
-    List<Przedmiot> przedmioty = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa, pesel);
-    tabsPane.getTabs().clear();
-//    for (Przedmiot przedmiot : przedmioty) {
-//      
-//      tabsPane.getTabs().add(stworzPojedynczaZakladke(przedmiot));
-
-    // content: sprawdzanie obecnosci tylko w dniach, w jakich nauczyciel pisze
-    Tab semestr1 = new Tab("Semestr 1");
-    Tab semestr2 = new Tab("Semestr 2");
-    // 1. Wyciagnij z bazy w jakich dniach masz lekcje i zrob z tego daty
-    // to do, przykladowo mam lekcje 3 razy w tyg, zaczynam od pierwszego, lece +1 do kolejnego, save, +1 do kolejnego, save, potem +1 week
-    
-//   LocalDate start = LocalDate.of( 2011 , 11 , 8 );
-//LocalDate stop = LocalDate.of( 2012 , 5 , 1 );
-//List<LocalDate> mondays = new ArrayList<>();
-//LocalDate monday = start.with( TemporalAdjusters.nextOrSame( DayOfWeek.MONDAY ) );
-//while( monday.isBefore( stop ) ) {
-//    mondays.add( monday );
-//    // Set up the next loop.
-//    monday = monday.plusWeeks( 1 );
-//}
-    
-    tabsPane.getTabs().addAll(semestr1,semestr2);
-
-    }
-  
-    
-    
-  
-
 
 }

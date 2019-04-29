@@ -8,12 +8,18 @@ package utilities;
 import utilities.HibernateUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -36,6 +42,12 @@ import static utilities.HibernateUtil.uzyskajPeselZalogowany;
 import static utilities.HibernateUtil.zwrocPrzedmiotyKtorychUczeDanaKlase;
 import static utilities.HibernateUtil.zwrocRodzajeOcen;
 import static utilities.HibernateUtil.zwrocUczniowZklasy;
+import static utilities.HibernateUtil.zwrocNauczyciela;
+import static utilities.HibernateUtil.zwrocPrzedmiotyKtorychUczeDanaKlase;
+import static utilities.HibernateUtil.zwrocRodzajeOcen;
+import static utilities.HibernateUtil.zwrocUczniowZklasy;
+import static utilities.HibernateUtil.zwrocWJakieDniTygodniaMamZajecia;
+import static utilities.Utils.zwrocDatyWktorychMamZajecia;
 
 public class HibernateTest {
 
@@ -96,18 +108,48 @@ public class HibernateTest {
 
   }
 
-  public static void main(String[] args) throws ParseException {
+   public static List<Obecnosc> zwrocObecnosciZprzedmiotu (Przedmiot przedmiot, List<Uczen> uczniowie ) {
 
-    /*List<Przedmiot> przedmioty=zwrocPrzedmiotyKtorychUczeDanaKlase("1a", 22222222221L);
     
-    for(Przedmiot przedmiot:przedmioty){
-        System.out.println(przedmiot.getNazwaPrzedmiotu());
-    }*/
+    
+    
+    CriteriaQuery<Obecnosc> criteria = builder.createQuery(Obecnosc.class);
+    Root<Obecnosc> root = criteria.from(Obecnosc.class);
+    criteria.select(root);
+     criteria.where(root.get("uczen").in(uczniowie));
+    criteria.where(builder.equal(root.get("przedmiot"), przedmiot));
+    List<Obecnosc> obecnosci = entityManager.createQuery(criteria).getResultList();
+     for (Obecnosc obecnosc : obecnosci) {
+       System.out.println(obecnosc.getWartosc());
+       
+     }
+    return obecnosci;
 
-     System.out.println(uzyskajKtoZalogowany(22222222225L));
-     System.out.println(uzyskajPeselZalogowany("otitmuss","pass"));
-     System.out.println(uzyskajLoginZalogowany(22222222225L));
-     System.out.println(uzyskajPeselZalogowany("",""));
+  }
+ public static List<Uczen> zwrocUczniowZklasy(String klasa) {
+
+    EntityManager em = sessionFactory.createEntityManager();
+    CriteriaBuilder b = em.getCriteriaBuilder();
+    CriteriaQuery<SkladKlasy> criteria = b.createQuery(SkladKlasy.class);
+    Root<Klasa> root = criteria.from(Klasa.class);
+    criteria.select(root.get("skladKlasies"));
+    criteria.where(b.equal(root.get("nazwaKlasy"), klasa));
+
+    List<SkladKlasy> skladKlasy = em.createQuery(criteria).getResultList();
+    List<Uczen> uczniowie = new ArrayList<>();
+
+    for (SkladKlasy uczen : skladKlasy) {
+      uczniowie.add(uczen.getUczen());
     }
+    return uczniowie;
+  }
 
+
+  public static void main(String[] args) throws ParseException {
+    Przedmiot przedmiot = new Przedmiot("algebra_liniowa");
+    List<Uczen> uczniowie = new ArrayList<>();
+    uczniowie = zwrocUczniowZklasy("1a");
+    zwrocObecnosciZprzedmiotu(przedmiot, uczniowie);
+    
+  }
 }

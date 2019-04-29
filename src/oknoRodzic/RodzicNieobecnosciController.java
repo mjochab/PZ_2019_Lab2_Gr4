@@ -21,9 +21,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -34,7 +31,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
@@ -152,7 +148,6 @@ public class RodzicNieobecnosciController implements Initializable {
 
         return obecnosci;
     }
-
     @FXML
     public void usprawiedliwNieobecnosc(ActionEvent event) throws IOException {
         Iterator<Obecnosc> it = listaNieobecnosci.iterator();
@@ -215,5 +210,4 @@ public class RodzicNieobecnosciController implements Initializable {
         colBtn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<Obecnosc>(data.getValue()));
         tabelaNieob.getColumns().add(colBtn);
     }
-
 }
