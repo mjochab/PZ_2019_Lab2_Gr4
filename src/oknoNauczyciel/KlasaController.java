@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -55,6 +57,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import mapping.Obecnosc;
 import mapping.Ocena;
 import mapping.Przedmiot;
 import mapping.RodzajOceny;
@@ -121,6 +124,7 @@ public class KlasaController implements Initializable {
 
   // OBECNOSCI
   private void stworzZakladkiZobecnosciami() {
+
     tabsPane.getTabs().clear();
     List<Przedmiot> przedmioty = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa, pesel);
 
@@ -128,39 +132,38 @@ public class KlasaController implements Initializable {
 
       Tab przedmiotyTab = new Tab(przedmiot.getNazwaPrzedmiotu());
 
+      // SEMESTR 1
       Tab semestr1 = new Tab("Semestr 1");
-//      
-//      Tab wrzesien = new Tab("wrzesien");
-//      Tab pazdziernik = new Tab("pazdziernik");
-//      Tab listopad = new Tab("listopad");
-//      Tab grudzien = new Tab("grudzien");
-//      Tab styczen = new Tab("styczen");
       TabPane semestr1Pane = new TabPane();
+
       semestr1Pane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
       for (int i = 9; i <= 12; i++) {
         Tab miesiac = new Tab(String.valueOf(i));
+        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i));
         semestr1Pane.getTabs().add(miesiac);
+
       }
 
       for (int i = 1; i <= 2; i++) {
         Tab miesiac = new Tab(String.valueOf(i));
+        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i));
         semestr1Pane.getTabs().add(miesiac);
+
       }
 
       semestr1.setContent(semestr1Pane);
 
+      // SEMESTR 2
       Tab semestr2 = new Tab("Semestr 2");
-//
-//      Tab luty = new Tab("luty");
-//      Tab marzec = new Tab("marzec");
-//      Tab kwiecien = new Tab("kwiecien");
-//      Tab maj = new Tab("maj");
-//      Tab czerwiec = new Tab("czerwiec");
+
       TabPane semestr2Pane = new TabPane();
       semestr2Pane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+
       for (int i = 1; i <= 6; i++) {
         Tab miesiac = new Tab(String.valueOf(i));
+        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i));
         semestr2Pane.getTabs().add(miesiac);
+
       }
 
       semestr2.setContent(semestr2Pane);
@@ -185,6 +188,44 @@ public class KlasaController implements Initializable {
 //    // Set up the next loop.
 //    monday = monday.plusWeeks( 1 );
 //}
+  }
+
+  private TableView stworzTabeleZobecnosciami(Przedmiot przedmiot, int i) {
+    TableView<Obecnosc> table = new TableView<>();
+// do ogarniecia dynamicznie
+
+    int year = 2019;
+    if (i<9){
+      year = 2020;
+    }
+    
+    zwrocKiedyMamZajecia(pesel, przedmiot);
+    
+    
+//    ObservableList<Uczen> data
+//            = FXCollections.observableArrayList(zwrocUczniowZklasy(klasa));
+//    table.setItems(data);
+
+    TableColumn kolumnaImie = new TableColumn("Imie");
+    kolumnaImie.setMinWidth(50);
+    TableColumn kolumnaNazwisko = new TableColumn("Nazwisko");
+    kolumnaNazwisko.setMinWidth(50);
+    table.getColumns().addAll(kolumnaImie, kolumnaNazwisko);
+
+//    YearMonth yearMonthObject = YearMonth.of(2020, i);
+//    int daysInMonth = yearMonthObject.lengthOfMonth();
+//
+//    // kolumny z dniami miesiaca
+//    for (int j = 1; j <= daysInMonth; j++) {
+//
+//      TableColumn nowaKolumna = new TableColumn(String.valueOf(j));
+//      nowaKolumna.setMaxWidth(20);
+//      table.getColumns().add(nowaKolumna);
+//      customResize(table);
+//
+//    }
+
+    return table;
   }
 
   // OCENY---------------------------
@@ -287,8 +328,7 @@ public class KlasaController implements Initializable {
 
     Button cancel = new Button("Cofnij");
     cancel.setVisible(false);
-    Event event = new Event(MouseEvent.MOUSE_CLICKED);
-    Event.fireEvent(cancel, event);
+
     HBox buttony = new HBox();
     buttony.setSpacing(15);
     buttony.setPadding(new Insets(15, 20, 5, 10));
