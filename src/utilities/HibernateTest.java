@@ -31,6 +31,7 @@ import static utilities.HibernateUtil.zwrocKlasyKtorychUcze;
 import static utilities.HibernateUtil.zwrocKtoZalogowany;
 
 import static utilities.HibernateUtil.uzyskajKtoZalogowany;
+import static utilities.HibernateUtil.uzyskajLoginZalogowany;
 import static utilities.HibernateUtil.uzyskajPeselZalogowany;
 import static utilities.HibernateUtil.zwrocPrzedmiotyKtorychUczeDanaKlase;
 import static utilities.HibernateUtil.zwrocRodzajeOcen;
@@ -102,8 +103,13 @@ public class HibernateTest {
     for(Przedmiot przedmiot:przedmioty){
         System.out.println(przedmiot.getNazwaPrzedmiotu());
     }*/
-    System.out.println(uzyskajKtoZalogowany(22222222225L));
-    System.out.println(uzyskajPeselZalogowany("login", "pass"));
 
-  }
+     System.out.println(uzyskajKtoZalogowany(22222222225L));
+     System.out.println(uzyskajPeselZalogowany("otitmuss","pass"));
+     System.out.println(uzyskajLoginZalogowany(22222222225L));
+     System.out.println(uzyskajPeselZalogowany("",""));
+    }
+
+
+
 }
