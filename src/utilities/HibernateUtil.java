@@ -1,3 +1,4 @@
+
 package utilities;
 
 import java.util.ArrayList;
@@ -280,5 +281,47 @@ public class HibernateUtil {
         //trzeba przeprowadzić testy przed cryteria bo występuje wyjątek 
         //Exception in thread "main" javax.persistence.NoResultException: No entity found for query
     }
+
+  public static void wstawOcene(Ocena ocena) {
+
+    Session session = sessionFactory.openSession();
+
+    Transaction tx = null;
+    Integer stId = null;
+    try {
+      tx = session.beginTransaction();
+
+      session.save(ocena);
+      tx.commit();
+    } catch (HibernateException ex) {
+      if (tx != null) {
+        tx.rollback();
+      }
+    } finally {
+      session.close();
+    }
+
+  }
+  
+    public static void edytujOcene(Ocena ocena) {
+
+    Session session = sessionFactory.openSession();
+
+    Transaction tx = null;
+    Integer stId = null;
+    try {
+      tx = session.beginTransaction();
+
+      session.merge(ocena);
+      tx.commit();
+    } catch (HibernateException ex) {
+      if (tx != null) {
+        tx.rollback();
+      }
+    } finally {
+      session.close();
+    }
+
+  }
 
 }

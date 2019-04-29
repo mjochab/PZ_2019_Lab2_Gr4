@@ -27,33 +27,36 @@ import mapping.Zajecia;
  */
 public class Utils {
 
-    //data gotowa do wstawienia przez nauczyciela
-    public static String returnDate(Date data) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("dd-mm-yyyy");
-        Date dateString = data;
-        String date = format.format(dateString);
-        return date;
+  //data gotowa do wstawienia przez nauczyciela
+  public static Date returnDate(String data) throws ParseException {
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    Date date = format.parse(data);
+    return date;
+  }
+
+  public static void customResize(TableView<?> view) {
+
+    AtomicLong width = new AtomicLong();
+    view.getColumns().forEach(col -> {
+      width.addAndGet((long) col.getWidth());
+    });
+    double tableWidth = view.getWidth();
+
+    if (tableWidth > width.get()) {
+      view.getColumns().forEach(col -> {
+        col.setPrefWidth(col.getWidth() + ((tableWidth - width.get()) / view.getColumns().size()));
+      });
     }
 
-    public static void customResize(TableView<?> view) {
 
-        AtomicLong width = new AtomicLong();
-        view.getColumns().forEach(col -> {
-            width.addAndGet((long) col.getWidth());
-        });
-        double tableWidth = view.getWidth();
+  }
 
-        if (tableWidth > width.get()) {
-            view.getColumns().forEach(col -> {
-                col.setPrefWidth(col.getWidth() + ((tableWidth - width.get()) / view.getColumns().size()));
-            });
-        }
-    }
+  public static void zwrocWartoscStringZKomorki(TableView<Uczen> table, int column, int row) {
+    String a = table.getColumns().get(column).getCellObservableValue(row).getValue().toString();
+  }
 
-    public static void zwrocWartoscStringZKomorki(TableView<Uczen> table, int column, int row) {
-        String a = table.getColumns().get(column).getCellObservableValue(row).getValue().toString();
-        System.out.println(a);
-    }
+
+
 
     // ------------------------- WSTAWIANIE PLANU ZAJEĆ DO TABELKI ------------------------- //
     public static void wstawianieGodziny(ArrayList<String> godzina, TableColumn<Integer, String> kol) {
