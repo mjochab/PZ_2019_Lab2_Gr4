@@ -55,7 +55,6 @@ public class Utils {
     String a = table.getColumns().get(column).getCellObservableValue(row).getValue().toString();
   }
 
-
     // ------------------------- WSTAWIANIE PLANU ZAJEĆ DO TABELKI ------------------------- //
     public static void wstawianieGodziny(ArrayList<String> godzina, TableColumn<Integer, String> kol) {
         kol.setCellValueFactory(cellData -> {
@@ -137,6 +136,4 @@ public class Utils {
         }
         return zajeciaDnia;
     }
-
-
 }
