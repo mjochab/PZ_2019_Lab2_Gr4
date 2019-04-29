@@ -1,5 +1,6 @@
 package mapping;
-// Generated 21 kwi 2019, 11:03:06 by Hibernate Tools 4.3.1
+
+// Generated 25 kwi 2019, 13:51:48 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -11,11 +12,11 @@ public class Ocena  implements java.io.Serializable {
 
 
      private Integer id;
+     private Przedmiot przedmiot;
+     private RodzajOceny rodzajOceny;
      private Uczen uczen;
-     private Long przedmiot;
-     private String stopien;
+     private Integer stopien;
      private Date data;
-     private String opis;
 
     public Ocena() {
     }
@@ -24,12 +25,12 @@ public class Ocena  implements java.io.Serializable {
     public Ocena(Uczen uczen) {
         this.uczen = uczen;
     }
-    public Ocena(Uczen uczen, Long przedmiot, String stopien, Date data, String opis) {
-       this.uczen = uczen;
+    public Ocena(Przedmiot przedmiot, RodzajOceny rodzajOceny, Uczen uczen, Integer stopien, Date data) {
        this.przedmiot = przedmiot;
+       this.rodzajOceny = rodzajOceny;
+       this.uczen = uczen;
        this.stopien = stopien;
        this.data = data;
-       this.opis = opis;
     }
    
     public Integer getId() {
@@ -39,6 +40,20 @@ public class Ocena  implements java.io.Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
+    public Przedmiot getPrzedmiot() {
+        return this.przedmiot;
+    }
+    
+    public void setPrzedmiot(Przedmiot przedmiot) {
+        this.przedmiot = przedmiot;
+    }
+    public RodzajOceny getRodzajOceny() {
+        return this.rodzajOceny;
+    }
+    
+    public void setRodzajOceny(RodzajOceny rodzajOceny) {
+        this.rodzajOceny = rodzajOceny;
+    }
     public Uczen getUczen() {
         return this.uczen;
     }
@@ -46,18 +61,11 @@ public class Ocena  implements java.io.Serializable {
     public void setUczen(Uczen uczen) {
         this.uczen = uczen;
     }
-    public Long getPrzedmiot() {
-        return this.przedmiot;
-    }
-    
-    public void setPrzedmiot(Long przedmiot) {
-        this.przedmiot = przedmiot;
-    }
-    public String getStopien() {
+    public Integer getStopien() {
         return this.stopien;
     }
     
-    public void setStopien(String stopien) {
+    public void setStopien(Integer stopien) {
         this.stopien = stopien;
     }
     public Date getData() {
@@ -66,13 +74,6 @@ public class Ocena  implements java.io.Serializable {
     
     public void setData(Date data) {
         this.data = data;
-    }
-    public String getOpis() {
-        return this.opis;
-    }
-    
-    public void setOpis(String opis) {
-        this.opis = opis;
     }
 
 

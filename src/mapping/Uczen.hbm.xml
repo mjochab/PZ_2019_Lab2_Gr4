@@ -1,13 +1,18 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 21 kwi 2019, 11:03:06 by Hibernate Tools 4.3.1 -->
+
+<!-- Generated 25 kwi 2019, 13:51:48 by Hibernate Tools 4.3.1 -->
+
 <hibernate-mapping>
     <class name="mapping.Uczen" table="uczen" catalog="dziennik_elektroniczny" optimistic-lock="version">
         <id name="pesel" type="long">
             <column name="pesel" />
-            <generator class="assigned" />
+            <generator class="foreign">
+                <param name="property">autoryzacja</param>
+            </generator>
         </id>
+        <one-to-one name="autoryzacja" class="mapping.Autoryzacja" constrained="true"></one-to-one>
         <many-to-one name="klasa" class="mapping.Klasa" fetch="select">
             <column name="nazwa_klasy" length="2" />
         </many-to-one>
@@ -17,7 +22,6 @@
         <property name="nazwisko" type="string">
             <column name="nazwisko" length="30" />
         </property>
-        <one-to-one name="autoryzacja" class="mapping.Autoryzacja"></one-to-one>
         <set name="rodzics" table="rodzic" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="dziecko" />
@@ -30,17 +34,17 @@
             </key>
             <one-to-many class="mapping.Ocena" />
         </set>
-        <set name="skladKlasies" table="sklad_klasy" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="uczen" not-null="true" />
-            </key>
-            <one-to-many class="mapping.SkladKlasy" />
-        </set>
         <set name="obecnoscs" table="obecnosc" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="pesel" />
             </key>
             <one-to-many class="mapping.Obecnosc" />
+        </set>
+        <set name="skladKlasies" table="sklad_klasy" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="uczen" not-null="true" />
+            </key>
+            <one-to-many class="mapping.SkladKlasy" />
         </set>
     </class>
 </hibernate-mapping>

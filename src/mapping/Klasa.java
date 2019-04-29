@@ -1,6 +1,5 @@
 package mapping;
-// Generated 21 kwi 2019, 11:03:06 by Hibernate Tools 4.3.1
-
+// Generated 25 kwi 2019, 19:22:52 by Hibernate Tools 4.3.1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -15,8 +14,8 @@ public class Klasa  implements java.io.Serializable {
      private String nazwaKlasy;
      private Nauczyciel nauczyciel;
      private Date rokSzkolny;
-     private Set skladKlasies = new HashSet(0);
      private Set zajecias = new HashSet(0);
+     private Set skladKlasies = new HashSet(0);
      private Set uczens = new HashSet(0);
 
     public Klasa() {
@@ -26,12 +25,12 @@ public class Klasa  implements java.io.Serializable {
     public Klasa(String nazwaKlasy) {
         this.nazwaKlasy = nazwaKlasy;
     }
-    public Klasa(String nazwaKlasy, Nauczyciel nauczyciel, Date rokSzkolny, Set skladKlasies, Set zajecias, Set uczens) {
+    public Klasa(String nazwaKlasy, Nauczyciel nauczyciel, Date rokSzkolny, Set zajecias, Set skladKlasies, Set uczens) {
        this.nazwaKlasy = nazwaKlasy;
        this.nauczyciel = nauczyciel;
        this.rokSzkolny = rokSzkolny;
-       this.skladKlasies = skladKlasies;
        this.zajecias = zajecias;
+       this.skladKlasies = skladKlasies;
        this.uczens = uczens;
     }
    
@@ -56,19 +55,19 @@ public class Klasa  implements java.io.Serializable {
     public void setRokSzkolny(Date rokSzkolny) {
         this.rokSzkolny = rokSzkolny;
     }
-    public Set getSkladKlasies() {
-        return this.skladKlasies;
-    }
-    
-    public void setSkladKlasies(Set skladKlasies) {
-        this.skladKlasies = skladKlasies;
-    }
     public Set getZajecias() {
         return this.zajecias;
     }
     
     public void setZajecias(Set zajecias) {
         this.zajecias = zajecias;
+    }
+    public Set getSkladKlasies() {
+        return this.skladKlasies;
+    }
+    
+    public void setSkladKlasies(Set skladKlasies) {
+        this.skladKlasies = skladKlasies;
     }
     public Set getUczens() {
         return this.uczens;
