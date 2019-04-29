@@ -65,6 +65,7 @@ import mapping.Uczen;
 import org.jboss.logging.Logger;
 import static utilities.HibernateUtil.*;
 import static utilities.Utils.customResize;
+import static utilities.Utils.zwrocDatyWktorychMamZajecia;
 
 public class KlasaController implements Initializable {
 
@@ -175,32 +176,12 @@ public class KlasaController implements Initializable {
       tabsPane.getTabs().add(przedmiotyTab);
 
     }
-    // content: sprawdzanie obecnosci tylko w dniach, w jakich nauczyciel pisze
-
-    // 1. Wyciagnij z bazy w jakich dniach masz lekcje i zrob z tego daty
-    // to do, przykladowo mam lekcje 3 razy w tyg, zaczynam od pierwszego, lece +1 do kolejnego, save, +1 do kolejnego, save, potem +1 week
-//   LocalDate start = LocalDate.of( 2011 , 11 , 8 );
-//LocalDate stop = LocalDate.of( 2012 , 5 , 1 );
-//List<LocalDate> mondays = new ArrayList<>();
-//LocalDate monday = start.with( TemporalAdjusters.nextOrSame( DayOfWeek.MONDAY ) );
-//while( monday.isBefore( stop ) ) {
-//    mondays.add( monday );
-//    // Set up the next loop.
-//    monday = monday.plusWeeks( 1 );
-//}
   }
 
   private TableView stworzTabeleZobecnosciami(Przedmiot przedmiot, int i) {
     TableView<Obecnosc> table = new TableView<>();
 // do ogarniecia dynamicznie
 
-    int year = 2019;
-    if (i<9){
-      year = 2020;
-    }
-    
-    zwrocKiedyMamZajecia(pesel, przedmiot);
-    
     
 //    ObservableList<Uczen> data
 //            = FXCollections.observableArrayList(zwrocUczniowZklasy(klasa));
@@ -224,6 +205,26 @@ public class KlasaController implements Initializable {
 //      customResize(table);
 //
 //    }
+
+    int year = 2019;
+    if (i<9){
+      year = 2020;
+    }
+    
+    List<Integer> dniTygodniaZajecia = zwrocWJakieDniTygodniaMamZajecia(pesel, przedmiot);
+    List<Integer> dniMiesiacaZajecia = zwrocDatyWktorychMamZajecia(year,i,dniTygodniaZajecia);
+    
+    
+    
+    for (Integer zajeciaWmiesiacu : dniMiesiacaZajecia) {
+      
+      //dany dzien
+       TableColumn nowaKolumna = new TableColumn(zajeciaWmiesiacu.toString());
+       // hibernate jesli mam w tym dniu dwa zajecia to nested columns
+       
+       table.getColumns().add(nowaKolumna);
+       
+    }
 
     return table;
   }

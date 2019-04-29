@@ -343,7 +343,7 @@ public class HibernateUtil {
     return nauczyciel;
   }
 
-  public static void zwrocKiedyMamZajeciaIile(Long pesel, Przedmiot przedmiot) {
+  public static void zwrocIleMamZajecWdanymDniu(Long pesel, Przedmiot przedmiot) {
 
     //Przedmiot przedmiot = new Przedmiot("algebra_liniowa");
     CriteriaQuery<Tuple> criteria = builder.createQuery(Tuple.class);
@@ -361,17 +361,32 @@ public class HibernateUtil {
 
   }
   
-    public static void zwrocKiedyMamZajecia(Long pesel, Przedmiot przedmiot) {
+  public static List<Integer> zwrocWJakieDniTygodniaMamZajecia(Long pesel, Przedmiot przedmiot) {
 
-    //Przedmiot przedmiot = new Przedmiot("algebra_liniowa");
+    
     CriteriaQuery<String> criteria = builder.createQuery(String.class);
     Root<Zajecia> root = criteria.from(Zajecia.class);
     criteria.select(root.get("dzien"));
     criteria.where(builder.equal(root.get("nauczyciel"), zwrocNauczyciela(pesel)), (builder.equal(root.get("przedmiot"), przedmiot)));
+    criteria.distinct(true);
     List<String> kiedyZajecia = entityManager.createQuery(criteria).getResultList();
+    List<Integer> zwrocDniTygodnia = new ArrayList<>();
     for (String x : kiedyZajecia) {
-      System.out.println(x);
+
+      if (x.equals("pon")) {
+        zwrocDniTygodnia.add(1);
+      } else if (x.equals("wt")) {
+        zwrocDniTygodnia.add(2);
+      } else if (x.equals("sr")) {
+        zwrocDniTygodnia.add(3);
+      } else if (x.equals("czw")) {
+        zwrocDniTygodnia.add(4);
+      } else if (x.equals("pt")) {
+        zwrocDniTygodnia.add(5);
+      }
+
     }
+    return zwrocDniTygodnia;
 
   }
   
