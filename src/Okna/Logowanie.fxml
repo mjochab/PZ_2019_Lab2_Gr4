@@ -18,5 +18,6 @@
       <Label layoutX="515.0" layoutY="222.0" text="Hasło" />
       <TextField id="login_field" fx:id="login_field" layoutX="558.0" layoutY="181.0" />
       <PasswordField id="password_field" fx:id="password_field" layoutX="558.0" layoutY="218.0" />
+      <Label id="niepoprawne_dane" fx:id="niepoprawne_dane" layoutX="515.0" layoutY="329.0" prefHeight="17.0" prefWidth="189.0" textAlignment="CENTER" textFill="#c30303" />
    </children>
 </AnchorPane>
