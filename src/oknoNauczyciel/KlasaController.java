@@ -29,7 +29,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -81,6 +80,11 @@ public class KlasaController implements Initializable {
   private AnchorPane rootPane;
   @FXML
   private Label userid;
+  @FXML
+  private Button przejdzDoOcen;
+  @FXML
+  private Button przejdzDoObecnosci;
+  
 
   private static String klasa = null;
   private String username = null;
@@ -96,8 +100,9 @@ public class KlasaController implements Initializable {
       wstawKlaseDoLabela(klasa);
       setUczniowie();
       //stworzZakladkiOceny();
-      stworzZakladkiZobecnosciami();
-
+      //stworzZakladkiZobecnosciami();
+      przejdzDoObecnosci.addEventHandler(MouseEvent.MOUSE_CLICKED, stworzTabeleObecnosci());
+      przejdzDoOcen.addEventHandler(MouseEvent.MOUSE_CLICKED, stworzTabeleOceny());
     });
 
   }
@@ -525,6 +530,34 @@ public class KlasaController implements Initializable {
 
       }
     };
+    return eventHandler;
+  }
+
+  private EventHandler stworzTabeleOceny() {
+
+    EventHandler eventHandler = new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        stworzZakladkiOceny();
+         gagatekPane.setVisible(true);
+         gagatek.setVisible(true);
+      }
+    };
+    return eventHandler;
+  }
+
+  private EventHandler stworzTabeleObecnosci() {
+
+    EventHandler eventHandler = new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+
+        stworzZakladkiZobecnosciami();
+        gagatekPane.setVisible(false);
+        gagatek.setVisible(false);
+      }
+    };
+    
     return eventHandler;
   }
 
