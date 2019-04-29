@@ -11,6 +11,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Root;
 import mapping.*;
 import org.hibernate.HibernateException;
@@ -343,8 +344,10 @@ public class HibernateUtil {
     return nauczyciel;
   }
 
+    
+    // DO SKONCZENIA do wstawiania 2 buttonow jak mam 2 zajecia w danym dniu
   public static void zwrocIleMamZajecWdanymDniu(Long pesel, Przedmiot przedmiot) {
-
+ // DO SKONCZENIA
     //Przedmiot przedmiot = new Przedmiot("algebra_liniowa");
     CriteriaQuery<Tuple> criteria = builder.createQuery(Tuple.class);
     Root<Zajecia> root = criteria.from(Zajecia.class);
@@ -354,9 +357,7 @@ public class HibernateUtil {
     Set<Integer> linkedHashSet = new LinkedHashSet<>();
     for (Tuple tuple : tuples) {
       Date godzina = (Date) tuple.get(0);
-      System.out.println(godzina.toString());
       String dzien = (String) tuple.get(1);
-      System.out.println(dzien);
     }
 
   }
@@ -387,6 +388,24 @@ public class HibernateUtil {
 
     }
     return zwrocDniTygodnia;
+
+  }
+  
+   public static List<Obecnosc> zwrocObecnosciZprzedmiotu (Przedmiot przedmiot, List<Uczen> uczniowie ) {
+
+    
+    
+    
+    CriteriaQuery<Obecnosc> criteria = builder.createQuery(Obecnosc.class);
+    Root<Obecnosc> root = criteria.from(Obecnosc.class);
+    criteria.select(root);
+     criteria.where(root.get("uczen").in(uczniowie));
+    criteria.where(builder.equal(root.get("przedmiot"), przedmiot));
+    List<Obecnosc> obecnosci = entityManager.createQuery(criteria).getResultList();
+     for (Obecnosc obecnosc : obecnosci) {
+       
+     }
+    return obecnosci;
 
   }
   

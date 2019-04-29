@@ -81,17 +81,7 @@ public class HibernateTest {
     return klasy;
   }
 
-  public static List<Klasa> zwrocObecnosci(Long pesel) {
-
-    CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
-    Root<Zajecia> root = criteria.from(Zajecia.class);
-    criteria.select(root.get("klasa"));
-    criteria.where(builder.equal(root.get("nauczyciel"), pesel));
-    criteria.distinct(true);
-    List<Klasa> klasy = entityManager.createQuery(criteria).getResultList();
-
-    return klasy;
-  }
+ 
 
   public static void testyQuery() {
     Query query = entityManager.createQuery(
@@ -105,21 +95,48 @@ public class HibernateTest {
 
   }
 
- 
+   public static List<Obecnosc> zwrocObecnosciZprzedmiotu (Przedmiot przedmiot, List<Uczen> uczniowie ) {
 
+    
+    
+    
+    CriteriaQuery<Obecnosc> criteria = builder.createQuery(Obecnosc.class);
+    Root<Obecnosc> root = criteria.from(Obecnosc.class);
+    criteria.select(root);
+     criteria.where(root.get("uczen").in(uczniowie));
+    criteria.where(builder.equal(root.get("przedmiot"), przedmiot));
+    List<Obecnosc> obecnosci = entityManager.createQuery(criteria).getResultList();
+     for (Obecnosc obecnosc : obecnosci) {
+       System.out.println(obecnosc.getWartosc());
+       
+     }
+    return obecnosci;
+
+  }
+ public static List<Uczen> zwrocUczniowZklasy(String klasa) {
+
+    EntityManager em = sessionFactory.createEntityManager();
+    CriteriaBuilder b = em.getCriteriaBuilder();
+    CriteriaQuery<SkladKlasy> criteria = b.createQuery(SkladKlasy.class);
+    Root<Klasa> root = criteria.from(Klasa.class);
+    criteria.select(root.get("skladKlasies"));
+    criteria.where(b.equal(root.get("nazwaKlasy"), klasa));
+
+    List<SkladKlasy> skladKlasy = em.createQuery(criteria).getResultList();
+    List<Uczen> uczniowie = new ArrayList<>();
+
+    for (SkladKlasy uczen : skladKlasy) {
+      uczniowie.add(uczen.getUczen());
+    }
+    return uczniowie;
+  }
 
 
   public static void main(String[] args) throws ParseException {
-
-    /*List<Przedmiot> przedmioty=zwrocPrzedmiotyKtorychUczeDanaKlase("1a", 22222222221L);
-    
-    for(Przedmiot przedmiot:przedmioty){
-        System.out.println(przedmiot.getNazwaPrzedmiotu());
-    }*/
-    //daty();
     Przedmiot przedmiot = new Przedmiot("algebra_liniowa");
-    List<Integer> zajecia = zwrocWJakieDniTygodniaMamZajecia(22222222221L, przedmiot);
-    zwrocDatyWktorychMamZajecia(2019,4,zajecia);
+    List<Uczen> uczniowie = new ArrayList<>();
+    uczniowie = zwrocUczniowZklasy("1a");
+    zwrocObecnosciZprzedmiotu(przedmiot, uczniowie);
     
   }
 }

@@ -134,7 +134,7 @@ public class KlasaController implements Initializable {
       Tab przedmiotyTab = new Tab(przedmiot.getNazwaPrzedmiotu());
 
       // SEMESTR 1
-      Tab semestr1 = new Tab("Semestr 1");
+      Tab semestr1 = new Tab("Półrocze 1");
       TabPane semestr1Pane = new TabPane();
 
       semestr1Pane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
@@ -145,7 +145,7 @@ public class KlasaController implements Initializable {
 
       }
 
-      for (int i = 1; i <= 2; i++) {
+      for (int i = 1; i < 2; i++) {
         Tab miesiac = new Tab(String.valueOf(i));
         miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i));
         semestr1Pane.getTabs().add(miesiac);
@@ -155,12 +155,12 @@ public class KlasaController implements Initializable {
       semestr1.setContent(semestr1Pane);
 
       // SEMESTR 2
-      Tab semestr2 = new Tab("Semestr 2");
+      Tab semestr2 = new Tab("Półrocze 2");
 
       TabPane semestr2Pane = new TabPane();
       semestr2Pane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
-      for (int i = 1; i <= 6; i++) {
+      for (int i = 2; i <= 6; i++) {
         Tab miesiac = new Tab(String.valueOf(i));
         miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i));
         semestr2Pane.getTabs().add(miesiac);
@@ -180,50 +180,70 @@ public class KlasaController implements Initializable {
 
   private TableView stworzTabeleZobecnosciami(Przedmiot przedmiot, int i) {
     TableView<Obecnosc> table = new TableView<>();
-// do ogarniecia dynamicznie
 
-    
-//    ObservableList<Uczen> data
-//            = FXCollections.observableArrayList(zwrocUczniowZklasy(klasa));
-//    table.setItems(data);
+    ObservableList<Obecnosc> data
+            = FXCollections.observableArrayList(zwrocObecnosciZprzedmiotu(przedmiot, uczniowie));
+    table.setItems(data);
 
     TableColumn kolumnaImie = new TableColumn("Imie");
     kolumnaImie.setMinWidth(50);
+    kolumnaImie.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
+      @Override
+      public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> data) {
+        StringProperty imieUcznia = new SimpleStringProperty();
+        imieUcznia.setValue(data.getValue().getUczen().getImie());
+
+        return imieUcznia;
+      }
+    });
     TableColumn kolumnaNazwisko = new TableColumn("Nazwisko");
     kolumnaNazwisko.setMinWidth(50);
+    kolumnaNazwisko.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
+      @Override
+      public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> data) {
+        StringProperty nazwiskoUcznia = new SimpleStringProperty();
+        nazwiskoUcznia.setValue(data.getValue().getUczen().getNazwisko());
+
+        return nazwiskoUcznia;
+      }
+    });
     table.getColumns().addAll(kolumnaImie, kolumnaNazwisko);
 
-//    YearMonth yearMonthObject = YearMonth.of(2020, i);
-//    int daysInMonth = yearMonthObject.lengthOfMonth();
-//
-//    // kolumny z dniami miesiaca
-//    for (int j = 1; j <= daysInMonth; j++) {
-//
-//      TableColumn nowaKolumna = new TableColumn(String.valueOf(j));
-//      nowaKolumna.setMaxWidth(20);
-//      table.getColumns().add(nowaKolumna);
-//      customResize(table);
-//
-//    }
-
     int year = 2019;
-    if (i<9){
+    if (i < 9) {
       year = 2020;
     }
-    
+    final int rok = year;
     List<Integer> dniTygodniaZajecia = zwrocWJakieDniTygodniaMamZajecia(pesel, przedmiot);
-    List<Integer> dniMiesiacaZajecia = zwrocDatyWktorychMamZajecia(year,i,dniTygodniaZajecia);
-    
-    
-    
+    List<Integer> dniMiesiacaZajecia = zwrocDatyWktorychMamZajecia(year, i, dniTygodniaZajecia);
+
     for (Integer zajeciaWmiesiacu : dniMiesiacaZajecia) {
-      
+
       //dany dzien
-       TableColumn nowaKolumna = new TableColumn(zajeciaWmiesiacu.toString());
-       // hibernate jesli mam w tym dniu dwa zajecia to nested columns
-       
-       table.getColumns().add(nowaKolumna);
-       
+      TableColumn nowaKolumna = new TableColumn(zajeciaWmiesiacu.toString());
+      // WRZUCIC FUNKCJE Z HIBERNATE UTILS DO SRP{AWDZANIA ILE MAM ZAJEC W DANYM DNIU I ZROBIC NESTED COLUMNS/2buttony
+      // hibernate jesli uczen ma x2 obecnosc w tym dniu to zrob dwa butony w srodku, do zrobienia funkcja hibernate
+      nowaKolumna.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
+        @Override
+        public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> data) {
+          StringProperty stanObecnosciUcznia = new SimpleStringProperty();
+
+          Date dataWkomorce = null;
+          try {
+            dataWkomorce = utilities.Utils.returnDate(rok + "-" + i + "-" + zajeciaWmiesiacu);
+          } catch (ParseException ex) {
+            java.util.logging.Logger.getLogger(KlasaController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+          }
+
+          if (data.getValue().getData().equals(dataWkomorce)) {
+            stanObecnosciUcznia.setValue(data.getValue().getWartosc());
+          }
+
+          return stanObecnosciUcznia;
+        }
+      });
+      table.getColumns().add(nowaKolumna);
+
     }
 
     return table;
