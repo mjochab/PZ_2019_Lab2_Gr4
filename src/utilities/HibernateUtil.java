@@ -134,7 +134,6 @@ public class HibernateUtil {
     int i = 0;
     for (Klasa klasa : klasy) {
       nazwyKlas[i] = klasa.getNazwaKlasy();
-
       i++;
     }
 
@@ -198,8 +197,6 @@ public class HibernateUtil {
       Long count = (Long) tuple.get(1);
     }
   }
-
-
 
   public static List<String> zwrocRodzajeOcen() {
 
@@ -316,7 +313,6 @@ public class HibernateUtil {
     }
 
   }
-
   public static Klasa zwrocPlan(String klasa) {
     CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
     Root<Klasa> root = criteria.from(Klasa.class);
@@ -428,6 +424,14 @@ public class HibernateUtil {
 
     }
 }
-  
-  
+      public static Klasa zwrocPlan(String klasa) {
+        CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
+        Root<Klasa> root = criteria.from(Klasa.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get("nazwaKlasy"), klasa));
+        Klasa plan = entityManager.createQuery(criteria).getSingleResult();
+
+        return plan;
+    }
+
 }
