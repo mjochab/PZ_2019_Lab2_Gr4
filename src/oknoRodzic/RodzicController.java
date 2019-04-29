@@ -5,7 +5,6 @@
  */
 package oknoRodzic;
 
-import oknoUczen.*;
 import utilities.HibernateUtil;
 import java.io.IOException;
 import java.net.URL;
@@ -93,7 +92,7 @@ public class RodzicController implements Initializable {
     private void LoadOceny(ActionEvent event) throws IOException {
         tabelaOcen.setColumnResizePolicy((param) -> true);
         Platform.runLater(() -> Utils.customResize(tabelaOcen));
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("Rodzic.fxml"));
         rootPane.getChildren().setAll(pane);
         wpisywanieOcen();
 
@@ -101,13 +100,13 @@ public class RodzicController implements Initializable {
 
     @FXML
     private void LoadNieobecnosci(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("RodzicNieobecnosci.fxml"));
         rootPane.getChildren().setAll(pane);
     }
 
     @FXML
     private void LoadUwagi(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("RodzicPlan.fxml"));
         rootPane.getChildren().setAll(pane);
     }
 

@@ -5,7 +5,6 @@
  */
 package oknoRodzic;
 
-import oknoUczen.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -94,19 +93,19 @@ public class RodzicPlanController implements Initializable {
     //ładujemy okno z ocenami uczenia.
     @FXML
     private void LoadNieobecnosci(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("RodzicNieobecnosci.fxml"));
         rootPane.getChildren().setAll(pane);
     }
 
     @FXML
     private void LoadOceny(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("Rodzic.fxml"));
         rootPane.getChildren().setAll(pane);
     }
 
     @FXML
     private void LoadUwagi(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("RodzicPlan.fxml"));
         rootPane.getChildren().setAll(pane);
     }
 

@@ -132,7 +132,7 @@ public class UczenNieobecnosciController implements Initializable {
 
         while (it.hasNext()) {
             Obecnosc ob = it.next();
-            if (ob.getWartosc().equals("nieobecny")) {
+            if (ob.getWartosc().equals("nieobecny") || ob.getWartosc().equals("oczekujace") || ob.getWartosc().equals("usprawiedliwione")) {
                 obecnosci.add(ob);
             }
         }

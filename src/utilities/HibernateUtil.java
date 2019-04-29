@@ -1,10 +1,10 @@
-
 package utilities;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -231,11 +231,10 @@ public class HibernateUtil {
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
         criteria.select(root.get("pesel"));
         criteria.where(builder.equal(root.get("login"), login), builder.equal(root.get("haslo"), haslo));
-        Long nr_pesel=null;
-        try{
-        nr_pesel  = entityManager.createQuery(criteria).getSingleResult();
-        }
-        catch(NoResultException e){
+        Long nr_pesel = null;
+        try {
+            nr_pesel = entityManager.createQuery(criteria).getSingleResult();
+        } catch (NoResultException e) {
             System.out.println("nic nie pasuje");
         }
         //Long nr_pesel = entityManager.createQuery(criteria).getSingleResult();
@@ -249,14 +248,13 @@ public class HibernateUtil {
         criteria.select(root.get("kto"));
         criteria.where(builder.equal(root.get("pesel"), pesel));
         String osoba = null;
-        try{
-        osoba = entityManager.createQuery(criteria).getSingleResult();
-        }
-        catch(NoResultException e){
+        try {
+            osoba = entityManager.createQuery(criteria).getSingleResult();
+        } catch (NoResultException e) {
             System.out.println("nic nie pasuje");
         }
-       // String osoba = entityManager.createQuery(criteria).getSingleResult();
- 
+        // String osoba = entityManager.createQuery(criteria).getSingleResult();
+
         return osoba;
     }
 
@@ -265,11 +263,10 @@ public class HibernateUtil {
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
         criteria.select(root.get("login"));
         criteria.where(builder.equal(root.get("pesel"), pesel));
-         String osoba = null;
-        try{
-        osoba = entityManager.createQuery(criteria).getSingleResult();
-        }
-        catch(NoResultException e){
+        String osoba = null;
+        try {
+            osoba = entityManager.createQuery(criteria).getSingleResult();
+        } catch (NoResultException e) {
             System.out.println("nic nie pasuje");
         }
         //String osoba = entityManager.createQuery(criteria).getSingleResult();
@@ -282,46 +279,66 @@ public class HibernateUtil {
         //Exception in thread "main" javax.persistence.NoResultException: No entity found for query
     }
 
-  public static void wstawOcene(Ocena ocena) {
+    public static void wstawOcene(Ocena ocena) {
 
-    Session session = sessionFactory.openSession();
+        Session session = sessionFactory.openSession();
 
-    Transaction tx = null;
-    Integer stId = null;
-    try {
-      tx = session.beginTransaction();
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
 
-      session.save(ocena);
-      tx.commit();
-    } catch (HibernateException ex) {
-      if (tx != null) {
-        tx.rollback();
-      }
-    } finally {
-      session.close();
+            session.save(ocena);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+
     }
 
-  }
-  
     public static void edytujOcene(Ocena ocena) {
 
-    Session session = sessionFactory.openSession();
+        Session session = sessionFactory.openSession();
 
-    Transaction tx = null;
-    Integer stId = null;
-    try {
-      tx = session.beginTransaction();
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
 
-      session.merge(ocena);
-      tx.commit();
-    } catch (HibernateException ex) {
-      if (tx != null) {
-        tx.rollback();
-      }
-    } finally {
-      session.close();
+            session.merge(ocena);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+
     }
 
-  }
+    public static void edytujNieobecnosc(Obecnosc obecnosc) {
+        Session session = sessionFactory.openSession();
 
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+
+            session.merge(obecnosc);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+
+    }
 }
+
