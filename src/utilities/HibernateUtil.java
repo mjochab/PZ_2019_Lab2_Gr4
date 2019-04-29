@@ -215,15 +215,29 @@ public class HibernateUtil {
 
     }
 
+    public static Klasa zwrocPlan(String klasa) {
+        CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
+        Root<Klasa> root = criteria.from(Klasa.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get("nazwaKlasy"), klasa));
+        Klasa plan = entityManager.createQuery(criteria).getSingleResult();
+
+        return plan;
+    }
+
     public static Long uzyskajPeselZalogowany(String login, String haslo) {
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
         criteria.select(root.get("pesel"));
-        criteria.where(builder.equal(root.get("login"), login));
-        criteria.where(builder.equal(root.get("haslo"), haslo));
-        // List<Long> pesele = entityManager.createQuery(criteria).getResultList();      
-        Long nr_pesel = entityManager.createQuery(criteria).getSingleResult();
-        //criteria.where( builder.equal( root.get( Person_.name ), "John Doe" ) );
+        criteria.where(builder.equal(root.get("login"), login), builder.equal(root.get("haslo"), haslo));
+        Long nr_pesel=null;
+        try{
+        nr_pesel  = entityManager.createQuery(criteria).getSingleResult();
+        }
+        catch(NoResultException e){
+            System.out.println("nic nie pasuje");
+        }
+        //Long nr_pesel = entityManager.createQuery(criteria).getSingleResult();
 
         return nr_pesel;
     }
@@ -233,8 +247,15 @@ public class HibernateUtil {
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
         criteria.select(root.get("kto"));
         criteria.where(builder.equal(root.get("pesel"), pesel));
-        String osoba = entityManager.createQuery(criteria).getSingleResult();
-
+        String osoba = null;
+        try{
+        osoba = entityManager.createQuery(criteria).getSingleResult();
+        }
+        catch(NoResultException e){
+            System.out.println("nic nie pasuje");
+        }
+       // String osoba = entityManager.createQuery(criteria).getSingleResult();
+ 
         return osoba;
     }
 
@@ -243,19 +264,21 @@ public class HibernateUtil {
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
         criteria.select(root.get("login"));
         criteria.where(builder.equal(root.get("pesel"), pesel));
-        String osoba = entityManager.createQuery(criteria).getSingleResult();
+         String osoba = null;
+        try{
+        osoba = entityManager.createQuery(criteria).getSingleResult();
+        }
+        catch(NoResultException e){
+            System.out.println("nic nie pasuje");
+        }
+        //String osoba = entityManager.createQuery(criteria).getSingleResult();
 
         return osoba;
     }
 
-    public static Klasa zwrocPlan(String klasa) {
-        CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
-        Root<Klasa> root = criteria.from(Klasa.class);
-        criteria.select(root);
-        criteria.where(builder.equal(root.get("nazwaKlasy"), klasa));
-        Klasa plan = entityManager.createQuery(criteria).getSingleResult();
-
-        return plan;
+    private void sprawdzDaneLogowania() {
+        //trzeba przeprowadzić testy przed cryteria bo występuje wyjątek 
+        //Exception in thread "main" javax.persistence.NoResultException: No entity found for query
     }
 
 }
