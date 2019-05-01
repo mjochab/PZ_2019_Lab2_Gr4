@@ -146,10 +146,16 @@ public class HibernateTest {
 
 
   public static void main(String[] args) throws ParseException {
-    Przedmiot przedmiot = new Przedmiot("algebra_liniowa");
-    List<Uczen> uczniowie = new ArrayList<>();
-    uczniowie = zwrocUczniowZklasy("1a");
-    zwrocObecnosciZprzedmiotu(przedmiot, uczniowie);
+//    Przedmiot przedmiot = new Przedmiot("algebra_liniowa");
+//    List<Uczen> uczniowie = new ArrayList<>();
+//    uczniowie = zwrocUczniowZklasy("1a");
+//    zwrocObecnosciZprzedmiotu(przedmiot, uczniowie);
+
+
+
+
+ 
+
     
   }
 }

@@ -137,6 +137,8 @@ public class KlasaController implements Initializable {
 
     for (Przedmiot przedmiot : przedmioty) {
 
+      ObservableList<Obecnosc> dataDoTabeli
+              = FXCollections.observableArrayList(zwrocObecnosciZprzedmiotu(przedmiot, uczniowie));
       Tab przedmiotyTab = new Tab(przedmiot.getNazwaPrzedmiotu());
 
       // SEMESTR 1
@@ -146,14 +148,14 @@ public class KlasaController implements Initializable {
       semestr1Pane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
       for (int i = 9; i <= 12; i++) {
         Tab miesiac = new Tab(String.valueOf(i));
-        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i));
+        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i, dataDoTabeli));
         semestr1Pane.getTabs().add(miesiac);
 
       }
 
       for (int i = 1; i < 2; i++) {
         Tab miesiac = new Tab(String.valueOf(i));
-        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i));
+        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i, dataDoTabeli));
         semestr1Pane.getTabs().add(miesiac);
 
       }
@@ -168,7 +170,7 @@ public class KlasaController implements Initializable {
 
       for (int i = 2; i <= 6; i++) {
         Tab miesiac = new Tab(String.valueOf(i));
-        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i));
+        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i, dataDoTabeli));
         semestr2Pane.getTabs().add(miesiac);
 
       }
@@ -180,15 +182,12 @@ public class KlasaController implements Initializable {
       przedmiotyTab.setContent(nowyTabPane);
 
       tabsPane.getTabs().add(przedmiotyTab);
-
     }
   }
 
-  private TableView stworzTabeleZobecnosciami(Przedmiot przedmiot, int i) {
+  private TableView stworzTabeleZobecnosciami(Przedmiot przedmiot, int i, ObservableList<Obecnosc> data) {
     TableView<Obecnosc> table = new TableView<>();
-
-    ObservableList<Obecnosc> data
-            = FXCollections.observableArrayList(zwrocObecnosciZprzedmiotu(przedmiot, uczniowie));
+// ZROB PO UCZNIU I ELO
     table.setItems(data);
 
     TableColumn kolumnaImie = new TableColumn("Imie");
@@ -234,8 +233,9 @@ public class KlasaController implements Initializable {
       }
 
       TableColumn nowaKolumna = (zwrocKolumneZButtonem(zajeciaWmiesiacu.toString(), dataWkomorce));
-      // WRZUCIC FUNKCJE Z HIBERNATE UTILS DO SRP{AWDZANIA ILE MAM ZAJEC W DANYM DNIU I ZROBIC NESTED COLUMNS/2buttony
-      // hibernate jesli uczen ma x2 obecnosc w tym dniu to zrob dwa butony w srodku, do zrobienia funkcja hibernate
+//       WRZUCIC FUNKCJE Z HIBERNATE UTILS DO SRP{AWDZANIA ILE MAM ZAJEC W DANYM DNIU I ZROBIC NESTED COLUMNS/2buttony
+//       hibernate jesli uczen ma x2 obecnosc w tym dniu to zrob dwa butony w srodku, do zrobienia funkcja hibernate
+//          TableColumn nowaKolumna = new TableColumn("");
 //            nowaKolumna.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
 //                @Override
 //                public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> data) {
@@ -256,25 +256,6 @@ public class KlasaController implements Initializable {
 //                }
 //            });
 
-//            nowaKolumna.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, Void>, Button>() {
-//                @Override
-//                public Button call(CellDataFeatures<Obecnosc, Void> data) {
-//                    Button buttonStanObecnosciUcznia = new Button();
-//
-//                    Date dataWkomorce = null;
-//                    try {
-//                        dataWkomorce = utilities.Utils.returnDate(rok + "-" + i + "-" + zajeciaWmiesiacu);
-//                    } catch (ParseException ex) {
-//                        java.util.logging.Logger.getLogger(KlasaController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//                    }
-//
-//                    if (data.getValue().getData().equals(dataWkomorce)) {
-//                        buttonStanObecnosciUcznia.setText(data.getValue().getWartosc());
-//                    }
-//
-//                    return buttonStanObecnosciUcznia;
-//                }
-//            });
       table.getColumns().add(nowaKolumna);
 
     }
@@ -310,7 +291,7 @@ public class KlasaController implements Initializable {
 
               btn.setOnAction((ActionEvent event) -> {
 
-               if (btn.getText().equals("o")) {
+                if (btn.getText().equals("o")) {
                   btn.setText("n");
                   Obecnosc nieobecny = item;
                   nieobecny.setData(dataWkomorce);
@@ -319,12 +300,12 @@ public class KlasaController implements Initializable {
 
                 } else if (btn.getText().equals("n")) {
                   btn.setText("o");
-                  
+
                   Obecnosc obecny = zwrocNieobecnoscZdanegoDnia(item, dataWkomorce);
-                  System.out.println(obecny.getUczen().getImie()+" wartosc: "+obecny.getWartosc());
+                  System.out.println(obecny.getUczen().getImie() + " wartosc: " + obecny.getWartosc());
                   obecny.setWartosc("o");
                   HibernateUtil.edytujNieobecnosc(obecny);
-                  
+
                 }
               });
 

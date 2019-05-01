@@ -401,6 +401,21 @@ public class HibernateUtil {
 
   }
 
+  public static void zwrocTuplesyObecnosciZprzedmiotu(Przedmiot przedmiot, List<Uczen> uczniowie) {
+
+
+    CriteriaQuery<Obecnosc> criteria = builder.createQuery(Obecnosc.class);
+    Root<Obecnosc> root = criteria.from(Obecnosc.class);
+    criteria.select(root);
+    criteria.where(root.get("uczen").in(uczniowie));
+    criteria.where(builder.equal(root.get("przedmiot"), przedmiot));
+    List<Obecnosc> obecnosci = entityManager.createQuery(criteria).getResultList();
+    
+    
+    //return obecnosci;
+
+  }
+
   public static void edytujNieobecnosc(Obecnosc obecnosc) {
     Session session = sessionFactory.openSession();
 
@@ -442,15 +457,13 @@ public class HibernateUtil {
 
   public static Obecnosc zwrocNieobecnoscZdanegoDnia(Obecnosc item, Date dataWkomorce) {
 
-    
-    
     CriteriaQuery<Obecnosc> criteria = builder.createQuery(Obecnosc.class);
     Root<Obecnosc> root = criteria.from(Obecnosc.class);
     criteria.select(root);
-    criteria.where(builder.equal(root.get("uczen"), item.getUczen()), (builder.equal(root.get("przedmiot"), item.getPrzedmiot())),builder.equal(root.get("data"), dataWkomorce));
+    criteria.where(builder.equal(root.get("uczen"), item.getUczen()), (builder.equal(root.get("przedmiot"), item.getPrzedmiot())), builder.equal(root.get("data"), dataWkomorce));
 
     Obecnosc obecnosc = entityManager.createQuery(criteria).getSingleResult();
-  
+
     return obecnosc;
   }
 
