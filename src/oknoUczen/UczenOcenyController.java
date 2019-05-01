@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -75,6 +76,8 @@ public class UczenOcenyController implements Initializable {
         tabelaOcen.setColumnResizePolicy((param) -> true);
         Platform.runLater(() -> Utils.customResize(tabelaOcen));
         wpisywanieOcen();
+        
+        Utils.tworzeniePDF(uczen);
 
     }
 
@@ -127,14 +130,14 @@ public class UczenOcenyController implements Initializable {
         }
     }
 
-    public List<Integer> zwrocOcenyDlaPrzedmiotu(Set oceny, String nazwaKolumny) {
-        List<Integer> lista = new ArrayList<>();
+    public List<String> zwrocOcenyDlaPrzedmiotu(Set oceny, String nazwaKolumny) {
+        List<String> lista = new ArrayList<>();
         Iterator<Ocena> it = oceny.iterator();
 
         while (it.hasNext()) {
             Ocena ocena = it.next();
             if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(nazwaKolumny)) {
-                lista.add(ocena.getStopien());
+                lista.add(ocena.getStopien().toString()+" - "+ocena.getRodzajOceny().getRodzajOceny());
             } else {
 
             }
@@ -142,13 +145,13 @@ public class UczenOcenyController implements Initializable {
         return lista;
     }
 
-    public void wstawianieOcenDoKolumn(TableColumn<Integer, Number> kol, List<Integer> listaOcen) {
+    public void wstawianieOcenDoKolumn(TableColumn<Integer, String> kol, List<String> listaOcen) {
         kol.setCellValueFactory(cellData -> {
             Integer rowIndex = cellData.getValue();
             if (rowIndex >= listaOcen.size()) {
                 return null;
             } else {
-                return new ReadOnlyIntegerWrapper(listaOcen.get(rowIndex));
+                return new ReadOnlyStringWrapper(listaOcen.get(rowIndex));
             }
         });
     }
@@ -163,9 +166,9 @@ public class UczenOcenyController implements Initializable {
         for (int i = 0; i < oceny.size(); i++) {
             tabelaOcen.getItems().add(i);
         }
-        for (TableColumn<Integer, Number> kol : kolumna) {
+        for (TableColumn<Integer, String> kol : kolumna) {
 
-            List<Integer> listaOcen = zwrocOcenyDlaPrzedmiotu(oceny, kol.getText());
+            List<String> listaOcen = zwrocOcenyDlaPrzedmiotu(oceny, kol.getText());
             if (listaOcen.isEmpty()) {
             } else {
                 wstawianieOcenDoKolumn(kol, listaOcen);
