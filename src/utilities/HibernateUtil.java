@@ -484,5 +484,7 @@ public class HibernateUtil {
 
     return obecnosc;
   }
+  
+  
 
 }

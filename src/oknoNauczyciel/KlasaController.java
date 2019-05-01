@@ -42,7 +42,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -59,6 +61,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -109,6 +112,7 @@ public class KlasaController implements Initializable {
       //stworzZakladkiZobecnosciami();
       przejdzDoObecnosci.addEventHandler(MouseEvent.MOUSE_CLICKED, stworzTabeleObecnosci());
       przejdzDoOcen.addEventHandler(MouseEvent.MOUSE_CLICKED, stworzTabeleOceny());
+      gagatek.setVisible(false);
     });
 
   }
@@ -247,7 +251,6 @@ public class KlasaController implements Initializable {
                 Obecnosc obecnosc = (Obecnosc) iterator.next();
 
                 if (obecnosc.getData().equals(dataWkomorce) && obecnosc.getPrzedmiot().getNazwaPrzedmiotu().equals(tab.getText())) {
-                  System.out.println("przedmioty porownanie: " + obecnosc.getPrzedmiot().getNazwaPrzedmiotu() + " z " + tab.getText());
                   btn.setText(obecnosc.getWartosc());
                   setGraphic(btn);
                 } else {
@@ -269,9 +272,6 @@ public class KlasaController implements Initializable {
                   } else if (btn.getText().equals("n")) {
 
                     obecnosc.setWartosc("o");
-//                  Obecnosc obecny = zwrocNieobecnoscZdanegoDnia(item, dataWkomorce);
-//                  System.out.println(obecny.getUczen().getImie() + " wartosc: " + obecny.getWartosc());
-//                  obecny.setWartosc("o");
                     HibernateUtil.usunNieobecnosc(obecnosc);
                     btn.setText("o");
                   }
@@ -314,12 +314,14 @@ public class KlasaController implements Initializable {
   }
 
   private void stworzTabeleGagatka(Uczen uczen, Przedmiot przedmiot, TableView<Uczen> staraTabela, Tab tab) {
+
     gagatekPane.getChildren().clear();
     gagatek.setVisible(true);
 
     gagatek.setText(uczen.getImie() + " " + uczen.getNazwisko() + " " + uczen.getKlasa().getNazwaKlasy());
 
     TableView<Ocena> table = new TableView<>();
+    table.setPlaceholder(new Label("Brak ocen, dodaj oceny poniżej."));
     ObservableList<Ocena> data
             = FXCollections.observableArrayList(zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(uczen, przedmiot));
     table.setItems(data);
@@ -372,12 +374,29 @@ public class KlasaController implements Initializable {
 
     TextField ocenaPole = new TextField();
     ocenaPole.setMaxWidth(25);
-    TextField rodzajPole = new TextField();
-    rodzajPole.setMaxWidth(40);
-//    TextField dataPole = new TextField();
-//    dataPole.setMaxWidth(80);
+    ocenaPole.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+      if (!newValue) { //when focus lost
+        if (!ocenaPole.getText().matches("[1-5]")) {
+          ocenaPole.setText("");
+        }
+      }
 
-         DatePicker datePicker = new DatePicker();
+    });
+
+    ListView<String> listaRodzajow = new ListView<String>();
+    ObservableList<String> items = FXCollections.observableArrayList(
+            zwrocRodzajeOcen());
+    listaRodzajow.setItems(items);
+    listaRodzajow.setPrefWidth(60);
+    listaRodzajow.setPrefHeight(35);
+
+//    Button test = new Button("testuj liste");
+//    test.setOnAction(action -> {
+//      String value = listaRodzajow.getSelectionModel().getSelectedItem().toString();
+//      System.out.println(value);
+//    });
+    DatePicker datePicker = new DatePicker();
+    datePicker.setMaxWidth(150);
     datePicker.setConverter(new StringConverter<LocalDate>() {
       private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -398,27 +417,18 @@ public class KlasaController implements Initializable {
       }
     });
 
-     
-    
-    
-    
-    
+    Label label = new Label();
+    label.setVisible(false);
+
     HBox textfieldy = new HBox();
     textfieldy.setSpacing(15);
     textfieldy.setPadding(new Insets(15, 20, 5, 10));
     textfieldy.setAlignment(Pos.CENTER);
-    textfieldy.getChildren().addAll(ocenaPole, rodzajPole, datePicker);
-    
-    
-   
-   
-
-    
-    
+    textfieldy.getChildren().addAll(ocenaPole, listaRodzajow, datePicker);
 
     Button dodajOcene = new Button("Dodaj");
     dodajOcene.setVisible(true);
-    dodajOcene.addEventHandler(MouseEvent.MOUSE_CLICKED, dodajOceneButtonHandler(table, ocenaPole, rodzajPole, datePicker, uczen, przedmiot, tab));
+    dodajOcene.addEventHandler(MouseEvent.MOUSE_CLICKED, dodajOceneButtonHandler(table, ocenaPole, listaRodzajow, datePicker, uczen, przedmiot, tab, label));
 
     Button edytujOcene = new Button("Edytuj");
     edytujOcene.setVisible(false);
@@ -432,15 +442,17 @@ public class KlasaController implements Initializable {
     buttony.setAlignment(Pos.CENTER);
     buttony.getChildren().addAll(dodajOcene, edytujOcene, cancel);
 
+    HBox validationAlertBox = new HBox();
+    validationAlertBox.setSpacing(15);
+    validationAlertBox.setPadding(new Insets(15, 20, 5, 10));
+    validationAlertBox.setAlignment(Pos.CENTER);
+    validationAlertBox.getChildren().addAll(label);
 
-
-    
-
-    ustawiaczPane.getChildren().addAll(table, textfieldy, buttony);
+    ustawiaczPane.getChildren().addAll(table, textfieldy, buttony, validationAlertBox);
 
     gagatekPane.getChildren().addAll(ustawiaczPane);
 
-    table.addEventHandler(MouseEvent.MOUSE_CLICKED, dodajButtonyWypelnijTextFieldyHandler(table, ocenaPole, rodzajPole, dodajOcene, edytujOcene, cancel, uczen, przedmiot, tab, datePicker));
+    table.addEventHandler(MouseEvent.MOUSE_CLICKED, dodajButtonyWypelnijTextFieldyHandler(table, ocenaPole, listaRodzajow, dodajOcene, edytujOcene, cancel, uczen, przedmiot, tab, datePicker, label));
 
     //DOROBIC CHOWANIE BUTTONOW, USUWANIE STAREJ TABELI
   }
@@ -523,92 +535,122 @@ public class KlasaController implements Initializable {
     return eventHandler;
   }
 
-  private EventHandler dodajButtonyWypelnijTextFieldyHandler(TableView<Ocena> table, TextField ocena, TextField rodzaj, Button dodaj, Button edytuj, Button cancel, Uczen uczen, Przedmiot przedmiot, Tab tab, DatePicker datePicker) {
+  private EventHandler dodajButtonyWypelnijTextFieldyHandler(TableView<Ocena> table, TextField ocena, ListView<String> listaRodzajow, Button dodaj, Button edytuj, Button cancel, Uczen uczen, Przedmiot przedmiot, Tab tab, DatePicker datePicker, Label label) {
 
     EventHandler eventHandler = new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent e) {
-        Ocena selectedItem = table.getSelectionModel().getSelectedItem();
-        //sprawdz null pointera
-        if (!selectedItem.toString().isEmpty()) {
+        try {
+          Ocena selectedItem = table.getSelectionModel().getSelectedItem();
+          //sprawdz null pointera
+          label.setText("Wybrano ocene");
           ocena.setText(selectedItem.getStopien().toString());
-          rodzaj.setText(selectedItem.getRodzajOceny().getRodzajOceny());
-          //data.setText(utilities.Utils.dateToString(selectedItem.getData()));
-          
-          LocalDate date = ((java.sql.Date) selectedItem.getData()).toLocalDate();
-          
-          datePicker.setValue(date);
+          listaRodzajow.getSelectionModel().select(selectedItem.getRodzajOceny().getRodzajOceny());
+          listaRodzajow.scrollTo(selectedItem.getRodzajOceny().getRodzajOceny());
+          java.util.Date date = selectedItem.getData();
+          java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+          LocalDate dateLocal = sqlDate.toLocalDate();
+
+          datePicker.setValue(dateLocal);
           //data.setText(selectedItem.getData().toString());
           cancel.setVisible(true);
           dodaj.setVisible(false);
           edytuj.setVisible(true);
-          edytuj.addEventHandler(MouseEvent.MOUSE_CLICKED, edytujOceneButtonHandler(table, ocena, rodzaj, datePicker, uczen, przedmiot, tab, selectedItem, dodaj, cancel, edytuj));
+          edytuj.addEventHandler(MouseEvent.MOUSE_CLICKED, edytujOceneButtonHandler(table, ocena, listaRodzajow, datePicker, uczen, przedmiot, tab, selectedItem, dodaj, cancel, edytuj, label));
           //TableView<Ocena> table, TextField ocena, TextField rodzaj, TextField data, Uczen uczen, Przedmiot przedmiot, Tab tab, Ocena obiektOcenaDoEdycji, Button dodaj, Button cancel
           cancel.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
               ocena.setText("");
-              rodzaj.setText("");
+              listaRodzajow.getSelectionModel().clearSelection();
               //data.setText("");
               dodaj.setVisible(true);
               cancel.setVisible(false);
               edytuj.setVisible(false);
+
             }
 
           });
+
+        } catch (NullPointerException npx) {
+          label.setVisible(true);
+          label.setText("Błąd przy wyborze oceny, spróbuj jeszcze raz!");
+          label.setTextFill(Color.web("#8B0000"));
         }
       }
+
     };
     return eventHandler;
   }
 
-  private EventHandler dodajOceneButtonHandler(TableView<Ocena> table, TextField ocena, TextField rodzaj, DatePicker datePicker, Uczen uczen, Przedmiot przedmiot, Tab tab) {
+  private EventHandler dodajOceneButtonHandler(TableView<Ocena> table, TextField ocena, ListView<String> listaRodzajow, DatePicker datePicker, Uczen uczen, Przedmiot przedmiot, Tab tab, Label label) {
 
     EventHandler eventHandler = new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent e) {
         Ocena obiektOcenaDoWstawienia = new Ocena();//przedmiot, rodzajOceny, Uczen uczen, Integer stopien, Date data);
-        obiektOcenaDoWstawienia.setPrzedmiot(przedmiot);
-        obiektOcenaDoWstawienia.setRodzajOceny(new RodzajOceny(rodzaj.getText()));
-        obiektOcenaDoWstawienia.setStopien(Integer.valueOf(ocena.getText()));
-        obiektOcenaDoWstawienia.setUczen(uczen);
         try {
-          String dataString = datePicker.getValue().toString();
-          obiektOcenaDoWstawienia.setData(utilities.Utils.returnDate(dataString));
+          if (ocena.getText().equals("")) {
+            throw new NullPointerException("brak oceny");
+          }
+          obiektOcenaDoWstawienia.setPrzedmiot(przedmiot);
+          obiektOcenaDoWstawienia.setRodzajOceny(new RodzajOceny(listaRodzajow.getSelectionModel().getSelectedItem().toString()));
+          obiektOcenaDoWstawienia.setStopien(Integer.valueOf(ocena.getText()));
+          obiektOcenaDoWstawienia.setUczen(uczen);
 
-        } catch (ParseException ex) {
-          java.util.logging.Logger.getLogger(KlasaController.class
-                  .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+          try {
+            String dataString = datePicker.getValue().toString();
+            obiektOcenaDoWstawienia.setData(utilities.Utils.returnDate(dataString));
+
+          } catch (ParseException ex) {
+            java.util.logging.Logger.getLogger(KlasaController.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+          }
+          wstawOcene(obiektOcenaDoWstawienia);
+          label.setText("Dodano ocene");
+          odswiezTabele(table, przedmiot, tab, uczen);
+          // usuwa date z datepickera, ale lepiej chyba zostawić ją jakby nauczyciel wprowadzal 30 ocen z danego dnia 
+          //datePicker.getEditor().clear();
+        } catch (NullPointerException npx) {
+          label.setVisible(true);
+          label.setText("Podaj poprawne wartosci do edycji oceny!!!");
+          label.setTextFill(Color.web("#8B0000"));
         }
-        wstawOcene(obiektOcenaDoWstawienia);
-        odswiezTabele(table, przedmiot, tab, uczen);
-
       }
     };
     return eventHandler;
   }
 
-  private EventHandler edytujOceneButtonHandler(TableView<Ocena> table, TextField ocena, TextField rodzaj, DatePicker datePicker, Uczen uczen, Przedmiot przedmiot, Tab tab, Ocena obiektOcenaDoEdycji, Button dodaj, Button cancel, Button edytuj) {
+  private EventHandler edytujOceneButtonHandler(TableView<Ocena> table, TextField ocena, ListView<String> listaRodzajow, DatePicker datePicker, Uczen uczen, Przedmiot przedmiot, Tab tab, Ocena obiektOcenaDoEdycji, Button dodaj, Button cancel, Button edytuj, Label label) {
 
     EventHandler eventHandler = new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent e) {
-        obiektOcenaDoEdycji.setRodzajOceny(new RodzajOceny(rodzaj.getText()));
-        obiektOcenaDoEdycji.setStopien(Integer.valueOf(ocena.getText()));
-               try {
-          String dataString = datePicker.getValue().toString();
-          obiektOcenaDoEdycji.setData(utilities.Utils.returnDate(dataString));
+        try {
+          if (ocena.getText().equals("")) {
+            throw new NullPointerException("brak oceny");
+          }
+          obiektOcenaDoEdycji.setRodzajOceny(new RodzajOceny(listaRodzajow.getSelectionModel().getSelectedItem().toString()));
+          obiektOcenaDoEdycji.setStopien(Integer.valueOf(ocena.getText()));
+          try {
+            String dataString = datePicker.getValue().toString();
+            obiektOcenaDoEdycji.setData(utilities.Utils.returnDate(dataString));
+          } catch (ParseException ex) {
+            java.util.logging.Logger.getLogger(KlasaController.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+          }
 
-        } catch (ParseException ex) {
-          java.util.logging.Logger.getLogger(KlasaController.class
-                  .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+          edytujOcene(obiektOcenaDoEdycji);
+          label.setText("Zedytowano ocene");
+          odswiezTabele(table, przedmiot, tab, uczen);
+          cancel.setVisible(false);
+          dodaj.setVisible(true);
+          edytuj.setVisible(false);
+        } catch (NullPointerException npx) {
+          label.setVisible(true);
+          label.setText("Podaj poprawne wartosci do dodania oceny!!!");
+          label.setTextFill(Color.web("#8B0000"));
         }
-        edytujOcene(obiektOcenaDoEdycji);
-        odswiezTabele(table, przedmiot, tab, uczen);
-        cancel.setVisible(false);
-        dodaj.setVisible(true);
-        edytuj.setVisible(false);
-
       }
     };
     return eventHandler;
@@ -621,7 +663,7 @@ public class KlasaController implements Initializable {
       public void handle(MouseEvent e) {
         stworzZakladkiOceny();
         gagatekPane.setVisible(true);
-        gagatek.setVisible(true);
+
       }
     };
     return eventHandler;
