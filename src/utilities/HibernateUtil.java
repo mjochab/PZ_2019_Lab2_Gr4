@@ -89,21 +89,6 @@ public class HibernateUtil {
 
   }
 
-  public static List<String> zwrocWszystkieKlasy() {
-    // najpierw co zwracamy
-    CriteriaQuery<String> criteria = builder.createQuery(String.class);
-    // skad, z jakiego mapowania
-    Root<Klasa> root = criteria.from(Klasa.class);
-    // ktora kolumna
-    criteria.select(root.get("nazwaKlasy"));
-    // dodatkowe kryteria
-    //criteria.where( builder.equal( root.get( Person_.name ), "John Doe" ) );
-    // zawsze zwraca liste z typem ktory dalismy na samej gorze.
-    List<String> klasy = entityManager.createQuery(criteria).getResultList();
-
-    return klasy;
-  }
-
   public static String zwrocKlaseKtoraWychowuje(Long pesel) {
     CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
     Root<Nauczyciel> root = criteria.from(Nauczyciel.class);
@@ -184,21 +169,6 @@ public class HibernateUtil {
 
     return uczen;
 
-  }
-
-  public static void zwrocMaxLiczbeOcenZdanegoPrzedmiotu() {
-// dorob sprawdzanie dla klasy
-    CriteriaQuery<Tuple> criteria = builder.createQuery(Tuple.class);
-    Root<Ocena> root = criteria.from(Ocena.class);
-    criteria.groupBy(root.get("przedmiot"));
-    //criteria.groupBy(root.get("uczen"));
-    criteria.multiselect(root.get("przedmiot"), builder.count(root.get("stopien")));
-
-    List<Tuple> tuples = entityManager.createQuery(criteria).getResultList();
-    for (Tuple tuple : tuples) {
-      Przedmiot przedmiotek = (Przedmiot) tuple.get(0);
-      Long count = (Long) tuple.get(1);
-    }
   }
 
   public static List<String> zwrocRodzajeOcen() {
