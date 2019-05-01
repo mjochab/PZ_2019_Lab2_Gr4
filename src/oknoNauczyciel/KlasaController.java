@@ -137,8 +137,8 @@ public class KlasaController implements Initializable {
 
     for (Przedmiot przedmiot : przedmioty) {
 
-      ObservableList<Obecnosc> dataDoTabeli
-              = FXCollections.observableArrayList(zwrocObecnosciZprzedmiotu(przedmiot, uczniowie));
+      ObservableList<Uczen> dataDoTabeli
+              = FXCollections.observableArrayList(zwrocUczniowZklasy(klasa));
       Tab przedmiotyTab = new Tab(przedmiot.getNazwaPrzedmiotu());
 
       // SEMESTR 1
@@ -148,14 +148,14 @@ public class KlasaController implements Initializable {
       semestr1Pane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
       for (int i = 9; i <= 12; i++) {
         Tab miesiac = new Tab(String.valueOf(i));
-        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i, dataDoTabeli));
+        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i, dataDoTabeli,przedmiotyTab));
         semestr1Pane.getTabs().add(miesiac);
 
       }
 
       for (int i = 1; i < 2; i++) {
         Tab miesiac = new Tab(String.valueOf(i));
-        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i, dataDoTabeli));
+        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i, dataDoTabeli,przedmiotyTab));
         semestr1Pane.getTabs().add(miesiac);
 
       }
@@ -170,7 +170,7 @@ public class KlasaController implements Initializable {
 
       for (int i = 2; i <= 6; i++) {
         Tab miesiac = new Tab(String.valueOf(i));
-        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i, dataDoTabeli));
+        miesiac.setContent(stworzTabeleZobecnosciami(przedmiot, i, dataDoTabeli, przedmiotyTab));
         semestr2Pane.getTabs().add(miesiac);
 
       }
@@ -185,33 +185,13 @@ public class KlasaController implements Initializable {
     }
   }
 
-  private TableView stworzTabeleZobecnosciami(Przedmiot przedmiot, int i, ObservableList<Obecnosc> data) {
-    TableView<Obecnosc> table = new TableView<>();
-// ZROB PO UCZNIU I ELO
+  private TableView stworzTabeleZobecnosciami(Przedmiot przedmiot, int i, ObservableList<Uczen> data, Tab tab) {
+    TableView<Uczen> table = new TableView<>();
+    TableColumn kolumnaImie = stworzKolumneUczniow("Imie");
+    TableColumn kolumnaNazwisko = stworzKolumneUczniow("Nazwisko");
+
     table.setItems(data);
 
-    TableColumn kolumnaImie = new TableColumn("Imie");
-    kolumnaImie.setMinWidth(50);
-    kolumnaImie.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
-      @Override
-      public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> data) {
-        StringProperty imieUcznia = new SimpleStringProperty();
-        imieUcznia.setValue(data.getValue().getUczen().getImie());
-
-        return imieUcznia;
-      }
-    });
-    TableColumn kolumnaNazwisko = new TableColumn("Nazwisko");
-    kolumnaNazwisko.setMinWidth(50);
-    kolumnaNazwisko.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
-      @Override
-      public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> data) {
-        StringProperty nazwiskoUcznia = new SimpleStringProperty();
-        nazwiskoUcznia.setValue(data.getValue().getUczen().getNazwisko());
-
-        return nazwiskoUcznia;
-      }
-    });
     table.getColumns().addAll(kolumnaImie, kolumnaNazwisko);
 
     int year = 2019;
@@ -231,31 +211,7 @@ public class KlasaController implements Initializable {
       } catch (ParseException ex) {
         java.util.logging.Logger.getLogger(KlasaController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
       }
-
-      TableColumn nowaKolumna = (zwrocKolumneZButtonem(zajeciaWmiesiacu.toString(), dataWkomorce));
-//       WRZUCIC FUNKCJE Z HIBERNATE UTILS DO SRP{AWDZANIA ILE MAM ZAJEC W DANYM DNIU I ZROBIC NESTED COLUMNS/2buttony
-//       hibernate jesli uczen ma x2 obecnosc w tym dniu to zrob dwa butony w srodku, do zrobienia funkcja hibernate
-//          TableColumn nowaKolumna = new TableColumn("");
-//            nowaKolumna.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
-//                @Override
-//                public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> data) {
-//                    StringProperty stanObecnosciUcznia = new SimpleStringProperty();
-//
-//                    Date dataWkomorce = null;
-//                    try {
-//                        dataWkomorce = utilities.Utils.returnDate(rok + "-" + i + "-" + zajeciaWmiesiacu);
-//                    } catch (ParseException ex) {
-//                        java.util.logging.Logger.getLogger(KlasaController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//                    }
-//
-//                    if (data.getValue().getData().equals(dataWkomorce)) {
-//                        stanObecnosciUcznia.setValue(data.getValue().getWartosc());
-//                    }
-//
-//                    return stanObecnosciUcznia;
-//                }
-//            });
-
+      TableColumn nowaKolumna = (zwrocKolumneZButtonem(zajeciaWmiesiacu.toString(), dataWkomorce, tab, table));
       table.getColumns().add(nowaKolumna);
 
     }
@@ -263,66 +219,75 @@ public class KlasaController implements Initializable {
     return table;
   }
 
-  private TableColumn zwrocKolumneZButtonem(String nazwaKol, Date dataWkomorce) {
-    TableColumn<Obecnosc, Obecnosc> colBtn = new TableColumn(nazwaKol);
+  private TableColumn zwrocKolumneZButtonem(String nazwaKol, Date dataWkomorce, Tab tab, TableView<Uczen> table) {
+    TableColumn<Uczen, Uczen> colBtn = new TableColumn(nazwaKol);
 
-    Callback<TableColumn<Obecnosc, Obecnosc>, TableCell<Obecnosc, Obecnosc>> cellFactory = new Callback<TableColumn<Obecnosc, Obecnosc>, TableCell<Obecnosc, Obecnosc>>() {
+    Callback<TableColumn<Uczen, Uczen>, TableCell<Uczen, Uczen>> cellFactory = new Callback<TableColumn<Uczen, Uczen>, TableCell<Uczen, Uczen>>() {
       @Override
-      public TableCell<Obecnosc, Obecnosc> call(final TableColumn<Obecnosc, Obecnosc> param) {
-        final TableCell<Obecnosc, Obecnosc> cell = new TableCell<Obecnosc, Obecnosc>() {
+      public TableCell<Uczen, Uczen> call(final TableColumn<Uczen, Uczen> param) {
+        final TableCell<Uczen, Uczen> cell = new TableCell<Uczen, Uczen>() {
 
-          private final Button btn = new Button("");
+          private final Button btn = new Button("o");
 
           @Override
-          public void updateItem(Obecnosc item, boolean empty) {
+          public void updateItem(Uczen item, boolean empty) {
             super.updateItem(item, empty);
 
             if (empty) {
               setGraphic(null);
             } else {
               //if (!item.getWartosc().equals("nieobecny")) {
-              if (item.getData().equals(dataWkomorce)) {
-                btn.setText(item.getWartosc());
-                setGraphic(btn);
-              } else {
-                btn.setText("o");
-                setGraphic(btn);
-              }
+              Set obecnosciUczniaKtoregoUcze = item.getObecnoscs();
+              for (Iterator iterator = obecnosciUczniaKtoregoUcze.iterator(); iterator.hasNext();) {
+                Obecnosc obecnosc = (Obecnosc) iterator.next();
 
-              btn.setOnAction((ActionEvent event) -> {
+                if (obecnosc.getData().equals(dataWkomorce) && obecnosc.getPrzedmiot().getNazwaPrzedmiotu().equals(tab.getText())) {
+                  System.out.println("przedmioty porownanie: "+obecnosc.getPrzedmiot().getNazwaPrzedmiotu()+" z "+tab.getText());
+                  btn.setText(obecnosc.getWartosc());
+                  setGraphic(btn);
+                } else {
+                  //btn.setText("o");
+                  setGraphic(btn);
+                }
+
+                btn.setOnAction((ActionEvent event) -> {
 
                 if (btn.getText().equals("o")) {
                   btn.setText("n");
-                  Obecnosc nieobecny = item;
+                  Obecnosc nieobecny = obecnosc;
+                  nieobecny.setPrzedmiot(new Przedmiot(tab.getText()));
                   nieobecny.setData(dataWkomorce);
                   nieobecny.setWartosc("n");
                   HibernateUtil.dodajNieobecnosc(nieobecny);
+                  //table.refresh();
 
                 } else if (btn.getText().equals("n")) {
+                  
+                   obecnosc.setWartosc("o");
+//                  Obecnosc obecny = zwrocNieobecnoscZdanegoDnia(item, dataWkomorce);
+//                  System.out.println(obecny.getUczen().getImie() + " wartosc: " + obecny.getWartosc());
+//                  obecny.setWartosc("o");
+                  HibernateUtil.usunNieobecnosc(obecnosc);
                   btn.setText("o");
-
-                  Obecnosc obecny = zwrocNieobecnoscZdanegoDnia(item, dataWkomorce);
-                  System.out.println(obecny.getUczen().getImie() + " wartosc: " + obecny.getWartosc());
-                  obecny.setWartosc("o");
-                  HibernateUtil.edytujNieobecnosc(obecny);
-
                 }
-              });
+                });
 
+              }
             }
+
           }
-
         };
-
         return cell;
       }
     };
     colBtn.setCellFactory(cellFactory);
-    colBtn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<Obecnosc>(data.getValue()));
+
+    colBtn.setCellValueFactory(data
+            -> new ReadOnlyObjectWrapper<Uczen>(data.getValue()));
     return colBtn;
   }
 
-  // OCENY---------------------------
+// OCENY---------------------------
   private void stworzZakladkiOceny() {
 
     List<Przedmiot> przedmioty = zwrocPrzedmiotyKtorychUczeDanaKlase(klasa, pesel);
@@ -528,8 +493,10 @@ public class KlasaController implements Initializable {
           rodzaj.setText(selectedItem.getRodzajOceny().getRodzajOceny());
           try {
             data.setText(utilities.Utils.dateToString(selectedItem.getData()));
+
           } catch (ParseException ex) {
-            java.util.logging.Logger.getLogger(KlasaController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(KlasaController.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
           }
           //data.setText(selectedItem.getData().toString());
           cancel.setVisible(true);
@@ -567,8 +534,10 @@ public class KlasaController implements Initializable {
         obiektOcenaDoWstawienia.setUczen(uczen);
         try {
           obiektOcenaDoWstawienia.setData(utilities.Utils.returnDate(data.getText()));
+
         } catch (ParseException ex) {
-          java.util.logging.Logger.getLogger(KlasaController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+          java.util.logging.Logger.getLogger(KlasaController.class
+                  .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         wstawOcene(obiektOcenaDoWstawienia);
         odswiezTabele(table, przedmiot, tab, uczen);
@@ -587,8 +556,10 @@ public class KlasaController implements Initializable {
         obiektOcenaDoEdycji.setStopien(Integer.valueOf(ocena.getText()));
         try {
           obiektOcenaDoEdycji.setData(utilities.Utils.returnDate(data.getText()));
+
         } catch (ParseException ex) {
-          java.util.logging.Logger.getLogger(KlasaController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+          java.util.logging.Logger.getLogger(KlasaController.class
+                  .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         edytujOcene(obiektOcenaDoEdycji);
         odswiezTabele(table, przedmiot, tab, uczen);

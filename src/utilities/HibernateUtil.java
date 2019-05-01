@@ -454,6 +454,24 @@ public class HibernateUtil {
       session.close();
     }
   }
+    public static void usunNieobecnosc(Obecnosc nieobecny) {
+    Session session = sessionFactory.openSession();
+
+    Transaction tx = null;
+    Integer stId = null;
+    try {
+      tx = session.beginTransaction();
+
+      session.delete(nieobecny);
+      tx.commit();
+    } catch (HibernateException ex) {
+      if (tx != null) {
+        tx.rollback();
+      }
+    } finally {
+      session.close();
+    }
+  }
 
   public static Obecnosc zwrocNieobecnoscZdanegoDnia(Obecnosc item, Date dataWkomorce) {
 
