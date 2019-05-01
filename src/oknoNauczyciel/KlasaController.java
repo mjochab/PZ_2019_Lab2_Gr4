@@ -39,6 +39,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -60,9 +61,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import mapping.Obecnosc;
@@ -93,12 +96,15 @@ public class KlasaController implements Initializable {
   @FXML
   private Button przejdzDoOcen;
   @FXML
+  private Button przejdzDoWychowankow;
+  @FXML
   private Button przejdzDoObecnosci;
 
   private static String klasa = null;
   private String username = null;
   private Long pesel = null;
   List<Uczen> uczniowie = new ArrayList<>();
+
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
@@ -112,6 +118,7 @@ public class KlasaController implements Initializable {
       //stworzZakladkiZobecnosciami();
       przejdzDoObecnosci.addEventHandler(MouseEvent.MOUSE_CLICKED, stworzTabeleObecnosci());
       przejdzDoOcen.addEventHandler(MouseEvent.MOUSE_CLICKED, stworzTabeleOceny());
+      przejdzDoWychowankow.addEventHandler(MouseEvent.MOUSE_CLICKED, przejdzDoWychowankowHandler());
       gagatek.setVisible(false);
     });
 
@@ -374,6 +381,8 @@ public class KlasaController implements Initializable {
 
     TextField ocenaPole = new TextField();
     ocenaPole.setMaxWidth(25);
+    
+    // walidacja
     ocenaPole.focusedProperty().addListener((arg0, oldValue, newValue) -> {
       if (!newValue) { //when focus lost
         if (!ocenaPole.getText().matches("[1-5]")) {
@@ -419,6 +428,7 @@ public class KlasaController implements Initializable {
 
     Label label = new Label();
     label.setVisible(false);
+    label.setTextFill(Color.web("#8B0000"));
 
     HBox textfieldy = new HBox();
     textfieldy.setSpacing(15);
@@ -575,7 +585,7 @@ public class KlasaController implements Initializable {
         } catch (NullPointerException npx) {
           label.setVisible(true);
           label.setText("Błąd przy wyborze oceny, spróbuj jeszcze raz!");
-          label.setTextFill(Color.web("#8B0000"));
+
         }
       }
 
@@ -614,7 +624,7 @@ public class KlasaController implements Initializable {
         } catch (NullPointerException npx) {
           label.setVisible(true);
           label.setText("Podaj poprawne wartosci do edycji oceny!!!");
-          label.setTextFill(Color.web("#8B0000"));
+
         }
       }
     };
@@ -649,7 +659,7 @@ public class KlasaController implements Initializable {
         } catch (NullPointerException npx) {
           label.setVisible(true);
           label.setText("Podaj poprawne wartosci do dodania oceny!!!");
-          label.setTextFill(Color.web("#8B0000"));
+
         }
       }
     };
@@ -706,4 +716,37 @@ public class KlasaController implements Initializable {
   private void wstawKlaseDoLabela(String klasa) {
     jakaKlasa.setText(klasa);
   }
+
+  private EventHandler przejdzDoWychowankowHandler() {
+
+    EventHandler eventHandler = new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        try {
+          zaladujOknoWychowawcy();
+        } catch (IOException ex) {
+          java.util.logging.Logger.getLogger(KlasaController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+      }
+    };
+    return eventHandler;
+
+  }
+
+  private void zaladujOknoWychowawcy() throws IOException {
+
+    Stage st = new Stage();
+    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Wychowawca.fxml"));
+    Region root = (Region) fxmlLoader.load();
+
+    Scene scene = new Scene(root);
+    st.setScene(scene);
+
+    WychowawcaController mainController = fxmlLoader.<WychowawcaController>getController();
+    mainController.przekazKlaseIusername(zwrocKlaseKtoraWychowuje(pesel), username, pesel);
+
+    st.show();
+
+  }
+
 }

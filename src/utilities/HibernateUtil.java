@@ -12,6 +12,7 @@ import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.ListJoin;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import mapping.*;
 import org.hibernate.HibernateException;
@@ -103,14 +104,16 @@ public class HibernateUtil {
     return klasy;
   }
 
-  public static List<Klasa> zwrocKlaseKtoraWychowuje(Long pesel) {
+  public static String zwrocKlaseKtoraWychowuje(Long pesel) {
     CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
     Root<Nauczyciel> root = criteria.from(Nauczyciel.class);
     criteria.select(root.get("klasas"));
     criteria.where(builder.equal(root.get("pesel"), pesel));
 
-    List<Klasa> klasy = entityManager.createQuery(criteria).getResultList();
-    return klasy;
+    Klasa klasaObj = entityManager.createQuery(criteria).getSingleResult();
+
+    String klasa = klasaObj.getNazwaKlasy();
+    return klasa;
   }
 
   public static List<Klasa> zwrocKlasyKtorychUcze(Long pesel) {
@@ -401,18 +404,20 @@ public class HibernateUtil {
 
   }
 
-  public static void zwrocTuplesyObecnosciZprzedmiotu(Przedmiot przedmiot, List<Uczen> uczniowie) {
-
+  public static List<Obecnosc> zwrocNieobecnosciUcznia(Uczen uczen) {
 
     CriteriaQuery<Obecnosc> criteria = builder.createQuery(Obecnosc.class);
     Root<Obecnosc> root = criteria.from(Obecnosc.class);
+    Predicate predicate = builder.equal(root.get("wartosc"), "o");
     criteria.select(root);
-    criteria.where(root.get("uczen").in(uczniowie));
-    criteria.where(builder.equal(root.get("przedmiot"), przedmiot));
-    List<Obecnosc> obecnosci = entityManager.createQuery(criteria).getResultList();
+    criteria.where(builder.equal(root.get("uczen"), uczen), (predicate.not()));
+
     
-    
-    //return obecnosci;
+   
+            
+    List<Obecnosc> nieobecnosci = entityManager.createQuery(criteria).getResultList();
+
+    return nieobecnosci;
 
   }
 
@@ -454,7 +459,8 @@ public class HibernateUtil {
       session.close();
     }
   }
-    public static void usunNieobecnosc(Obecnosc nieobecny) {
+
+  public static void usunNieobecnosc(Obecnosc nieobecny) {
     Session session = sessionFactory.openSession();
 
     Transaction tx = null;
@@ -473,6 +479,26 @@ public class HibernateUtil {
     }
   }
 
+  public static void usprawiedliwNieobecnosc(Obecnosc obecnosc) {
+    Session session = sessionFactory.openSession();
+
+    Transaction tx = null;
+    Integer stId = null;
+    try {
+      tx = session.beginTransaction();
+
+      session.merge(obecnosc);
+      tx.commit();
+    } catch (HibernateException ex) {
+      if (tx != null) {
+        tx.rollback();
+      }
+    } finally {
+      session.close();
+    }
+
+  }
+
   public static Obecnosc zwrocNieobecnoscZdanegoDnia(Obecnosc item, Date dataWkomorce) {
 
     CriteriaQuery<Obecnosc> criteria = builder.createQuery(Obecnosc.class);
@@ -484,7 +510,5 @@ public class HibernateUtil {
 
     return obecnosc;
   }
-  
-  
 
 }
