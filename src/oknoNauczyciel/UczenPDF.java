@@ -18,9 +18,9 @@ public class UczenPDF {
 
     private String nazwaPrzedmiotu;
     private String oceny;
-    private double srednia;
+    private String srednia;
 
-    public UczenPDF(String nazwaPrzedmiotu, String oceny, double srednia) {
+    public UczenPDF(String nazwaPrzedmiotu, String oceny, String srednia) {
         this.nazwaPrzedmiotu = nazwaPrzedmiotu;
         this.oceny = oceny;
         this.srednia = srednia;
@@ -34,7 +34,7 @@ public class UczenPDF {
         this.oceny = oceny;
     }
 
-    public void setSrednia(double srednia) {
+    public void setSrednia(String srednia) {
         this.srednia = srednia;
     }
 
@@ -46,7 +46,7 @@ public class UczenPDF {
         return oceny;
     }
 
-    public double getSrednia() {
+    public String getSrednia() {
         return srednia;
     }
 
@@ -67,13 +67,13 @@ public class UczenPDF {
         return ocenyUcznia;
     }
 
-    public static Double obliczSrednia(String przedmiot, Set oceny) {
+    public static String obliczSrednia(String przedmiot, Set oceny) {
         String ocenyUczniaString = zwrocOceny(przedmiot, oceny);
         double sumaOcen = 0;
         double sredniaOcen = 0;
 
         if (ocenyUczniaString.equals("")) {
-            return sredniaOcen;
+            return "";
         }
 
         String[] ocenyUcznia = zwrocOceny(przedmiot, oceny).split(",");
@@ -82,7 +82,10 @@ public class UczenPDF {
         }
 
         sredniaOcen = sumaOcen / ocenyUcznia.length;
-        return sredniaOcen;
+        if(sredniaOcen == 0){
+            return "";
+        }
+        return String.valueOf(sredniaOcen);
     }
 
 }

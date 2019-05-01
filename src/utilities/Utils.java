@@ -1,5 +1,6 @@
 package utilities;
 
+import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -18,7 +19,7 @@ import javafx.scene.control.TableView;
 import mapping.Uczen;
 import mapping.Zajecia;
 import oknoNauczyciel.UczenPDF;
-
+import pdf.Pdf;
 import java.io.FileOutputStream;
 import java.util.Date;
 
@@ -179,11 +180,11 @@ public class Utils {
         String[] nazwyPrzedmiotow = HibernateUtil.pobieranieNazwPrzedmiotow();
         UczenPDF uczenpdf;
         String ocenyUcznia;
-        double sredniaOcen;
+        String sredniaOcen;
 
         for (String przedmiot : nazwyPrzedmiotow) {
             ocenyUcznia = UczenPDF.zwrocOceny(przedmiot, oceny);
-            sredniaOcen = UczenPDF.obliczSrednia(przedmiot, oceny);
+            sredniaOcen = UczenPDF.obliczSrednia(przedmiot, oceny);     
             uczenpdf = new UczenPDF(przedmiot, ocenyUcznia, sredniaOcen);
             listaPDF.add(uczenpdf);
         }
@@ -191,11 +192,21 @@ public class Utils {
         return listaPDF;
     }
 
-    public static void tworzeniePDF(Uczen uczen) {
+    public static void tworzeniePDF(Uczen uczen) throws FileNotFoundException {
         ArrayList<UczenPDF> listaPDF = zwrocOceny(uczen.getOcenas());
-        listaPDF.forEach((u) -> {
-            System.out.println(u.getNazwaPrzedmiotu() + " | " + u.getOceny() + " | " + u.getSrednia());
-        });
+        String imie = uczen.getImie();
+        String nazwisko = uczen.getNazwisko();
+        
+        ArrayList<String> przedmioty = new ArrayList<String>();
+        ArrayList<String> oceny = new ArrayList<String>();
+        ArrayList<String> srednia = new ArrayList<String>();
+        
+        for(UczenPDF l : listaPDF){
+            przedmioty.add(l.getNazwaPrzedmiotu());
+            oceny.add(l.getOceny());
+            srednia.add(String.valueOf(l.getSrednia()));         
+        }
+        Pdf.tworzeniePDF(imie, nazwisko, przedmioty, oceny, srednia);
 
     }
 }

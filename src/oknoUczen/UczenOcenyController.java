@@ -6,6 +6,7 @@
 package oknoUczen;
 
 import Okna.LogowanieController;
+import java.io.FileNotFoundException;
 import utilities.HibernateUtil;
 import java.io.IOException;
 import java.net.URL;
@@ -16,6 +17,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -76,8 +79,6 @@ public class UczenOcenyController implements Initializable {
         tabelaOcen.setColumnResizePolicy((param) -> true);
         Platform.runLater(() -> Utils.customResize(tabelaOcen));
         wpisywanieOcen();
-        
-        Utils.tworzeniePDF(uczen);
 
     }
 
@@ -106,6 +107,7 @@ public class UczenOcenyController implements Initializable {
     private void LoadNieobecnosci(ActionEvent event) throws IOException {
         AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
         rootPane.getChildren().setAll(pane);
+
     }
 
     @FXML
@@ -137,7 +139,7 @@ public class UczenOcenyController implements Initializable {
         while (it.hasNext()) {
             Ocena ocena = it.next();
             if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(nazwaKolumny)) {
-                lista.add(ocena.getStopien().toString()+" - "+ocena.getRodzajOceny().getRodzajOceny());
+                lista.add(ocena.getStopien().toString() + " - " + ocena.getRodzajOceny().getRodzajOceny());
             } else {
 
             }
@@ -158,8 +160,8 @@ public class UczenOcenyController implements Initializable {
 
     public void wpisywanieOcen() {
         //String login = LogowanieController.getPassword_field().getText();
-      //  String haslo = LogowanieController.getLogin_field().getText();
-       // pesel = HibernateUtil.uzyskajPeselZalogowany(login, haslo);
+        //  String haslo = LogowanieController.getLogin_field().getText();
+        // pesel = HibernateUtil.uzyskajPeselZalogowany(login, haslo);
         uczen = HibernateUtil.zwrocUcznia(pesel);
         Set oceny = uczen.getOcenas();
 
