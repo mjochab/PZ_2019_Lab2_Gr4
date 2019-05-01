@@ -174,5 +174,28 @@ public class Utils {
 
     }
 
-    
+    public static ArrayList<UczenPDF> zwrocOceny(Set oceny) {
+        ArrayList<UczenPDF> listaPDF = new ArrayList<>();
+        String[] nazwyPrzedmiotow = HibernateUtil.pobieranieNazwPrzedmiotow();
+        UczenPDF uczenpdf;
+        String ocenyUcznia;
+        double sredniaOcen;
+
+        for (String przedmiot : nazwyPrzedmiotow) {
+            ocenyUcznia = UczenPDF.zwrocOceny(przedmiot, oceny);
+            sredniaOcen = UczenPDF.obliczSrednia(przedmiot, oceny);
+            uczenpdf = new UczenPDF(przedmiot, ocenyUcznia, sredniaOcen);
+            listaPDF.add(uczenpdf);
+        }
+
+        return listaPDF;
+    }
+
+    public static void tworzeniePDF(Uczen uczen) {
+        ArrayList<UczenPDF> listaPDF = zwrocOceny(uczen.getOcenas());
+        listaPDF.forEach((u) -> {
+            System.out.println(u.getNazwaPrzedmiotu() + " | " + u.getOceny() + " | " + u.getSrednia());
+        });
+
+    }
 }
