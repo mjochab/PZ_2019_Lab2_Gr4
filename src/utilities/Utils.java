@@ -1,5 +1,6 @@
 package utilities;
 
+import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -18,6 +19,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import mapping.Uczen;
 import mapping.Zajecia;
+import oknoNauczyciel.UczenPDF;
+import pdf.Pdf;
+import java.io.FileOutputStream;
+import java.util.Date;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -30,151 +36,184 @@ import mapping.Zajecia;
  */
 public class Utils {
 
-  //data gotowa do wstawienia przez nauczyciela
-  public static Date returnDate(String data) throws ParseException {
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    Date date = format.parse(data);
-    return date;
-  }
-
-  public static void customResize(TableView<?> view) {
-
-    AtomicLong width = new AtomicLong();
-    view.getColumns().forEach(col -> {
-      width.addAndGet((long) col.getWidth());
-    });
-    double tableWidth = view.getWidth();
-
-    if (tableWidth > width.get()) {
-      view.getColumns().forEach(col -> {
-        col.setPrefWidth(col.getWidth() + ((tableWidth - width.get()) / view.getColumns().size()));
-      });
-    }
-  }
-
-  public static void zwrocWartoscStringZKomorki(TableView<Uczen> table, int column, int row) {
-    String a = table.getColumns().get(column).getCellObservableValue(row).getValue().toString();
-  }
-
-  // ------------------------- WSTAWIANIE PLANU ZAJEĆ DO TABELKI ------------------------- //
-  public static void wstawianieGodziny(ArrayList<String> godzina, TableColumn<Integer, String> kol) {
-    kol.setCellValueFactory(cellData -> {
-      Integer rowIndex = cellData.getValue();
-      if (rowIndex >= godzina.size()) {
-        return null;
-      } else {
-        return new ReadOnlyStringWrapper(godzina.get(rowIndex));
-      }
-    });
-  }
-
-  public static ArrayList<String> pobierzGodziny(ArrayList<Zajecia> zajecia) {
-    ArrayList<String> lista = new ArrayList<String>();
-    Iterator<Zajecia> it = zajecia.iterator();
-
-    while (it.hasNext()) {
-      Zajecia ob = it.next();
-      if (lista.contains(ob.getGodzina().toString())) {
-      } else {
-        lista.add(ob.getGodzina().toString());
-      }
-    }
-    return lista;
-  }
-
-  public static ArrayList<Zajecia> posortujZajecia(Set zajecia) {
-    ArrayList<Zajecia> zajeciaPosortowane = new ArrayList<Zajecia>();
-
-    Iterator<Zajecia> it = zajecia.iterator();
-    while (it.hasNext()) {
-      Zajecia ob = it.next();
-      zajeciaPosortowane.add(ob);
-    }
-    Comparator<Zajecia> porownajPoGodzinie = (Zajecia o1, Zajecia o2)
-            -> o1.getGodzina().compareTo(o2.getGodzina());
-
-    Collections.sort(zajeciaPosortowane, porownajPoGodzinie);
-    return zajeciaPosortowane;
-  }
-
-  public static void wstawianieZajecDoKolumn(TableColumn<Integer, String> kol, ArrayList<String> dzien) {
-    kol.setCellValueFactory(cellData -> {
-      Integer rowIndex = cellData.getValue();
-      if (rowIndex >= dzien.size()) {
-        return null;
-      } else {
-        return new ReadOnlyStringWrapper(dzien.get(rowIndex));
-      }
-    });
-  }
-
-  public static ArrayList<String> pobierzZajeciaDnia(String dzien, ArrayList<Zajecia> zajeciaPosortowane,
-          ArrayList<String> godzina) {
-
-    ArrayList<String> zajeciaDnia = new ArrayList<String>();
-    ArrayList<Zajecia> zajeciaDniaObiekt = new ArrayList<Zajecia>();
-    Iterator<Zajecia> it = zajeciaPosortowane.iterator();
-    Iterator<String> itG = godzina.iterator();
-    // Pobierane są zajęcia z danego dnia.
-    while (it.hasNext()) {
-      Zajecia ob = it.next();
-
-      if (ob.getDzien().equals(dzien)) {
-        zajeciaDniaObiekt.add(ob);
-      }
-    }
-    ListIterator<Zajecia> itO = zajeciaDniaObiekt.listIterator();
-    // Sprawdzanie czy dla danej godziny jest przedmiot, jeśli nie wstaw null, jeśli tak dodaj do listy
-    while (itG.hasNext() && itO.hasNext()) {
-      String x = itG.next();
-      Zajecia ob = itO.next();
-      if (ob.getGodzina().toString().equals(x)) {
-        zajeciaDnia.add(ob.getPrzedmiot().getNazwaPrzedmiotu());
-      } else {
-        zajeciaDnia.add(null);
-        itO.previous();
-      }
-    }
-    return zajeciaDnia;
-  }
-
-  public static String dateToString(Date data) throws ParseException {
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    String date = format.format(data);
-    return date;
-  }
-
-  public static List<Integer> zwrocDatyWktorychMamZajecia(int year, int month, List<Integer> ktoreDniZwrocic) {
-
-    List<LocalDate> datyZajec = new ArrayList<>();
-    List<Integer> kiedyMamZajecia = new ArrayList<>();
-    LocalDate today = LocalDate.of(year, month, 1);
-    LocalDate miesiacPozniej = today.plusMonths(1).minusDays(1);
-
-    LocalDate localDate = today;
-
-    while (localDate.isBefore(miesiacPozniej)) {
-      int dow = localDate.getDayOfWeek().getValue();
-
-      if (ktoreDniZwrocic.contains(dow)) {
-        datyZajec.add(localDate);
-        kiedyMamZajecia.add(localDate.getDayOfMonth());
-
-      }
-
-      // Set-up the next loop.
-      localDate = localDate.plusDays(1);
+    //data gotowa do wstawienia przez nauczyciela
+    public static Date returnDate(String data) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = format.parse(data);
+        return date;
     }
 
+    public static void customResize(TableView<?> view) {
 
-    
-    return kiedyMamZajecia;
+        AtomicLong width = new AtomicLong();
+        view.getColumns().forEach(col -> {
+            width.addAndGet((long) col.getWidth());
+        });
+        double tableWidth = view.getWidth();
 
-  }
+        if (tableWidth > width.get()) {
+            view.getColumns().forEach(col -> {
+                col.setPrefWidth(col.getWidth() + ((tableWidth - width.get()) / view.getColumns().size()));
+            });
+        }
+    }
+
+    public static void zwrocWartoscStringZKomorki(TableView<Uczen> table, int column, int row) {
+        String a = table.getColumns().get(column).getCellObservableValue(row).getValue().toString();
+    }
+
+    // ------------------------- WSTAWIANIE PLANU ZAJEĆ DO TABELKI ------------------------- //
+    public static void wstawianieGodziny(ArrayList<String> godzina, TableColumn<Integer, String> kol) {
+        kol.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            if (rowIndex >= godzina.size()) {
+                return null;
+            } else {
+                return new ReadOnlyStringWrapper(godzina.get(rowIndex));
+            }
+        });
+    }
+
+    public static ArrayList<String> pobierzGodziny(ArrayList<Zajecia> zajecia) {
+        ArrayList<String> lista = new ArrayList<String>();
+        Iterator<Zajecia> it = zajecia.iterator();
+
+        while (it.hasNext()) {
+            Zajecia ob = it.next();
+            if (lista.contains(ob.getGodzina().toString())) {
+            } else {
+                lista.add(ob.getGodzina().toString());
+            }
+        }
+        return lista;
+    }
+
+    public static ArrayList<Zajecia> posortujZajecia(Set zajecia) {
+        ArrayList<Zajecia> zajeciaPosortowane = new ArrayList<Zajecia>();
+
+        Iterator<Zajecia> it = zajecia.iterator();
+        while (it.hasNext()) {
+            Zajecia ob = it.next();
+            zajeciaPosortowane.add(ob);
+        }
+        Comparator<Zajecia> porownajPoGodzinie = (Zajecia o1, Zajecia o2)
+                -> o1.getGodzina().compareTo(o2.getGodzina());
+
+        Collections.sort(zajeciaPosortowane, porownajPoGodzinie);
+        return zajeciaPosortowane;
+    }
+
+    public static void wstawianieZajecDoKolumn(TableColumn<Integer, String> kol, ArrayList<String> dzien) {
+        kol.setCellValueFactory(cellData -> {
+            Integer rowIndex = cellData.getValue();
+            if (rowIndex >= dzien.size()) {
+                return null;
+            } else {
+                return new ReadOnlyStringWrapper(dzien.get(rowIndex));
+            }
+        });
+    }
+
+    public static ArrayList<String> pobierzZajeciaDnia(String dzien, ArrayList<Zajecia> zajeciaPosortowane,
+            ArrayList<String> godzina) {
+
+        ArrayList<String> zajeciaDnia = new ArrayList<String>();
+        ArrayList<Zajecia> zajeciaDniaObiekt = new ArrayList<Zajecia>();
+        Iterator<Zajecia> it = zajeciaPosortowane.iterator();
+        Iterator<String> itG = godzina.iterator();
+        // Pobierane są zajęcia z danego dnia.
+        while (it.hasNext()) {
+            Zajecia ob = it.next();
+
+            if (ob.getDzien().equals(dzien)) {
+                zajeciaDniaObiekt.add(ob);
+            }
+        }
+        ListIterator<Zajecia> itO = zajeciaDniaObiekt.listIterator();
+        // Sprawdzanie czy dla danej godziny jest przedmiot, jeśli nie wstaw null, jeśli tak dodaj do listy
+        while (itG.hasNext() && itO.hasNext()) {
+            String x = itG.next();
+            Zajecia ob = itO.next();
+            if (ob.getGodzina().toString().equals(x)) {
+                zajeciaDnia.add(ob.getPrzedmiot().getNazwaPrzedmiotu());
+            } else {
+                zajeciaDnia.add(null);
+                itO.previous();
+            }
+        }
+        return zajeciaDnia;
+    }
+
+    public static String dateToString(Date data) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String date = format.format(data);
+        return date;
+    }
+
+    public static List<Integer> zwrocDatyWktorychMamZajecia(int year, int month, List<Integer> ktoreDniZwrocic) {
+
+        List<LocalDate> datyZajec = new ArrayList<>();
+        List<Integer> kiedyMamZajecia = new ArrayList<>();
+        LocalDate today = LocalDate.of(year, month, 1);
+        LocalDate miesiacPozniej = today.plusMonths(1).minusDays(1);
+
+        LocalDate localDate = today;
+
+        while (localDate.isBefore(miesiacPozniej)) {
+            int dow = localDate.getDayOfWeek().getValue();
+
+            if (ktoreDniZwrocic.contains(dow)) {
+                datyZajec.add(localDate);
+                kiedyMamZajecia.add(localDate.getDayOfMonth());
+
+            }
+
+            // Set-up the next loop.
+            localDate = localDate.plusDays(1);
+        }
+
+        return kiedyMamZajecia;
+
+    }
+
+    public static ArrayList<UczenPDF> zwrocOceny(Set oceny) {
+        ArrayList<UczenPDF> listaPDF = new ArrayList<>();
+        String[] nazwyPrzedmiotow = HibernateUtil.pobieranieNazwPrzedmiotow();
+        UczenPDF uczenpdf;
+        String ocenyUcznia;
+        String sredniaOcen;
+
+        for (String przedmiot : nazwyPrzedmiotow) {
+            ocenyUcznia = UczenPDF.zwrocOceny(przedmiot, oceny);
+            sredniaOcen = UczenPDF.obliczSrednia(przedmiot, oceny);     
+            uczenpdf = new UczenPDF(przedmiot, ocenyUcznia, sredniaOcen);
+            listaPDF.add(uczenpdf);
+        }
+
+        return listaPDF;
+    }
+
+    public static void tworzeniePDF(Uczen uczen) throws FileNotFoundException {
+        ArrayList<UczenPDF> listaPDF = zwrocOceny(uczen.getOcenas());
+        String imie = uczen.getImie();
+        String nazwisko = uczen.getNazwisko();
+        
+        ArrayList<String> przedmioty = new ArrayList<String>();
+        ArrayList<String> oceny = new ArrayList<String>();
+        ArrayList<String> srednia = new ArrayList<String>();
+        
+        for(UczenPDF l : listaPDF){
+            przedmioty.add(l.getNazwaPrzedmiotu());
+            oceny.add(l.getOceny());
+            srednia.add(String.valueOf(l.getSrednia()));         
+        }
+        Pdf.tworzeniePDF(imie, nazwisko, przedmioty, oceny, srednia);
+
+    }
   
 public static LocalDate convertToLocalDate(Date dateToConvert) {
     return LocalDate.ofInstant(
       dateToConvert.toInstant(), ZoneId.systemDefault());
 }
-  
+
 }
