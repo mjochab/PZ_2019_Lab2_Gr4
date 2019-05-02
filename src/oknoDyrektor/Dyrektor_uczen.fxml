@@ -12,8 +12,10 @@
 
 <AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="oknoDyrektor.Dyrektor_uczenController">
     <children>  
-    <AnchorPane layoutX="11.0" prefHeight="635.0" prefWidth="627.0">
+        <AnchorPane layoutX="11.0" prefHeight="635.0" prefWidth="627.0">
             <children>
+                <Label layoutX="1064.0" layoutY="16.0" prefHeight="17.0" prefWidth="97.0" text="Zalogowano jako" />
+                <Label fx:id="userid" layoutX="1161.0" layoutY="16.0" prefHeight="17.0" prefWidth="97.0" text="tu login" />
                 <TextField layoutX="363.0" layoutY="88.0" />
                 <TextField layoutX="599.0" layoutY="88.0" />
                 <Label layoutX="319.0" layoutY="92.0" text="Imię" />
@@ -36,26 +38,26 @@
                 <Button layoutX="1076.0" layoutY="412.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Edytuj dane" />
                 <Label layoutX="319.0" layoutY="540.0" text="Lista" />
                 <TableView layoutX="318.0" layoutY="186.0" prefHeight="217.0" prefWidth="909.0">
-                  <columns>
-                    <TableColumn prefWidth="215.0" text="Imię" />
-                    <TableColumn prefWidth="257.0" text="Nazwisko" />
-                      <TableColumn prefWidth="259.0" text="Klasa" />
-                  </columns>
+                    <columns>
+                        <TableColumn prefWidth="215.0" text="Imię" />
+                        <TableColumn prefWidth="257.0" text="Nazwisko" />
+                        <TableColumn prefWidth="259.0" text="Klasa" />
+                    </columns>
                 </TableView>
                 <Line endX="808.0" layoutX="418.0" layoutY="474.0" startX="-100.0" />
                 <Label layoutX="317.0" layoutY="493.0" text="Usuwanie ucznia">
                 </Label>
                 <Button layoutX="599.0" layoutY="536.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Usuń" />
             </children>
-    </AnchorPane>
-    <AnchorPane layoutX="-6.0" prefHeight="726.0" prefWidth="248.0">
-         <children>
-            <Button fx:id="nauczycielbtn" layoutX="7.0" layoutY="50.0" mnemonicParsing="false" onAction="#LoadNauczyciel" prefHeight="25.0" prefWidth="248.0" text="Nauczyciel" />
-            <Button fx:id="uczenbtn" layoutX="7.0" layoutY="85.0" mnemonicParsing="false" onAction="#LoadUczen" prefHeight="25.0" prefWidth="248.0" text="Uczeń" />
-            <Button fx:id="rodzicbtn" layoutX="7.0" layoutY="120.0" mnemonicParsing="false" onAction="#LoadRodzic" prefHeight="25.0" prefWidth="248.0" text="Rodzic" />
-            <Button fx:id="wylogujbtn" layoutX="7.0" layoutY="171.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />
-            <Label fx:id="userid1" layoutX="24.0" layoutY="14.0" prefHeight="17.0" prefWidth="177.0" text="Dziennik_elektroniczny.net" />
-         </children>
-      </AnchorPane>
+        </AnchorPane>
+        <AnchorPane layoutX="-6.0" prefHeight="726.0" prefWidth="248.0">
+            <children>
+                <Button fx:id="nauczycielbtn" layoutX="7.0" layoutY="50.0" mnemonicParsing="false" onAction="#LoadNauczyciel" prefHeight="25.0" prefWidth="248.0" text="Nauczyciel" />
+                <Button fx:id="uczenbtn" layoutX="7.0" layoutY="85.0" mnemonicParsing="false" onAction="#LoadUczen" prefHeight="25.0" prefWidth="248.0" text="Uczeń" />
+                <Button fx:id="rodzicbtn" layoutX="7.0" layoutY="120.0" mnemonicParsing="false" onAction="#LoadRodzic" prefHeight="25.0" prefWidth="248.0" text="Rodzic" />
+                <Button fx:id="wylogujbtn" layoutX="7.0" layoutY="171.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />
+                <Label fx:id="userid1" layoutX="24.0" layoutY="14.0" prefHeight="17.0" prefWidth="177.0" text="Dziennik_elektroniczny.net" />
+            </children>
+        </AnchorPane>
     </children>
 </AnchorPane>
