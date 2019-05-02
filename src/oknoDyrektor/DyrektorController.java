@@ -5,6 +5,7 @@
  */
 package oknoDyrektor;
 
+import Okna.LogowanieController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -37,15 +38,20 @@ public class DyrektorController implements Initializable {
     @FXML
     private Label userid;
     
-    private String username=null;
+    private String username="xd";
+    //private String username=przekazNazweUzytkownikaIPesel(username,pesel);
+    
+    private Long pesel = null;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        //przekazNazweUzytkownikaIPesel(username,pesel);
+        
+       wstawUseraDoZalogowanoJako(username);
        Platform.runLater(() -> {
-           //pobierzUseraDoZalogowanoJako();
-           
+       
        });
     }
     
@@ -69,10 +75,19 @@ public class DyrektorController implements Initializable {
             AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor_uczen.fxml"));
              rootPane.getChildren().setAll(pane);
     }
-    private void wstawUseraDoZalogowanoJako(String username) {
+    public void wstawUseraDoZalogowanoJako(String username) {
 
         userid.setText(username);
 
     }
+    public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
+        this.username = username;
+        this.pesel = pesel;
+    }
+    public void przekazNazweUzytkownika(String username) {
+        this.username = username;
+    }
+    
+
     
 }
