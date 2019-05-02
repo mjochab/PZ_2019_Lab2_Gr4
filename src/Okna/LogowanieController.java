@@ -26,6 +26,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import mapping.*;
 import oknoDyrektor.DyrektorController;
+import oknoNauczyciel.NauczycielKlasyController;
 import utilities.*;
 import static utilities.HibernateUtil.uzyskajKtoZalogowany;
 import static utilities.HibernateUtil.uzyskajPeselZalogowany;
@@ -89,8 +90,21 @@ public class LogowanieController implements Initializable {
         if (osoba == null) {
             niepoprawne_dane.setText("Nie ma takiego użytkownika!");
         } else if (osoba.equals("n")) {
-            pane = FXMLLoader.load(getClass().getResource("/oknoNauczyciel/NauczycielKlasy.fxml"));
-            rootPane.getChildren().setAll(pane);
+             FXMLLoader fxmlLoader = new FXMLLoader();
+             fxmlLoader.setLocation(getClass().getResource("/oknoNauczyciel/NauczycielKlasy.fxml"));
+            try{
+               pane = fxmlLoader.load();
+               rootPane.getChildren().setAll(pane);
+            }
+            catch(IOException ex){
+               Logger.getLogger(LogowanieController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            NauczycielKlasyController controller = fxmlLoader.getController();
+            controller.wstawUseraDoZalogowanoJako(login_field.getText());
+            controller.przekazNazweUzytkownikaIPesel(login_field.getText(), pobierzPeselZalogowanego());          
+            
+            //pane = FXMLLoader.load(getClass().getResource("/oknoNauczyciel/NauczycielKlasy.fxml"));
+            //rootPane.getChildren().setAll(pane);
         } else if (osoba.equals("d")) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/oknoDyrektor/Dyrektor.fxml"));
@@ -103,6 +117,7 @@ public class LogowanieController implements Initializable {
             }
             DyrektorController controller = fxmlLoader.getController();
             controller.wstawUseraDoZalogowanoJako(login_field.getText());
+            controller.przekazNazweUzytkownikaIPesel(login_field.getText(), pobierzPeselZalogowanego());
             
             //pane = FXMLLoader.load(getClass().getResource("/oknoDyrektor/Dyrektor.fxml"));
             

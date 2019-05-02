@@ -155,7 +155,7 @@ public class NauczycielKlasyController implements Initializable {
 
   }
 
-  private void wstawUseraDoZalogowanoJako(String username) {
+  public void wstawUseraDoZalogowanoJako(String username) {
 
     userid.setText(username);
 
