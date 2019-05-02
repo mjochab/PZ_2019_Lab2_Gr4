@@ -19,9 +19,9 @@
       <TextField id="login_field" fx:id="login_field" layoutX="558.0" layoutY="181.0" />
       <PasswordField id="password_field" fx:id="password_field" layoutX="558.0" layoutY="218.0" />
       <Label id="niepoprawne_dane" fx:id="niepoprawne_dane" layoutX="515.0" layoutY="329.0" prefHeight="17.0" prefWidth="189.0" textAlignment="CENTER" textFill="#c30303" />
-      <Button layoutX="349.0" layoutY="338.0" mnemonicParsing="false" onAction="#logUczen" text="uczen" />
-      <Button layoutX="428.0" layoutY="338.0" mnemonicParsing="false" onAction="#logNauczyciel" text="nauczyciel" />
-      <Button layoutX="521.0" layoutY="338.0" mnemonicParsing="false" onAction="#logRodzic" text="rodzic" />
-      <Button layoutX="600.0" layoutY="338.0" mnemonicParsing="false" onAction="#logDyrek" text="dyrek" />
+      <Button layoutX="461.0" layoutY="376.0" mnemonicParsing="false" onAction="#logUczen" prefHeight="25.0" prefWidth="61.0" text="uczen" />
+      <Button layoutX="540.0" layoutY="376.0" mnemonicParsing="false" onAction="#logNauczyciel" text="nauczyciel" />
+      <Button layoutX="633.0" layoutY="376.0" mnemonicParsing="false" onAction="#logRodzic" prefHeight="25.0" prefWidth="61.0" text="rodzic" />
+      <Button layoutX="712.0" layoutY="376.0" mnemonicParsing="false" onAction="#logDyrek" text="dyrektor" />
    </children>
 </AnchorPane>

@@ -8,11 +8,13 @@ package oknoDyrektor;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -32,12 +34,19 @@ public class DyrektorController implements Initializable {
     private Button wylogujbtn;
     @FXML
     private AnchorPane rootPane;
+    @FXML
+    private Label userid;
+    
+    private String username=null;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+       Platform.runLater(() -> {
+           //pobierzUseraDoZalogowanoJako();
+           
+       });
     }
     
     @FXML
@@ -59,6 +68,11 @@ public class DyrektorController implements Initializable {
     private void LoadUczen(ActionEvent event) throws IOException {
             AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor_uczen.fxml"));
              rootPane.getChildren().setAll(pane);
+    }
+    private void wstawUseraDoZalogowanoJako(String username) {
+
+        userid.setText(username);
+
     }
     
 }

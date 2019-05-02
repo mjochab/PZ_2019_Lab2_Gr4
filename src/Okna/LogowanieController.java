@@ -8,6 +8,7 @@ package Okna;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,31 +23,31 @@ import utilities.*;
 import static utilities.HibernateUtil.uzyskajKtoZalogowany;
 import static utilities.HibernateUtil.uzyskajPeselZalogowany;
 
-/**
- * FXML Controller class
- *
- * @author Kasia
- */
 public class LogowanieController implements Initializable {
     @FXML
     private TextField login_field;
     @FXML
     private TextField password_field;
-
-
     @FXML
     private Button zalogujbtn;
     @FXML
     private AnchorPane rootPane;
     @FXML
     private Label niepoprawne_dane;
+    @FXML
+    private Label userid;
     
-    /**
-     * Initializes the controller class.
-     */
+    private Long pesel = null;
+    private String username = " ";
+    private String password= " ";
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       
+       Platform.runLater(() -> {
+        //wstawUseraDoZalogowanoJako(username);
+       //przekazNazweUzytkownikaIPesel(username,pesel);
+       przekazNazweUzytkownikaPesel();
+       });
     }
    
     @FXML
@@ -75,6 +76,7 @@ public class LogowanieController implements Initializable {
     private void logowanie(ActionEvent event) throws IOException {
         AnchorPane pane;
         String osoba = pobierzKtoJestZalogowany();
+        username = login_field.getText();
         if(osoba==null){
              niepoprawne_dane.setText("Nie ma takiego użytkownika!");
         }else if (osoba.equals("n")){
@@ -118,6 +120,29 @@ public class LogowanieController implements Initializable {
         }
         
         return ktoZal;
+    }
+    
+     public Long pobierzPeselZalogowanego(){
+        String login = login_field.getText();
+        String haslo = password_field.getText();
+        Long nr_pesel=null;
+        if(!login.isEmpty() && !haslo.isEmpty()){
+            nr_pesel = uzyskajPeselZalogowany(login,haslo);   
+        }
+        return nr_pesel;
+     }
+    
+    private void wstawUseraDoZalogowanoJako(String username) {
+        userid.setText(username);
+    }
+    
+    public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
+        this.username = username;
+        this.pesel = pesel;
+    }
+    public void przekazNazweUzytkownikaPesel() {
+        this.username = login_field.getText();;
+        this.pesel = pobierzPeselZalogowanego();
     }
    
 }

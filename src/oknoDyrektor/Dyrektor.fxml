@@ -12,7 +12,7 @@
 
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="oknoDyrektor.DyrektorController">
     <children>  
-        <AnchorPane layoutX="39.0" layoutY="14.0" prefHeight="580.0" prefWidth="1224.0">
+        <AnchorPane layoutX="11.0" layoutY="25.0" prefHeight="532.0" prefWidth="1258.0">
             <children>
                 <TextField layoutX="363.0" layoutY="88.0" />
                 <TextField layoutX="599.0" layoutY="88.0" />
@@ -57,5 +57,7 @@
                 <Button fx:id="wylogujbtn" layoutX="7.0" layoutY="171.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />
              </children>
           </AnchorPane>
+          <Label fx:id="userid" layoutX="1131.0" layoutY="16.0" prefHeight="17.0" prefWidth="97.0" text="tu login" />
+           <Label layoutX="1029.0" layoutY="17.0" prefHeight="17.0" prefWidth="97.0" text="Zalogowano jako" />
     </children>
 </AnchorPane>
