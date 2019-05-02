@@ -3,6 +3,7 @@ package utilities;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -170,4 +171,10 @@ public class Utils {
     return kiedyMamZajecia;
 
   }
+  
+public static LocalDate convertToLocalDate(Date dateToConvert) {
+    return LocalDate.ofInstant(
+      dateToConvert.toInstant(), ZoneId.systemDefault());
+}
+  
 }
