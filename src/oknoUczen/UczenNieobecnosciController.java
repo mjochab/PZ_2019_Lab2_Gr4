@@ -13,6 +13,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -24,6 +26,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -62,8 +65,11 @@ public class UczenNieobecnosciController implements Initializable {
     private TableColumn<Obecnosc, String> kolData;
     @FXML
     private TableColumn<Obecnosc, String> kolWartosc;
+    @FXML
+    private Label userid;
 
-    private final long PESEL = 32222222221L;
+    private String username = "uzytkownik";
+    private long pesel = 32222222221L;
 
     /**
      * Initializes the controller class.
@@ -89,27 +95,69 @@ public class UczenNieobecnosciController implements Initializable {
     //ładujemy okno z ocenami uczenia.
     @FXML
     private void LoadNieobecnosci(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
-        rootPane.getChildren().setAll(pane);
+            AnchorPane pane;
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("UczenNieobecnosci.fxml"));
+            try{
+               pane = fxmlLoader.load();
+               rootPane.getChildren().setAll(pane);
+            }
+            catch(IOException ex){
+               Logger.getLogger(UczenNieobecnosciController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            UczenNieobecnosciController controller = fxmlLoader.getController();
+            controller.wstawUseraDoZalogowanoJako(username);
+            controller.przekazNazweUzytkownikaIPesel(username, pesel);
+        
+        //AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
+        //rootPane.getChildren().setAll(pane);
         tabelaNieob.setColumnResizePolicy((param) -> true);
         Platform.runLater(() -> Utils.customResize(tabelaNieob));
         wstawNieobecnosci();
     }
 
-    @FXML
+   @FXML
     private void LoadOceny(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
-        rootPane.getChildren().setAll(pane);
+            AnchorPane pane;
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("UczenOceny.fxml"));
+            try{
+               pane = fxmlLoader.load();
+               rootPane.getChildren().setAll(pane);
+            }
+            catch(IOException ex){
+               Logger.getLogger(UczenNieobecnosciController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            UczenOcenyController controller = fxmlLoader.getController();
+            controller.wstawUseraDoZalogowanoJako(username);
+            controller.przekazNazweUzytkownikaIPesel(username, pesel);
+        
+        //AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
+        //rootPane.getChildren().setAll(pane);
     }
 
-    @FXML
+     @FXML
     private void LoadUwagi(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
-        rootPane.getChildren().setAll(pane);
+            AnchorPane pane;
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("UczenUwagi.fxml"));
+            try{
+               pane = fxmlLoader.load();
+               rootPane.getChildren().setAll(pane);
+            }
+            catch(IOException ex){
+               Logger.getLogger(UczenNieobecnosciController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            UczenUwagiController controller = fxmlLoader.getController();
+            controller.wstawUseraDoZalogowanoJako(username);
+            controller.przekazNazweUzytkownikaIPesel(username, pesel);
+            
+        //AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
+        //rootPane.getChildren().setAll(pane);
     }
 
     public void wstawNieobecnosci() {
-        Uczen uczen = HibernateUtil.zwrocUcznia(PESEL);
+        Uczen uczen = HibernateUtil.zwrocUcznia(pesel);
         kolData.setCellValueFactory(new PropertyValueFactory<>("data"));
         kolWartosc.setCellValueFactory(new PropertyValueFactory<>("wartosc"));
         kolPrzedmiot.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
@@ -148,6 +196,15 @@ public class UczenNieobecnosciController implements Initializable {
         Collections.sort(obecnosci, porownajPoGodzinie);
 
         return obecnosci;
+    }
+
+    public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
+        this.username = username;
+        this.pesel = pesel;
+    }
+
+    public void wstawUseraDoZalogowanoJako(String username) {
+        userid.setText(username);
     }
 
 }

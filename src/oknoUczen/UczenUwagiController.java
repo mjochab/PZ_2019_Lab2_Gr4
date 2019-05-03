@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
@@ -23,6 +25,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -66,8 +69,11 @@ public class UczenUwagiController implements Initializable {
     private TableColumn<Integer, String> czw;
     @FXML
     private TableColumn<Integer, String> pt;
+    @FXML
+    private Label userid;
 
-    private final long PESEL = 32222222221L;
+    private String username = "uzytkownik";
+    private long pesel = 32222222221L;
     private ObservableList<TableColumn> kolumna;
 
     /**
@@ -90,23 +96,65 @@ public class UczenUwagiController implements Initializable {
         rootPane.getChildren().setAll(pane);
     }
 
-    //ładujemy okno z ocenami uczenia.
     @FXML
-    private void LoadNieobecnosci(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
-        rootPane.getChildren().setAll(pane);
+    private void LoadOceny(ActionEvent event) throws IOException {
+            AnchorPane pane;
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("UczenOceny.fxml"));
+            try{
+               pane = fxmlLoader.load();
+               rootPane.getChildren().setAll(pane);
+            }
+            catch(IOException ex){
+               Logger.getLogger(UczenUwagiController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            UczenOcenyController controller = fxmlLoader.getController();
+            controller.wstawUseraDoZalogowanoJako(username);
+            controller.przekazNazweUzytkownikaIPesel(username, pesel);
+        
+        //AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
+        //rootPane.getChildren().setAll(pane);
     }
 
     @FXML
-    private void LoadOceny(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
-        rootPane.getChildren().setAll(pane);
+    private void LoadNieobecnosci(ActionEvent event) throws IOException {
+            AnchorPane pane;
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("UczenNieobecnosci.fxml"));
+            try{
+               pane = fxmlLoader.load();
+               rootPane.getChildren().setAll(pane);
+            }
+            catch(IOException ex){
+               Logger.getLogger(UczenUwagiController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            UczenNieobecnosciController controller = fxmlLoader.getController();
+            controller.wstawUseraDoZalogowanoJako(username);
+            controller.przekazNazweUzytkownikaIPesel(username, pesel);
+            
+        //AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
+        //rootPane.getChildren().setAll(pane);
+
     }
 
     @FXML
     private void LoadUwagi(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
-        rootPane.getChildren().setAll(pane);
+            AnchorPane pane;
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("UczenUwagi.fxml"));
+            try{
+               pane = fxmlLoader.load();
+               rootPane.getChildren().setAll(pane);
+            }
+            catch(IOException ex){
+               Logger.getLogger(UczenUwagiController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            UczenUwagiController controller = fxmlLoader.getController();
+            controller.wstawUseraDoZalogowanoJako(username);
+            controller.przekazNazweUzytkownikaIPesel(username, pesel);
+            
+        //AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
+        //rootPane.getChildren().setAll(pane);
     }
 
     public void ustawIdKolumn() {
@@ -118,7 +166,7 @@ public class UczenUwagiController implements Initializable {
     }
 
     public void wstawPlan() {
-        Uczen uczen = HibernateUtil.zwrocUcznia(PESEL);
+        Uczen uczen = HibernateUtil.zwrocUcznia(pesel);
         Klasa plan = zwrocPlan(uczen.getKlasa().getNazwaKlasy());
         Set zajecia = plan.getZajecias();
         ArrayList<Zajecia> zajeciaPosortowane = Utils.posortujZajecia(zajecia);
@@ -128,10 +176,10 @@ public class UczenUwagiController implements Initializable {
         for (int i = 0; i < zajecia.size(); i++) {
             tabelaZajec.getItems().add(i);
         }
-        
+
         ArrayList<String> godziny = Utils.pobierzGodziny(zajeciaPosortowane);
         Utils.wstawianieGodziny(godziny, godzina);
-  
+
         for (TableColumn<Integer, String> kol : kolumna) {
             if (kol.getText().equals("Godzina")) {
 
@@ -142,5 +190,13 @@ public class UczenUwagiController implements Initializable {
         }
     }
 
-    
+    public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
+        this.username = username;
+        this.pesel = pesel;
+    }
+
+    public void wstawUseraDoZalogowanoJako(String username) {
+        userid.setText(username);
+    }
+
 }
