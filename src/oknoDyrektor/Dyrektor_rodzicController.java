@@ -66,7 +66,7 @@ public class Dyrektor_rodzicController implements Initializable {
             pane = fxmlLoader.load();
             rootPane.getChildren().setAll(pane);
         } catch (IOException ex) {
-            Logger.getLogger(DyrektorController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Dyrektor_rodzicController.class.getName()).log(Level.SEVERE, null, ex);
         }
         DyrektorController controller = fxmlLoader.getController();
         controller.wstawUseraDoZalogowanoJako(username);
@@ -85,7 +85,7 @@ public class Dyrektor_rodzicController implements Initializable {
             pane = fxmlLoader.load();
             rootPane.getChildren().setAll(pane);
         } catch (IOException ex) {
-            Logger.getLogger(DyrektorController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Dyrektor_rodzicController.class.getName()).log(Level.SEVERE, null, ex);
         }
         Dyrektor_rodzicController controller = fxmlLoader.getController();
         controller.wstawUseraDoZalogowanoJako(username);
@@ -104,7 +104,7 @@ public class Dyrektor_rodzicController implements Initializable {
             pane = fxmlLoader.load();
             rootPane.getChildren().setAll(pane);
         } catch (IOException ex) {
-            Logger.getLogger(DyrektorController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Dyrektor_rodzicController.class.getName()).log(Level.SEVERE, null, ex);
         }
         Dyrektor_uczenController controller = fxmlLoader.getController();
         controller.wstawUseraDoZalogowanoJako(username);

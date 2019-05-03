@@ -28,6 +28,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.TableColumn;
@@ -63,8 +64,11 @@ public class UczenOcenyController implements Initializable {
     private TableColumn<Integer, Number> kolumna6;
     @FXML
     private TableColumn<Integer, Number> kolumna7;
+    @FXML
+    private Label userid;
 
     private long pesel = 32222222221L;
+    private String username = "uzytkownik";
     public String[] nazwyKolumn;
     public ObservableList<TableColumn> kolumna;
     public Uczen uczen;
@@ -176,5 +180,14 @@ public class UczenOcenyController implements Initializable {
                 wstawianieOcenDoKolumn(kol, listaOcen);
             }
         }
+    }
+    
+    public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
+        this.username = username;
+        this.pesel = pesel;
+    }
+
+    public void wstawUseraDoZalogowanoJako(String username) {
+        userid.setText(username);
     }
 }

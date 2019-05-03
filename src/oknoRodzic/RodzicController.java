@@ -25,6 +25,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.TableColumn;
@@ -33,7 +34,7 @@ import utilities.*;
 
 public class RodzicController implements Initializable {
 
-    private final long PESEL = 32222222220L;
+    //private final long PESEL = 32222222220L;
     @FXML
     private AnchorPane rootPane;
     @FXML
@@ -60,8 +61,11 @@ public class RodzicController implements Initializable {
     private TableColumn<Integer, Number> kolumna6;
     @FXML
     private TableColumn<Integer, Number> kolumna7;
+    @FXML
+    private Label userid;
 
-    private final long pesel = 32222222221L;
+    private long pesel = 32222222221L;
+    private String username = "uzytkownik";
     public String[] nazwyKolumn;
     public ObservableList<TableColumn> kolumna;
     public Uczen uczen;
@@ -72,6 +76,7 @@ public class RodzicController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        wstawUseraDoZalogowanoJako(username);
         zmianaNazwKolumn();
         tabelaOcen.setColumnResizePolicy((param) -> true);
         Platform.runLater(() -> Utils.customResize(tabelaOcen));
@@ -135,7 +140,7 @@ public class RodzicController implements Initializable {
         while (it.hasNext()) {
             Ocena ocena = it.next();
             if (ocena.getPrzedmiot().getNazwaPrzedmiotu().equals(nazwaKolumny)) {
-                lista.add(ocena.getStopien().toString()+" - "+ocena.getRodzajOceny().getRodzajOceny());
+                lista.add(ocena.getStopien().toString() + " - " + ocena.getRodzajOceny().getRodzajOceny());
             } else {
 
             }
@@ -156,8 +161,8 @@ public class RodzicController implements Initializable {
 
     public void wpisywanieOcen() {
         //String login = LogowanieController.getPassword_field().getText();
-      //  String haslo = LogowanieController.getLogin_field().getText();
-       // pesel = HibernateUtil.uzyskajPeselZalogowany(login, haslo);
+        //  String haslo = LogowanieController.getLogin_field().getText();
+        // pesel = HibernateUtil.uzyskajPeselZalogowany(login, haslo);
         uczen = HibernateUtil.zwrocUcznia(pesel);
         Set oceny = uczen.getOcenas();
 
@@ -172,5 +177,14 @@ public class RodzicController implements Initializable {
                 wstawianieOcenDoKolumn(kol, listaOcen);
             }
         }
+    }
+
+    public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
+        this.username = username;
+        this.pesel = pesel;
+    }
+
+    public void wstawUseraDoZalogowanoJako(String username) {
+        userid.setText(username);
     }
 }

@@ -27,6 +27,8 @@ import javafx.stage.Stage;
 import mapping.*;
 import oknoDyrektor.DyrektorController;
 import oknoNauczyciel.NauczycielKlasyController;
+import oknoRodzic.RodzicController;
+import oknoUczen.UczenOcenyController;
 import utilities.*;
 import static utilities.HibernateUtil.uzyskajKtoZalogowany;
 import static utilities.HibernateUtil.uzyskajPeselZalogowany;
@@ -52,7 +54,6 @@ public class LogowanieController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //odpalanie();
 
     }
 
@@ -81,12 +82,10 @@ public class LogowanieController implements Initializable {
     }
 
     @FXML
-    private void logowanie(ActionEvent event) throws IOException {
-        
+    private void logowanie(ActionEvent event) throws IOException {   
         AnchorPane pane;
         String osoba = pobierzKtoJestZalogowany();
-        //odpalanie();
-        //testowaMetoda();
+
         if (osoba == null) {
             niepoprawne_dane.setText("Nie ma takiego użytkownika!");
         } else if (osoba.equals("n")) {
@@ -122,11 +121,38 @@ public class LogowanieController implements Initializable {
             //pane = FXMLLoader.load(getClass().getResource("/oknoDyrektor/Dyrektor.fxml"));
             
         } else if (osoba.equals("u")) {
-            pane = FXMLLoader.load(getClass().getResource("/oknoUczen/UczenOceny.fxml"));
-            rootPane.getChildren().setAll(pane);
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/oknoUczen/UczenOceny.fxml"));
+            try{
+               pane = fxmlLoader.load();
+               rootPane.getChildren().setAll(pane);
+            }
+            catch(IOException ex){
+               Logger.getLogger(LogowanieController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            UczenOcenyController controller = fxmlLoader.getController();
+            controller.wstawUseraDoZalogowanoJako(login_field.getText());
+            controller.przekazNazweUzytkownikaIPesel(login_field.getText(), pobierzPeselZalogowanego());
+            
+            //pane = FXMLLoader.load(getClass().getResource("/oknoUczen/UczenOceny.fxml"));
+            //rootPane.getChildren().setAll(pane);
         } else if (osoba.equals("r")) {
-            pane = FXMLLoader.load(getClass().getResource("/oknoRodzic/Rodzic.fxml"));
-            rootPane.getChildren().setAll(pane);
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/oknoRodzic/Rodzic.fxml"));
+            try{
+               pane = fxmlLoader.load();
+               rootPane.getChildren().setAll(pane);
+            }
+            catch(IOException ex){
+               Logger.getLogger(LogowanieController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            RodzicController controller = fxmlLoader.getController();
+            controller.wstawUseraDoZalogowanoJako(login_field.getText());
+            controller.przekazNazweUzytkownikaIPesel(login_field.getText(), pobierzPeselZalogowanego());
+            
+            
+            //pane = FXMLLoader.load(getClass().getResource("/oknoRodzic/Rodzic.fxml"));
+            //rootPane.getChildren().setAll(pane);
         } else {
             //pane = FXMLLoader.load(getClass().getResource("/okna/Logowanie.fxml"));
             System.out.println("coś nie pykło");
@@ -182,20 +208,6 @@ public class LogowanieController implements Initializable {
 //        this.username = login_field.getText();
 //        this.pesel = pobierzPeselZalogowanego();
 //    }
-    private void odpalanie(){
-                        try {
-                            testowaMetoda();
-                        } catch (IOException ex) {
-                            Logger.getLogger(LogowanieController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-    }
-    
-    private void testowaMetoda() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/oknoDyrektor/Dyrektor.fxml"));
-        DyrektorController controller = fxmlLoader.getController();
-        controller.wstawUseraDoZalogowanoJako(username);
-       
-    }
+
 
 }
