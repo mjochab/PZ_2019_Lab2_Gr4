@@ -85,7 +85,8 @@ public class LogowanieController implements Initializable {
     private void logowanie(ActionEvent event) throws IOException {   
         AnchorPane pane;
         String osoba = pobierzKtoJestZalogowany();
-
+        //System.out.println(pobierzPeselZalogowanego());
+        
         if (osoba == null) {
             niepoprawne_dane.setText("Nie ma takiego użytkownika!");
         } else if (osoba.equals("n")) {

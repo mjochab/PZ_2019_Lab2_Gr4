@@ -36,8 +36,7 @@ import mapping.*;
 import utilities.*;
 
 public class UczenOcenyController implements Initializable {
-
-    private final long PESEL = 32222222220L;
+ 
     @FXML
     private AnchorPane rootPane;
     @FXML
@@ -68,7 +67,7 @@ public class UczenOcenyController implements Initializable {
     private Label userid;
     
     private String username = "uzytkownik";
-    private long pesel = 32222222221L;
+    private Long pesel = 32222222221L;
     public String[] nazwyKolumn;
     public ObservableList<TableColumn> kolumna;
     public Uczen uczen;
@@ -79,6 +78,10 @@ public class UczenOcenyController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        System.out.println(pesel);
+        przekazNazweUzytkownikaIPesel(username,pesel);  
+        System.out.println(pesel);
+        wstawUseraDoZalogowanoJako(username);
         zmianaNazwKolumn();
         tabelaOcen.setColumnResizePolicy((param) -> true);
         Platform.runLater(() -> Utils.customResize(tabelaOcen));

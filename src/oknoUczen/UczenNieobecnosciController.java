@@ -69,13 +69,15 @@ public class UczenNieobecnosciController implements Initializable {
     private Label userid;
 
     private String username = "uzytkownik";
-    private long pesel = 32222222221L;
+    private Long pesel = 32222222221L;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        przekazNazweUzytkownikaIPesel(username,pesel);       
+        wstawUseraDoZalogowanoJako(username);
         wstawNieobecnosci();
         tabelaNieob.setColumnResizePolicy((param) -> true);
         Platform.runLater(() -> Utils.customResize(tabelaNieob));

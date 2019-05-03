@@ -73,7 +73,7 @@ public class UczenUwagiController implements Initializable {
     private Label userid;
 
     private String username = "uzytkownik";
-    private long pesel = 32222222221L;
+    private Long pesel = 32222222221L;
     private ObservableList<TableColumn> kolumna;
 
     /**
@@ -81,6 +81,8 @@ public class UczenUwagiController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        przekazNazweUzytkownikaIPesel(username,pesel);       
+        wstawUseraDoZalogowanoJako(username);
         wstawPlan();
 
     }

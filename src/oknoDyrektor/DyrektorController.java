@@ -50,7 +50,7 @@ public class DyrektorController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //przekazNazweUzytkownikaIPesel(username,pesel);       
+        przekazNazweUzytkownikaIPesel(username,pesel);       
         wstawUseraDoZalogowanoJako(username);
         Platform.runLater(() -> {
             //wstawUseraDoZalogowanoJako(username);
