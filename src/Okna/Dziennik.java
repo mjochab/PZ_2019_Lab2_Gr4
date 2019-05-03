@@ -14,9 +14,9 @@ import javafx.stage.Stage;
 
 public class Dziennik extends Application {
 
-       @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("Logowanie.fxml"));  
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("Logowanie.fxml"));
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
@@ -24,6 +24,6 @@ public class Dziennik extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }
 //

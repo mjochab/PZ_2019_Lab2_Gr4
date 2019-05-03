@@ -53,7 +53,7 @@ public class DyrektorController implements Initializable {
         //przekazNazweUzytkownikaIPesel(username,pesel);       
         wstawUseraDoZalogowanoJako(username);
         Platform.runLater(() -> {
-              //wstawUseraDoZalogowanoJako(username);
+            //wstawUseraDoZalogowanoJako(username);
         });
     }
 
@@ -77,7 +77,7 @@ public class DyrektorController implements Initializable {
         DyrektorController controller = fxmlLoader.getController();
         controller.wstawUseraDoZalogowanoJako(username);
         controller.przekazNazweUzytkownikaIPesel(username, pesel);
-        
+
         //AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor.fxml"));
         //rootPane.getChildren().setAll(pane);
     }
@@ -115,14 +115,13 @@ public class DyrektorController implements Initializable {
         Dyrektor_uczenController controller = fxmlLoader.getController();
         controller.wstawUseraDoZalogowanoJako(username);
         controller.przekazNazweUzytkownikaIPesel(username, pesel);
-        
+
         //AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor_uczen.fxml"));
         //rootPane.getChildren().setAll(pane);
     }
 
     public void wstawUseraDoZalogowanoJako(String username) {
         userid.setText(username);
-
     }
 
     public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
