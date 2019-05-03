@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -25,7 +26,7 @@ public class Dyrektor_rodzicController implements Initializable {
     /**
      * Initializes the controller class.
      */
-     @FXML
+    @FXML
     private Button uczenbtn;
     @FXML
     private Button nauczycielbtn;
@@ -35,28 +36,54 @@ public class Dyrektor_rodzicController implements Initializable {
     private Button wylogujbtn;
     @FXML
     private AnchorPane rootPane;
+    @FXML
+    private Label userid;
+
+    private Long pesel = null;
+    private String username = "rodzic";
+    private String password = " ";
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        wstawUseraDoZalogowanoJako(username);
         // TODO
-    }    
+    }
+
     @FXML
     private void logout(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("/Okna/Logowanie.fxml"));
-             rootPane.getChildren().setAll(pane);
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("/Okna/Logowanie.fxml"));
+        rootPane.getChildren().setAll(pane);
     }
+
     @FXML
     private void LoadNauczyciel(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor.fxml"));
-             rootPane.getChildren().setAll(pane);
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor.fxml"));
+        rootPane.getChildren().setAll(pane);
     }
+
     @FXML
     private void LoadRodzic(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor_rodzic.fxml"));
-             rootPane.getChildren().setAll(pane);
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor_rodzic.fxml"));
+        rootPane.getChildren().setAll(pane);
     }
+
     @FXML
     private void LoadUczen(ActionEvent event) throws IOException {
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor_uczen.fxml"));
-             rootPane.getChildren().setAll(pane);
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor_uczen.fxml"));
+        rootPane.getChildren().setAll(pane);
+    }
+
+    public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
+        this.username = username;
+        this.pesel = pesel;
+    }
+
+    public void przekazNazweUzytkownika(String username) {
+        this.username = username;
+    }
+
+    public void wstawUseraDoZalogowanoJako(String username) {
+        userid.setText(username);
+
     }
 }
