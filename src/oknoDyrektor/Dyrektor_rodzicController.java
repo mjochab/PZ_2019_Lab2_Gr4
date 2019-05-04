@@ -47,6 +47,7 @@ public class Dyrektor_rodzicController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        System.out.println(pesel);
         wstawUseraDoZalogowanoJako(username);
         // TODO
     }

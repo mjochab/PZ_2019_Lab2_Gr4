@@ -19,6 +19,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import static utilities.HibernateUtil.getTest;
+import static utilities.HibernateUtil.uzyskajPesel;
 
 /**
  * FXML Controller class
@@ -50,9 +52,14 @@ public class DyrektorController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        przekazNazweUzytkownikaIPesel(username,pesel);       
+        //przekazNazweUzytkownikaIPesel(username,pesel);  
+        //wstawPesel(pesel);
+        System.out.println(getTest());
+        
         wstawUseraDoZalogowanoJako(username);
         Platform.runLater(() -> {
+            System.out.println(getPesel());
+            //pesel = getPesel();
             //wstawUseraDoZalogowanoJako(username);
         });
     }
@@ -123,14 +130,23 @@ public class DyrektorController implements Initializable {
     public void wstawUseraDoZalogowanoJako(String username) {
         userid.setText(username);
     }
-
-    public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
+    
+    public void wstawPesel(Long nr_pesel){
+        //tajne.setText(nr_pesel.toString());
+    }
+    
+    public void przekazNazweUzytkownikaIPesel(String username, Long nr_pesel) {
         this.username = username;
-        this.pesel = pesel;
+       pesel = nr_pesel;
     }
 
     public void przekazNazweUzytkownika(String username) {
         this.username = username;
+    }
+    
+    private Long getPesel(){
+        String login = userid.getText();
+        return uzyskajPesel(login);  
     }
 
 }

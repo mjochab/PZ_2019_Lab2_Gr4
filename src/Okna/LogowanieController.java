@@ -30,6 +30,8 @@ import oknoNauczyciel.NauczycielKlasyController;
 import oknoRodzic.RodzicController;
 import oknoUczen.UczenOcenyController;
 import utilities.*;
+import static utilities.HibernateUtil.getTest;
+import static utilities.HibernateUtil.setTest;
 import static utilities.HibernateUtil.uzyskajKtoZalogowany;
 import static utilities.HibernateUtil.uzyskajPeselZalogowany;
 
@@ -48,7 +50,6 @@ public class LogowanieController implements Initializable {
     @FXML
     private Label userid;
 
-    private Long pesel = null;
     private String username = "uzytkownik";
     private String password = " ";
 
@@ -82,7 +83,10 @@ public class LogowanieController implements Initializable {
     }
 
     @FXML
-    private void logowanie(ActionEvent event) throws IOException {   
+    private void logowanie(ActionEvent event) throws IOException {
+        String zmiennaX = getTest();
+        System.out.println(zmiennaX);
+        setTest("xyz");
         AnchorPane pane;
         String osoba = pobierzKtoJestZalogowany();
         //System.out.println(pobierzPeselZalogowanego());
@@ -117,6 +121,7 @@ public class LogowanieController implements Initializable {
             }
             DyrektorController controller = fxmlLoader.getController();
             controller.wstawUseraDoZalogowanoJako(login_field.getText());
+            controller.wstawPesel(pobierzPeselZalogowanego());
             controller.przekazNazweUzytkownikaIPesel(login_field.getText(), pobierzPeselZalogowanego());
             
             //pane = FXMLLoader.load(getClass().getResource("/oknoDyrektor/Dyrektor.fxml"));
@@ -190,6 +195,10 @@ public class LogowanieController implements Initializable {
             nr_pesel = uzyskajPeselZalogowany(login, haslo);
         }
         return nr_pesel;
+    }
+    
+    public void getZalogowanego(){
+        login_field.getText(); 
     }
 
 //    private void wstawUseraDoZalogowanoJako(String username) {

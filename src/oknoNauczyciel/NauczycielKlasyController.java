@@ -60,6 +60,7 @@ public class NauczycielKlasyController implements Initializable {
   public void initialize(URL url, ResourceBundle rb) {
     wybierzKlaseButtony();
     wstawUseraDoZalogowanoJako(username);
+     System.out.println(pesel);
     // TODO
   }
 

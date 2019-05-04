@@ -34,6 +34,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.TableColumn;
 import mapping.*;
 import utilities.*;
+import static utilities.HibernateUtil.uzyskajPesel;
 
 public class UczenOcenyController implements Initializable {
  
@@ -78,13 +79,15 @@ public class UczenOcenyController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println(pesel);
         przekazNazweUzytkownikaIPesel(username,pesel);  
-        System.out.println(pesel);
         wstawUseraDoZalogowanoJako(username);
         zmianaNazwKolumn();
         tabelaOcen.setColumnResizePolicy((param) -> true);
-        Platform.runLater(() -> Utils.customResize(tabelaOcen));
+        Platform.runLater(() -> {
+            Utils.customResize(tabelaOcen);
+            //System.out.println(getPesel());
+            pesel = getPesel();
+        });
         wpisywanieOcen();
 
     }
@@ -234,5 +237,9 @@ public class UczenOcenyController implements Initializable {
 
     public void wstawUseraDoZalogowanoJako(String username) {
         userid.setText(username);
+    }
+    private Long getPesel(){
+        String login = userid.getText();
+        return uzyskajPesel(login);  
     }
 }
