@@ -32,6 +32,15 @@ public class Rodzic  implements java.io.Serializable {
        this.nazwiskoMatki = nazwiskoMatki;
     }
    
+     public Rodzic(long pesel, Uczen uczen, String imieOjca, String nazwiskoOjca, String imieMatki, String nazwiskoMatki) {
+       this.pesel = pesel;
+       this.uczen = uczen;
+       this.imieOjca = imieOjca;
+       this.nazwiskoOjca = nazwiskoOjca;
+       this.imieMatki = imieMatki;
+       this.nazwiskoMatki = nazwiskoMatki;
+    }
+    
     public long getPesel() {
         return this.pesel;
     }

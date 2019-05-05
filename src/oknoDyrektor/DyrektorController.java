@@ -8,19 +8,25 @@ package oknoDyrektor;
 import Okna.LogowanieController;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import static utilities.HibernateUtil.podajPeseleNauczycielaBezDanych;
 import static utilities.HibernateUtil.uzyskajPesel;
+import static utilities.HibernateUtil.wstawNauczyciela;
 
 /**
  * FXML Controller class
@@ -43,13 +49,17 @@ public class DyrektorController implements Initializable {
     private Label userid;
     @FXML
     private TextField imie_n;
+    @FXML
+    private TextField nazwisko_n;
+    @FXML
+    private ChoiceBox pesel_n;
 
     private String username = "xd";
     private Long pesel = null;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        ustawWartosciBox();
         wstawUseraDoZalogowanoJako(username);
         Platform.runLater(() -> {
             System.out.println(getPesel());
@@ -122,23 +132,43 @@ public class DyrektorController implements Initializable {
     public void wstawUseraDoZalogowanoJako(String username) {
         userid.setText(username);
     }
-    
-    public void wstawPesel(Long nr_pesel){
+
+    public void wstawPesel(Long nr_pesel) {
         //tajne.setText(nr_pesel.toString());
     }
-    
+
     public void przekazNazweUzytkownikaIPesel(String username, Long nr_pesel) {
         this.username = username;
-       pesel = nr_pesel;
+        pesel = nr_pesel;
     }
 
     public void przekazNazweUzytkownika(String username) {
         this.username = username;
     }
-    
-    private Long getPesel(){
+
+    private Long getPesel() {
         String login = userid.getText();
-        return uzyskajPesel(login);  
+        return uzyskajPesel(login);
     }
+    // wyłapać null jeśli brak rekordów
+    private void ustawWartosciBox() {
+        //ChoiceBox cb = new ChoiceBox();
+        List<Long> peselki = podajPeseleNauczycielaBezDanych();
+        ObservableList<Long> lista = FXCollections.observableArrayList(peselki);
+        pesel_n.setItems(lista);
+        pesel_n.setValue(peselki.get(0));
+        //System.out.println(kto_box.getSelectionModel().getSelectedItem().toString());
+    }
+
+    @FXML
+    private void wstawNowegoNauczyciela() {
+        System.out.println(pesel_n.getSelectionModel().getSelectedItem().toString() + " " + imie_n.getText() + " " + nazwisko_n.getText());
+        //String kto_wpisany = kto_box.getSelectionModel().getSelectedItem().toString();
+        //Long peselek = Long.parseLong(pesel_uz.getText());
+        //wstawNauczyciela(peselek,login_uz.getText(),haslo_uz.getText(),kto_box.getSelectionModel().getSelectedItem().toString());
+        Long peselN = Long.parseLong(pesel_n.getSelectionModel().getSelectedItem().toString());
+        wstawNauczyciela(peselN,imie_n.getText(),nazwisko_n.getText());
+    }
+    
 
 }

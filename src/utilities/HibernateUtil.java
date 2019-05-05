@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -15,6 +16,7 @@ import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import mapping.*;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -24,9 +26,11 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 
 public class HibernateUtil {
+
     private static final SessionFactory sessionFactory = buildSessionFactory();
     private static final EntityManager entityManager = sessionFactory.createEntityManager();
     private static final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -491,10 +495,20 @@ public class HibernateUtil {
 
         return obecnosc;
     }
+
+     public static Autoryzacja zwrocAutoryzacje(Long pesel) {
+        CriteriaQuery<Autoryzacja> criteria = builder.createQuery(Autoryzacja.class);
+        Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get("pesel"), pesel));
+        Autoryzacja aut = entityManager.createQuery(criteria).getSingleResult();
+
+        return aut;
+    }
     
-    public static void wstawAutoryzacje(long pesel, String login, String haslo, String kto){
-        Autoryzacja nowa_os = new Autoryzacja(pesel,login,haslo,kto);
-          Session session = sessionFactory.openSession();
+    public static void wstawAutoryzacje(long pesel, String login, String haslo, String kto) {
+        Autoryzacja nowa_os = new Autoryzacja(pesel, login, haslo, kto);
+        Session session = sessionFactory.openSession();
 
         Transaction tx = null;
         Integer stId = null;
@@ -510,7 +524,186 @@ public class HibernateUtil {
         } finally {
             session.close();
         }
+    }
+
+    public static void wstawNauczyciela(long pesel, String imie, String nazwisko) {
+        Autoryzacja aut = zwrocAutoryzacje(pesel);
+        Nauczyciel nowa_os = new Nauczyciel(pesel, imie, nazwisko);
+        nowa_os.setAutoryzacja(aut);
+        Session session = sessionFactory.openSession();
+
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+            session.save(nowa_os);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+    }
+
+    public static void wstawRodzicaIUcznia(long pesel_u, long pesel_r, String imie_u, String nazwisko_u,
+            String imie_o, String nazwisko_o, String imie_m, String nazwisko_m, Klasa klasa) {
+        Uczen nowy_ucz = new Uczen(pesel_u, imie_u, nazwisko_u, klasa);
+        Rodzic nowy_rodzic = new Rodzic(pesel_r, nowy_ucz, imie_o, nazwisko_o, imie_m, nazwisko_m);
+        Session session = sessionFactory.openSession();
+
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+            session.save(nowy_ucz);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+        Transaction tx2 = null;
+        Integer stId2 = null;
+        try {
+            tx2 = session.beginTransaction();
+            session.save(nowy_rodzic);
+            tx2.commit();
+        } catch (HibernateException ex) {
+            if (tx2 != null) {
+                tx2.rollback();
+            }
+        } finally {
+            session.close();
+        }
         
     }
-    
+
+    public static List<Klasa> pobierzKlasy() {
+        CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
+        Root root = criteria.from(Klasa.class);
+        criteria.select(root.get("nazwa_klasy"));
+        List<Klasa> klasy = entityManager.createQuery(criteria).getResultList();
+
+        return klasy;
+
+    }
+
+    public static List<Long> pobierzListePeseli() {
+        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+        Root root = criteria.from(Autoryzacja.class);
+        criteria.select(root.get("pesel"));
+        List<Long> pesele = entityManager.createQuery(criteria).getResultList();
+
+        return pesele;
+    }
+
+    public static List<Long> podajPeseleNauczycielaBezDanych() {
+        List<Long> peselki = new ArrayList<>();
+
+        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+        Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
+        criteria.select(root.get("pesel"));
+        criteria.where(builder.equal(root.get("kto"), "n"));
+        List<Long> pesele_naucz_aut = entityManager.createQuery(criteria).getResultList();
+
+        CriteriaQuery<Long> criteria2 = builder.createQuery(Long.class);
+        Root<Nauczyciel> root2 = criteria2.from(Nauczyciel.class);
+        criteria2.select(root2.get("pesel"));
+        List<Long> pesele_naucz = entityManager.createQuery(criteria2).getResultList();
+
+        List<Long> pelna_lista = new ArrayList<>();
+        pelna_lista.addAll(pesele_naucz);
+        pelna_lista.addAll(pesele_naucz_aut);
+
+        for (int i = 0; i < pelna_lista.size(); i++) {
+            boolean uniq = true;
+            for (int j = 0; j < pelna_lista.size(); j++) {
+                if (i != j) {
+                    if (Objects.equals(pelna_lista.get(i), pelna_lista.get(j))) {
+                        uniq = false;
+                    }
+                }
+            }
+            if (uniq) {
+                //System.out.println(pelna_lista.get(i));
+                peselki.add(pelna_lista.get(i));
+            }
+        }
+        return peselki;
+    }
+
+    public static List<Long> podajPeseleUczniaBezDanych() {
+        List<Long> peselki = new ArrayList<>();
+
+        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+        Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
+        criteria.select(root.get("pesel"));
+        criteria.where(builder.equal(root.get("kto"), "u"));
+        List<Long> pesele_ucz_aut = entityManager.createQuery(criteria).getResultList();
+
+        CriteriaQuery<Long> criteria2 = builder.createQuery(Long.class);
+        Root<Uczen> root2 = criteria2.from(Uczen.class);
+        criteria2.select(root2.get("pesel"));
+        List<Long> pesele_ucz = entityManager.createQuery(criteria2).getResultList();
+
+        List<Long> pelna_lista = new ArrayList<>();
+        pelna_lista.addAll(pesele_ucz);
+        pelna_lista.addAll(pesele_ucz_aut);
+
+        for (int i = 0; i < pelna_lista.size(); i++) {
+            boolean uniq = true;
+            for (int j = 0; j < pelna_lista.size(); j++) {
+                if (i != j) {
+                    if (Objects.equals(pelna_lista.get(i), pelna_lista.get(j))) {
+                        uniq = false;
+                    }
+                }
+            }
+            if (uniq) {
+                //System.out.println(pelna_lista.get(i));
+                peselki.add(pelna_lista.get(i));
+            }
+        }
+        return peselki;
+    }
+
+    public static List<Long> podajPeseleRodzicaBezDanych() {
+        List<Long> peselki = new ArrayList<>();
+
+        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+        Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
+        criteria.select(root.get("pesel"));
+        criteria.where(builder.equal(root.get("kto"), "r"));
+        List<Long> pesele_rodz_aut = entityManager.createQuery(criteria).getResultList();
+
+        CriteriaQuery<Long> criteria2 = builder.createQuery(Long.class);
+        Root<Rodzic> root2 = criteria2.from(Rodzic.class);
+        criteria2.select(root2.get("pesel"));
+        List<Long> pesele_rodz = entityManager.createQuery(criteria2).getResultList();
+
+        List<Long> pelna_lista = new ArrayList<>();
+        pelna_lista.addAll(pesele_rodz);
+        pelna_lista.addAll(pesele_rodz_aut);
+
+        for (int i = 0; i < pelna_lista.size(); i++) {
+            boolean uniq = true;
+            for (int j = 0; j < pelna_lista.size(); j++) {
+                if (i != j) {
+                    if (Objects.equals(pelna_lista.get(i), pelna_lista.get(j))) {
+                        uniq = false;
+                    }
+                }
+            }
+            if (uniq) {
+                //System.out.println(pelna_lista.get(i));
+                peselki.add(pelna_lista.get(i));
+            }
+        }
+        return peselki;
+    }
+
 }

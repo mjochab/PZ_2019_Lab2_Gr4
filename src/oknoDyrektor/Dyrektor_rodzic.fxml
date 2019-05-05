@@ -18,7 +18,7 @@
                 <Label layoutX="66.0" layoutY="66.0" text="Imię ucznia" />
                 <Label layoutX="227.0" layoutY="66.0" text="Nazwisko ucznia" />
                 <Label layoutX="19.0" layoutY="6.0" text="Dodawanie" />
-                <Button fx:id="dodajbtn" layoutX="22.0" layoutY="147.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Dodaj " />
+                <Button fx:id="dodajbtn" layoutX="22.0" layoutY="147.0" mnemonicParsing="false" onMouseClicked="#wstawNowegoUczniaIRodzica" prefHeight="25.0" prefWidth="149.0" text="Dodaj " />
                 <ChoiceBox fx:id="pesel_u" layoutX="358.0" layoutY="41.0" prefWidth="150.0" />
                 <Label layoutX="401.0" layoutY="66.0" text="Pesel ucznia" />
                 <Separator layoutX="10.0" layoutY="182.0" prefHeight="4.0" prefWidth="923.0" />

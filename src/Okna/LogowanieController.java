@@ -106,7 +106,7 @@ public class LogowanieController implements Initializable {
             //rootPane.getChildren().setAll(pane);
         } else if (osoba.equals("d")) {
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/oknoDyrektor/Dyrektor.fxml"));
+            fxmlLoader.setLocation(getClass().getResource("/oknoDyrektor/Dyrektor_Autoryzacja.fxml"));
             try{
                pane = fxmlLoader.load();
                rootPane.getChildren().setAll(pane);

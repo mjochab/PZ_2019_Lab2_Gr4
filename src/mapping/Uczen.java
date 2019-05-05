@@ -38,6 +38,13 @@ public class Uczen  implements java.io.Serializable {
        this.obecnoscs = obecnoscs;
        this.skladKlasies = skladKlasies;
     }
+    
+     public Uczen(long pesel, String imie, String nazwisko, Klasa klasa) {
+       this.klasa = klasa;
+       this.imie = imie;
+       this.nazwisko = nazwisko;
+       this.pesel = pesel;
+    }
    
     public long getPesel() {
         return this.pesel;

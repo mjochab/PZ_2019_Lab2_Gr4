@@ -21,7 +21,13 @@ public class Nauczyciel  implements java.io.Serializable {
 
     public Nauczyciel() {
     }
-	
+    
+    public Nauczyciel(long pesel, String imie, String nazwisko) {
+       this.imie = imie;
+       this.nazwisko = nazwisko;
+       this.pesel = pesel;
+    }
+    
     public Nauczyciel(Autoryzacja autoryzacja) {
         this.autoryzacja = autoryzacja;
     }
