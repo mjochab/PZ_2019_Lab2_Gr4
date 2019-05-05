@@ -30,8 +30,6 @@ import oknoNauczyciel.NauczycielKlasyController;
 import oknoRodzic.RodzicController;
 import oknoUczen.UczenOcenyController;
 import utilities.*;
-import static utilities.HibernateUtil.getTest;
-import static utilities.HibernateUtil.setTest;
 import static utilities.HibernateUtil.uzyskajKtoZalogowany;
 import static utilities.HibernateUtil.uzyskajPeselZalogowany;
 
@@ -84,9 +82,6 @@ public class LogowanieController implements Initializable {
 
     @FXML
     private void logowanie(ActionEvent event) throws IOException {
-        String zmiennaX = getTest();
-        System.out.println(zmiennaX);
-        setTest("xyz");
         AnchorPane pane;
         String osoba = pobierzKtoJestZalogowany();
         //System.out.println(pobierzPeselZalogowanego());

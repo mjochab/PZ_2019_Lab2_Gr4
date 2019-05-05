@@ -27,8 +27,6 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 
 public class HibernateUtil {
-    private static String testx="ala";
-
     private static final SessionFactory sessionFactory = buildSessionFactory();
     private static final EntityManager entityManager = sessionFactory.createEntityManager();
     private static final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -492,12 +490,6 @@ public class HibernateUtil {
         Obecnosc obecnosc = entityManager.createQuery(criteria).getSingleResult();
 
         return obecnosc;
-    }
-    public static void setTest(String zmiana){
-        final String testx = zmiana;
-    }
-    public static String getTest(){
-        return testx;
     }
     
 }

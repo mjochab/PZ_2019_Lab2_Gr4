@@ -16,6 +16,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -23,13 +25,12 @@ import javafx.scene.layout.AnchorPane;
  *
  * @author Kasia
  */
-public class Dyrektor_uczenController implements Initializable {
+public class Dyrektor_AutoryzacjaController implements Initializable {
 
     /**
      * Initializes the controller class.
      */
-    @FXML
-    private Button uczenbtn;
+
     @FXML
     private Button nauczycielbtn;
     @FXML
@@ -40,7 +41,15 @@ public class Dyrektor_uczenController implements Initializable {
     private AnchorPane rootPane;
     @FXML
     private Label userid;
-
+    @FXML
+    private TextField login_uz;
+    @FXML
+    private PasswordField haslo_uz;
+    @FXML
+    private TextField pesel_uz;
+    @FXML
+    private Button dodajbtn;
+        
     private Long pesel = null;
     private String username = "uczen";
     private String password = " ";
@@ -66,7 +75,7 @@ public class Dyrektor_uczenController implements Initializable {
             pane = fxmlLoader.load();
             rootPane.getChildren().setAll(pane);
         } catch (IOException ex) {
-            Logger.getLogger(Dyrektor_uczenController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Dyrektor_AutoryzacjaController.class.getName()).log(Level.SEVERE, null, ex);
         }
         DyrektorController controller = fxmlLoader.getController();
         controller.wstawUseraDoZalogowanoJako(username);
@@ -85,7 +94,7 @@ public class Dyrektor_uczenController implements Initializable {
             pane = fxmlLoader.load();
             rootPane.getChildren().setAll(pane);
         } catch (IOException ex) {
-            Logger.getLogger(Dyrektor_uczenController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Dyrektor_AutoryzacjaController.class.getName()).log(Level.SEVERE, null, ex);
         }
         Dyrektor_rodzicController controller = fxmlLoader.getController();
         controller.wstawUseraDoZalogowanoJako(username);
@@ -99,14 +108,14 @@ public class Dyrektor_uczenController implements Initializable {
     private void LoadUczen(ActionEvent event) throws IOException {
         AnchorPane pane;
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("Dyrektor_uczen.fxml"));
+        fxmlLoader.setLocation(getClass().getResource("Dyrektor_Autoryzacja.fxml"));
         try {
             pane = fxmlLoader.load();
             rootPane.getChildren().setAll(pane);
         } catch (IOException ex) {
-            Logger.getLogger(Dyrektor_uczenController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Dyrektor_AutoryzacjaController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Dyrektor_uczenController controller = fxmlLoader.getController();
+        Dyrektor_AutoryzacjaController controller = fxmlLoader.getController();
         controller.wstawUseraDoZalogowanoJako(username);
         controller.przekazNazweUzytkownikaIPesel(username, pesel);
 

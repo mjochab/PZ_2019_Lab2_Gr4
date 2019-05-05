@@ -100,14 +100,14 @@ public class Dyrektor_rodzicController implements Initializable {
     private void LoadUczen(ActionEvent event) throws IOException {
         AnchorPane pane;
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("Dyrektor_uczen.fxml"));
+        fxmlLoader.setLocation(getClass().getResource("Dyrektor_Autoryzacja.fxml"));
         try {
             pane = fxmlLoader.load();
             rootPane.getChildren().setAll(pane);
         } catch (IOException ex) {
             Logger.getLogger(Dyrektor_rodzicController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Dyrektor_uczenController controller = fxmlLoader.getController();
+        Dyrektor_AutoryzacjaController controller = fxmlLoader.getController();
         controller.wstawUseraDoZalogowanoJako(username);
         controller.przekazNazweUzytkownikaIPesel(username, pesel);
 

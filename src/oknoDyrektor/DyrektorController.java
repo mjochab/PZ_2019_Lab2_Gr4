@@ -18,8 +18,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import static utilities.HibernateUtil.getTest;
 import static utilities.HibernateUtil.uzyskajPesel;
 
 /**
@@ -30,7 +30,7 @@ import static utilities.HibernateUtil.uzyskajPesel;
 public class DyrektorController implements Initializable {
 
     @FXML
-    private Button uczenbtn;
+    private Button autoryzacjabtn;
     @FXML
     private Button nauczycielbtn;
     @FXML
@@ -41,21 +41,15 @@ public class DyrektorController implements Initializable {
     private AnchorPane rootPane;
     @FXML
     private Label userid;
+    @FXML
+    private TextField imie_n;
 
     private String username = "xd";
-    //private String username=przekazNazweUzytkownikaIPesel(username,pesel);
-
     private Long pesel = null;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //przekazNazweUzytkownikaIPesel(username,pesel);  
-        //wstawPesel(pesel);
-        System.out.println(getTest());
-        
+
         wstawUseraDoZalogowanoJako(username);
         Platform.runLater(() -> {
             System.out.println(getPesel());
@@ -112,16 +106,14 @@ public class DyrektorController implements Initializable {
     private void LoadUczen(ActionEvent event) throws IOException {
         AnchorPane pane;
         FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("Dyrektor_uczen.fxml"));
+        fxmlLoader.setLocation(getClass().getResource("Dyrektor_Autoryzacja.fxml"));
         try {
             pane = fxmlLoader.load();
             rootPane.getChildren().setAll(pane);
         } catch (IOException ex) {
             Logger.getLogger(DyrektorController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Dyrektor_uczenController controller = fxmlLoader.getController();
-        controller.wstawUseraDoZalogowanoJako(username);
-        controller.przekazNazweUzytkownikaIPesel(username, pesel);
+        Dyrektor_AutoryzacjaController controller = fxmlLoader.getController();
 
         //AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor_uczen.fxml"));
         //rootPane.getChildren().setAll(pane);
