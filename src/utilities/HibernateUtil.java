@@ -492,4 +492,25 @@ public class HibernateUtil {
         return obecnosc;
     }
     
+    public static void wstawAutoryzacje(long pesel, String login, String haslo, String kto){
+        Autoryzacja nowa_os = new Autoryzacja(pesel,login,haslo,kto);
+          Session session = sessionFactory.openSession();
+
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+
+            session.save(nowa_os);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+        
+    }
+    
 }

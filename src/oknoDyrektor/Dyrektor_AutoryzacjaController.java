@@ -7,18 +7,27 @@ package oknoDyrektor;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import static utilities.HibernateUtil.*;
 
 /**
  * FXML Controller class
@@ -30,7 +39,6 @@ public class Dyrektor_AutoryzacjaController implements Initializable {
     /**
      * Initializes the controller class.
      */
-
     @FXML
     private Button nauczycielbtn;
     @FXML
@@ -49,7 +57,9 @@ public class Dyrektor_AutoryzacjaController implements Initializable {
     private TextField pesel_uz;
     @FXML
     private Button dodajbtn;
-        
+    @FXML
+    private ChoiceBox kto_box;
+
     private Long pesel = null;
     private String username = "uczen";
     private String password = " ";
@@ -57,6 +67,10 @@ public class Dyrektor_AutoryzacjaController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         wstawUseraDoZalogowanoJako(username);
+        ustawWartosciBox();
+        Platform.runLater(() -> {
+            //wstawNowaAutoryzacje();
+        });
         // TODO
     }
 
@@ -136,4 +150,22 @@ public class Dyrektor_AutoryzacjaController implements Initializable {
         userid.setText(username);
 
     }
+
+    private void ustawWartosciBox() {
+        //ChoiceBox cb = new ChoiceBox();
+        ObservableList<String> kto_list = FXCollections.observableArrayList("n", "u", "r");
+        kto_box.setItems(kto_list);
+        kto_box.setValue(kto_list.get(0));
+        //System.out.println(kto_box.getSelectionModel().getSelectedItem().toString());
+    }
+    
+    @FXML
+    private void wstawNowaAutoryzacje() {
+        System.out.println(pesel_uz.getText()+" "+login_uz.getText()+" "+haslo_uz.getText()+" "
+                + kto_box.getSelectionModel().getSelectedItem().toString());
+        //String kto_wpisany = kto_box.getSelectionModel().getSelectedItem().toString();
+        Long peselek = Long.parseLong(pesel_uz.getText());
+        wstawAutoryzacje(peselek,login_uz.getText(),haslo_uz.getText(),kto_box.getSelectionModel().getSelectedItem().toString());
+    }
+
 }
