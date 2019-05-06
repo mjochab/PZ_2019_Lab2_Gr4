@@ -5,6 +5,7 @@
  */
 package oknoNauczyciel;
 
+import Okna.LogowanieController;
 import com.sun.javafx.logging.PlatformLogger.Level;
 import java.io.IOException;
 import java.net.URL;
@@ -99,12 +100,13 @@ public class KlasaController implements Initializable {
   private Button przejdzDoWychowankow;
   @FXML
   private Button przejdzDoObecnosci;
+  @FXML
+  private Button wyloguj;
 
   private static String klasa = null;
   private String username = null;
   private Long pesel = null;
   List<Uczen> uczniowie = new ArrayList<>();
-
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
@@ -119,6 +121,11 @@ public class KlasaController implements Initializable {
       przejdzDoObecnosci.addEventHandler(MouseEvent.MOUSE_CLICKED, stworzTabeleObecnosci());
       przejdzDoOcen.addEventHandler(MouseEvent.MOUSE_CLICKED, stworzTabeleOceny());
       przejdzDoWychowankow.addEventHandler(MouseEvent.MOUSE_CLICKED, przejdzDoWychowankowHandler());
+      wyloguj.setOnAction((ActionEvent event) -> {
+
+        poprosze o metode do wylogowywania
+      });
+
       gagatek.setVisible(false);
     });
 
@@ -381,7 +388,7 @@ public class KlasaController implements Initializable {
 
     TextField ocenaPole = new TextField();
     ocenaPole.setMaxWidth(25);
-    
+
     // walidacja
     ocenaPole.focusedProperty().addListener((arg0, oldValue, newValue) -> {
       if (!newValue) { //when focus lost
