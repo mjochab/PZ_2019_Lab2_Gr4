@@ -547,10 +547,34 @@ public class HibernateUtil {
         }
     }
 
-    public static void wstawRodzicaIUcznia(long pesel_u, long pesel_r, String imie_u, String nazwisko_u,
-            String imie_o, String nazwisko_o, String imie_m, String nazwisko_m, Klasa klasa) {
+    public static void wstawRodzica(long pesel_r, long pesel_uczen, String imie_o, String nazwisko_o, String imie_m, String nazwisko_m) {
+        Autoryzacja aut = zwrocAutoryzacje(pesel_r);
+        Autoryzacja aut_ucz = zwrocAutoryzacje(pesel_uczen);
+        Uczen uczniak = aut_ucz.getUczen();
+        
+        Rodzic nowy_rodzic = new Rodzic(pesel_r, uczniak, imie_o, nazwisko_o, imie_m, nazwisko_m);
+        nowy_rodzic.setAutoryzacja(aut);
+        Session session = sessionFactory.openSession();
+
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+            session.save(nowy_rodzic);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }   
+    }
+    
+     public static void wstawUcznia(long pesel_u, String imie_u, String nazwisko_u, Klasa klasa) {
+        Autoryzacja aut = zwrocAutoryzacje(pesel_u);
         Uczen nowy_ucz = new Uczen(pesel_u, imie_u, nazwisko_u, klasa);
-        Rodzic nowy_rodzic = new Rodzic(pesel_r, nowy_ucz, imie_o, nazwisko_o, imie_m, nazwisko_m);
+        nowy_ucz.setAutoryzacja(aut);
         Session session = sessionFactory.openSession();
 
         Transaction tx = null;
@@ -565,22 +589,9 @@ public class HibernateUtil {
             }
         } finally {
             session.close();
-        }
-        Transaction tx2 = null;
-        Integer stId2 = null;
-        try {
-            tx2 = session.beginTransaction();
-            session.save(nowy_rodzic);
-            tx2.commit();
-        } catch (HibernateException ex) {
-            if (tx2 != null) {
-                tx2.rollback();
-            }
-        } finally {
-            session.close();
-        }
-        
+        }   
     }
+    
 
     public static List<Klasa> pobierzKlasy() {
         CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
@@ -688,6 +699,50 @@ public class HibernateUtil {
         List<Long> pelna_lista = new ArrayList<>();
         pelna_lista.addAll(pesele_rodz);
         pelna_lista.addAll(pesele_rodz_aut);
+
+        for (int i = 0; i < pelna_lista.size(); i++) {
+            boolean uniq = true;
+            for (int j = 0; j < pelna_lista.size(); j++) {
+                if (i != j) {
+                    if (Objects.equals(pelna_lista.get(i), pelna_lista.get(j))) {
+                        uniq = false;
+                    }
+                }
+            }
+            if (uniq) {
+                //System.out.println(pelna_lista.get(i));
+                peselki.add(pelna_lista.get(i));
+            }
+        }
+        return peselki;
+    }
+    
+    public static List<Long> pobierzListePeseliUczniow(){
+        CriteriaQuery<Uczen> criteria = builder.createQuery(Uczen.class);
+        Root root = criteria.from(Rodzic.class);
+        criteria.select(root.get("uczen"));
+        List<Uczen> pesele_rodz_dz = entityManager.createQuery(criteria).getResultList();
+        
+        List<Long> peselki = new ArrayList<>();
+            for(int i =0; i<pesele_rodz_dz.size();i++){
+                peselki.add(pesele_rodz_dz.get(i).getPesel());
+            }
+        return peselki;
+    }
+    
+    public static List<Long> podajPeseleUczniaBezRodzica() {
+        List<Long> peselki = new ArrayList<>();
+
+        List<Long> pesele_rodz_dz = pobierzListePeseliUczniow();
+        
+        CriteriaQuery<Long> criteria2 = builder.createQuery(Long.class);
+        Root<Uczen> root2 = criteria2.from(Uczen.class);
+        criteria2.select(root2.get("pesel"));
+        List<Long> pesele_ucz = entityManager.createQuery(criteria2).getResultList();
+
+        List<Long> pelna_lista = new ArrayList<>();
+        pelna_lista.addAll(pesele_ucz);
+        pelna_lista.addAll(pesele_rodz_dz);
 
         for (int i = 0; i < pelna_lista.size(); i++) {
             boolean uniq = true;

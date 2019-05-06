@@ -34,9 +34,11 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import static utilities.HibernateUtil.pobierzKlasy;
+import static utilities.HibernateUtil.pobierzListePeseliUczniow;
 import static utilities.HibernateUtil.podajPeseleNauczycielaBezDanych;
 import static utilities.HibernateUtil.podajPeseleRodzicaBezDanych;
 import static utilities.HibernateUtil.podajPeseleUczniaBezDanych;
+import static utilities.HibernateUtil.podajPeseleUczniaBezRodzica;
 import static utilities.HibernateUtil.zwrocKlasyKtorychUcze;
 import static utilities.HibernateUtil.zwrocKtoZalogowany;
 
@@ -154,7 +156,8 @@ public class HibernateTest {
 //    List<Uczen> uczniowie = new ArrayList<>();
 //    uczniowie = zwrocUczniowZklasy("1a");
 //    zwrocObecnosciZprzedmiotu(przedmiot, uczniowie);
-  
+        System.out.println(podajPeseleUczniaBezRodzica().size());
+       //System.out.println(pobierzListePeseliUczniow().size());
 
     
   }
