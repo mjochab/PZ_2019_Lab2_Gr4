@@ -5,12 +5,15 @@
  */
 package oknoNauczyciel;
 
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -46,6 +49,7 @@ import static utilities.HibernateUtil.edytujOcene;
 import static utilities.HibernateUtil.zwrocKlaseKtoraWychowuje;
 import static utilities.HibernateUtil.zwrocNieobecnosciUcznia;
 import static utilities.HibernateUtil.zwrocUczniowZklasy;
+import utilities.Utils;
 
 /**
  * FXML Controller class
@@ -196,10 +200,10 @@ public class WychowawcaController implements Initializable {
 
     gagatekPane.getChildren().clear();
 
-    //gagatekPane.setVisible(true);
+    gagatekPane.setVisible(true);
 
     // MASZ TU OBIEKT UCZNIA PO KLIKNIECIU NA REKORD W DUZEJ TABELI!!!!
-   // gagatek.setText(uczen.getImie() + " " + uczen.getNazwisko() + " " + uczen.getKlasa().getNazwaKlasy());
+//    gagatek.setText(uczen.getImie() + " " + uczen.getNazwisko() + " " + uczen.getKlasa().getNazwaKlasy());
 
     Label label = new Label();
     label.setVisible(true);
@@ -209,8 +213,12 @@ public class WychowawcaController implements Initializable {
  
     Button pobierzRaport = new Button("Pobierz raport");
     pobierzRaport.setOnAction(action -> {
-      // pobierz raport
-      //tworzeniePDF(uczen);
+        try {
+            // pobierz raport
+            Utils.tworzeniePDF(uczen);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(WychowawcaController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     });
 
     VBox validationAlertBox = new VBox();
