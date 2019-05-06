@@ -73,7 +73,7 @@ public class UczenUwagiController implements Initializable {
     private Label userid;
 
     private String username = "uzytkownik";
-    private Long pesel = 32222222221L;
+    private Long pesel;
     private ObservableList<TableColumn> kolumna;
 
     /**
