@@ -17,7 +17,7 @@
       <Button fx:id="przejdzDoOcen" layoutX="54.0" layoutY="141.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="Oceny" />
       <Button fx:id="przejdzDoObecnosci" layoutX="54.0" layoutY="187.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="Obecnosci" />
       <Button fx:id="przejdzDoWychowankow" layoutX="54.0" layoutY="234.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="Wychowankowie" />
-      <Button fx:id="zmienKlase" layoutX="54.0" layoutY="293.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="Zmien klase" />
+      <Button fx:id="wyloguj" layoutX="54.0" layoutY="293.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="Wyloguj" />
       <Text layoutX="24.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Klasa" />
       <Label fx:id="gagatek" layoutX="416.0" layoutY="80.0" text="Gagatek" visible="false">
          <font>
