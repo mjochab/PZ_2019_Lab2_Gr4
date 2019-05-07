@@ -496,7 +496,7 @@ public class HibernateUtil {
         return obecnosc;
     }
 
-     public static Autoryzacja zwrocAutoryzacje(Long pesel) {
+    public static Autoryzacja zwrocAutoryzacje(Long pesel) {
         CriteriaQuery<Autoryzacja> criteria = builder.createQuery(Autoryzacja.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
         criteria.select(root);
@@ -505,7 +505,7 @@ public class HibernateUtil {
 
         return aut;
     }
-    
+
     public static void wstawAutoryzacje(long pesel, String login, String haslo, String kto) {
         Autoryzacja nowa_os = new Autoryzacja(pesel, login, haslo, kto);
         Session session = sessionFactory.openSession();
@@ -551,7 +551,7 @@ public class HibernateUtil {
         Autoryzacja aut = zwrocAutoryzacje(pesel_r);
         Autoryzacja aut_ucz = zwrocAutoryzacje(pesel_uczen);
         Uczen uczniak = aut_ucz.getUczen();
-        
+
         Rodzic nowy_rodzic = new Rodzic(pesel_r, uczniak, imie_o, nazwisko_o, imie_m, nazwisko_m);
         nowy_rodzic.setAutoryzacja(aut);
         Session session = sessionFactory.openSession();
@@ -568,10 +568,10 @@ public class HibernateUtil {
             }
         } finally {
             session.close();
-        }   
+        }
     }
-    
-     public static void wstawUcznia(long pesel_u, String imie_u, String nazwisko_u, Klasa klasa) {
+
+    public static void wstawUcznia(long pesel_u, String imie_u, String nazwisko_u, Klasa klasa) {
         Autoryzacja aut = zwrocAutoryzacje(pesel_u);
         Uczen nowy_ucz = new Uczen(pesel_u, imie_u, nazwisko_u, klasa);
         nowy_ucz.setAutoryzacja(aut);
@@ -589,9 +589,8 @@ public class HibernateUtil {
             }
         } finally {
             session.close();
-        }   
+        }
     }
-    
 
     public static List<Klasa> pobierzKlasy() {
         CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
@@ -716,25 +715,12 @@ public class HibernateUtil {
         }
         return peselki;
     }
-    
-    public static List<Long> pobierzListePeseliUczniow(){
-        CriteriaQuery<Uczen> criteria = builder.createQuery(Uczen.class);
-        Root root = criteria.from(Rodzic.class);
-        criteria.select(root.get("uczen"));
-        List<Uczen> pesele_rodz_dz = entityManager.createQuery(criteria).getResultList();
-        
-        List<Long> peselki = new ArrayList<>();
-            for(int i =0; i<pesele_rodz_dz.size();i++){
-                peselki.add(pesele_rodz_dz.get(i).getPesel());
-            }
-        return peselki;
-    }
-    
+
     public static List<Long> podajPeseleUczniaBezRodzica() {
         List<Long> peselki = new ArrayList<>();
 
-        List<Long> pesele_rodz_dz = pobierzListePeseliUczniow();
-        
+        List<Long> pesele_rodz_dz = pobierzListePeseliUczniowZRodzica();
+
         CriteriaQuery<Long> criteria2 = builder.createQuery(Long.class);
         Root<Uczen> root2 = criteria2.from(Uczen.class);
         criteria2.select(root2.get("pesel"));
@@ -759,6 +745,56 @@ public class HibernateUtil {
             }
         }
         return peselki;
+    }
+
+    public static List<Long> pobierzListePeseliUczniowZRodzica() {
+        CriteriaQuery<Uczen> criteria = builder.createQuery(Uczen.class);
+        Root root = criteria.from(Rodzic.class);
+        criteria.select(root.get("uczen"));
+        List<Uczen> pesele_rodz_dz = entityManager.createQuery(criteria).getResultList();
+
+        List<Long> peselki = new ArrayList<>();
+        for (int i = 0; i < pesele_rodz_dz.size(); i++) {
+            peselki.add(pesele_rodz_dz.get(i).getPesel());
+        }
+        return peselki;
+    }
+
+    public static List<Long> pobierzListePeseliRodzicow() {
+        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+        Root root = criteria.from(Rodzic.class);
+        criteria.select(root.get("pesel"));
+        List<Long> pesele = entityManager.createQuery(criteria).getResultList();
+
+        return pesele;
+    }
+
+    public static List<Long> pobierzListePeseliNauczycieli() {
+        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+        Root root = criteria.from(Nauczyciel.class);
+        criteria.select(root.get("pesel"));
+        List<Long> pesele = entityManager.createQuery(criteria).getResultList();
+
+        return pesele;
+    }
+
+    public static List<Long> pobierzListePeseliUczniow() {
+        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+        Root root = criteria.from(Uczen.class);
+        criteria.select(root.get("pesel"));
+        List<Long> pesele = entityManager.createQuery(criteria).getResultList();
+
+        return pesele;
+    }
+
+    public static Rodzic zwrocRodzica(Long pesel) {
+        CriteriaQuery<Rodzic> criteria = builder.createQuery(Rodzic.class);
+        Root<Rodzic> root = criteria.from(Rodzic.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get("pesel"), pesel));
+        Rodzic rodzic = entityManager.createQuery(criteria).getSingleResult();
+
+        return rodzic;
     }
 
 }
