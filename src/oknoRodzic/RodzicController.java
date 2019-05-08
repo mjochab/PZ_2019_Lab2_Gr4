@@ -93,10 +93,6 @@ public class RodzicController implements Initializable {
     }
 
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-    }
-
-    @FXML
     private void logout(ActionEvent event) throws IOException {
         AnchorPane pane = FXMLLoader.load(getClass().getResource("/Okna/Logowanie.fxml"));
         rootPane.getChildren().setAll(pane);
@@ -158,7 +154,7 @@ public class RodzicController implements Initializable {
     }
 
     @FXML
-    public void zmianaNazwKolumn() {
+    private void zmianaNazwKolumn() {
         nazwyKolumn = HibernateUtil.pobieranieNazwPrzedmiotow();
         kolumna = tabelaOcen.getColumns();
 
@@ -173,7 +169,7 @@ public class RodzicController implements Initializable {
         }
     }
 
-    public List<String> zwrocOcenyDlaPrzedmiotu(Set oceny, String nazwaKolumny) {
+    private List<String> zwrocOcenyDlaPrzedmiotu(Set oceny, String nazwaKolumny) {
         List<String> lista = new ArrayList<>();
         Iterator<Ocena> it = oceny.iterator();
 
@@ -188,7 +184,7 @@ public class RodzicController implements Initializable {
         return lista;
     }
 
-    public void wstawianieOcenDoKolumn(TableColumn<Integer, String> kol, List<String> listaOcen) {
+    private void wstawianieOcenDoKolumn(TableColumn<Integer, String> kol, List<String> listaOcen) {
         kol.setCellValueFactory(cellData -> {
             Integer rowIndex = cellData.getValue();
             if (rowIndex >= listaOcen.size()) {
@@ -199,7 +195,7 @@ public class RodzicController implements Initializable {
         });
     }
 
-    public void wpisywanieOcen() {
+    private void wpisywanieOcen() {
         Rodzic rodzic = HibernateUtil.zwrocRodzica(pesel);
         uczen = rodzic.getUczen();
         Set oceny = uczen.getOcenas();

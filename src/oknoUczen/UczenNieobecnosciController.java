@@ -148,7 +148,7 @@ public class UczenNieobecnosciController implements Initializable {
         //rootPane.getChildren().setAll(pane);
     }
 
-    public void wstawNieobecnosci() {
+    private void wstawNieobecnosci() {
         Uczen uczen = HibernateUtil.zwrocUcznia(pesel);
         kolData.setCellValueFactory(new PropertyValueFactory<>("data"));
         kolWartosc.setCellValueFactory(new PropertyValueFactory<>("wartosc"));
@@ -166,7 +166,7 @@ public class UczenNieobecnosciController implements Initializable {
         tabelaNieob.setItems(dane);
     }
 
-    public ArrayList<Obecnosc> posortujNieobecnosci(Set nieobecnosciSet) {
+    private ArrayList<Obecnosc> posortujNieobecnosci(Set nieobecnosciSet) {
         ArrayList<Obecnosc> obecnosci = new ArrayList<Obecnosc>();
         Iterator<Obecnosc> it = nieobecnosciSet.iterator();
 

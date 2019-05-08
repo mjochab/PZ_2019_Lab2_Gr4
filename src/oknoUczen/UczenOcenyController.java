@@ -164,7 +164,7 @@ public class UczenOcenyController implements Initializable {
     }
 
     @FXML
-    public void zmianaNazwKolumn() {
+    private void zmianaNazwKolumn() {
         nazwyKolumn = HibernateUtil.pobieranieNazwPrzedmiotow();
         kolumna = tabelaOcen.getColumns();
 
@@ -179,7 +179,7 @@ public class UczenOcenyController implements Initializable {
         }
     }
 
-    public List<String> zwrocOcenyDlaPrzedmiotu(Set oceny, String nazwaKolumny) {
+    private List<String> zwrocOcenyDlaPrzedmiotu(Set oceny, String nazwaKolumny) {
         List<String> lista = new ArrayList<>();
         Iterator<Ocena> it = oceny.iterator();
 
@@ -194,7 +194,7 @@ public class UczenOcenyController implements Initializable {
         return lista;
     }
 
-    public void wstawianieOcenDoKolumn(TableColumn<Integer, String> kol, List<String> listaOcen) {
+    private void wstawianieOcenDoKolumn(TableColumn<Integer, String> kol, List<String> listaOcen) {
         kol.setCellValueFactory(cellData -> {
             Integer rowIndex = cellData.getValue();
             if (rowIndex >= listaOcen.size()) {
@@ -205,7 +205,7 @@ public class UczenOcenyController implements Initializable {
         });
     }
 
-    public void wpisywanieOcen() {
+    private void wpisywanieOcen() {
         System.out.println(pesel);
         uczen = HibernateUtil.zwrocUcznia(pesel);
         Set oceny = uczen.getOcenas();

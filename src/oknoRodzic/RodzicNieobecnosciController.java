@@ -153,7 +153,7 @@ public class RodzicNieobecnosciController implements Initializable {
 
     }
 
-    public void wstawNieobecnosci() {
+    private void wstawNieobecnosci() {
         Rodzic rodzic = HibernateUtil.zwrocRodzica(pesel);
         Uczen uczen = rodzic.getUczen();
         kolData.setCellValueFactory(new PropertyValueFactory<>("data"));
@@ -173,7 +173,7 @@ public class RodzicNieobecnosciController implements Initializable {
         addButtonToTable();
     }
 
-    public ArrayList<Obecnosc> posortujNieobecnosci(Set nieobecnosciSet) {
+    private ArrayList<Obecnosc> posortujNieobecnosci(Set nieobecnosciSet) {
         ArrayList<Obecnosc> obecnosci = new ArrayList<Obecnosc>();
         Iterator<Obecnosc> it = nieobecnosciSet.iterator();
 
@@ -198,7 +198,7 @@ public class RodzicNieobecnosciController implements Initializable {
     }
 
     @FXML
-    public void usprawiedliwNieobecnosc(ActionEvent event) throws IOException {
+    private void usprawiedliwNieobecnosc(ActionEvent event) throws IOException {
         Iterator<Obecnosc> it = listaNieobecnosci.iterator();
         while (it.hasNext()) {
             Obecnosc ob = it.next();

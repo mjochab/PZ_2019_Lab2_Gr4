@@ -159,7 +159,7 @@ public class UczenUwagiController implements Initializable {
         //rootPane.getChildren().setAll(pane);
     }
 
-    public void ustawIdKolumn() {
+    private void ustawIdKolumn() {
         pon.setId("pon");
         wt.setId("wt");
         sr.setId("sr");
@@ -167,7 +167,7 @@ public class UczenUwagiController implements Initializable {
         pt.setId("pt");
     }
 
-    public void wstawPlan() {
+    private void wstawPlan() {
         Uczen uczen = HibernateUtil.zwrocUcznia(pesel);
         Klasa plan = zwrocPlan(uczen.getKlasa().getNazwaKlasy());
         Set zajecia = plan.getZajecias();

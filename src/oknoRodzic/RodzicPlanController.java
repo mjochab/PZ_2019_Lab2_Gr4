@@ -153,7 +153,7 @@ public class RodzicPlanController implements Initializable {
 
     }
 
-    public void ustawIdKolumn() {
+    private void ustawIdKolumn() {
         pon.setId("pon");
         wt.setId("wt");
         sr.setId("sr");
@@ -161,7 +161,7 @@ public class RodzicPlanController implements Initializable {
         pt.setId("pt");
     }
 
-    public void wstawPlan() {
+    private void wstawPlan() {
         Rodzic rodzic = HibernateUtil.zwrocRodzica(pesel);
         Uczen uczen = rodzic.getUczen();
         Klasa plan = zwrocPlan(uczen.getKlasa().getNazwaKlasy());
