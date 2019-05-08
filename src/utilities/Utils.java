@@ -37,12 +37,23 @@ import java.util.Date;
 public class Utils {
 
     //data gotowa do wstawienia przez nauczyciela
+
+    /**
+     *
+     * @param data
+     * @return
+     * @throws ParseException
+     */
     public static Date returnDate(String data) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = format.parse(data);
         return date;
     }
 
+    /**
+     *
+     * @param view - widok tabeli której rozmiar należy zmienić.
+     */
     public static void customResize(TableView<?> view) {
 
         AtomicLong width = new AtomicLong();
@@ -58,11 +69,23 @@ public class Utils {
         }
     }
 
+    /**
+     *
+     * @param table
+     * @param column
+     * @param row
+     */
     public static void zwrocWartoscStringZKomorki(TableView<Uczen> table, int column, int row) {
         String a = table.getColumns().get(column).getCellObservableValue(row).getValue().toString();
     }
 
     // ------------------------- WSTAWIANIE PLANU ZAJEĆ DO TABELKI ------------------------- //
+
+    /**
+     * Metoda wstawiająca godziny zajęć do odpowiedniej kolumny
+     * @param godzina - ArrayList typu String, lista godzin 
+     * @param kol - Table Column typu (Integer, String), kolumna do której wartosci z listy <b>godzna</b> zostaną wstawione.
+     */
     public static void wstawianieGodziny(ArrayList<String> godzina, TableColumn<Integer, String> kol) {
         kol.setCellValueFactory(cellData -> {
             Integer rowIndex = cellData.getValue();
@@ -74,6 +97,11 @@ public class Utils {
         });
     }
 
+    /**
+     * Metoda zwracająca godziny (bez powtórzeń) zajeć.
+     * @param zajecia - ArrayList typu Zajecia, lista zwierająca zajęcia danego ucznia
+     * @return ArrayList typu String
+     */
     public static ArrayList<String> pobierzGodziny(ArrayList<Zajecia> zajecia) {
         ArrayList<String> lista = new ArrayList<String>();
         Iterator<Zajecia> it = zajecia.iterator();
@@ -88,6 +116,11 @@ public class Utils {
         return lista;
     }
 
+    /**
+     * Metoda sortująca zajęcia po godzinie od najmniejszej do największej.
+     * @param zajecia - typ Set, zbiór zajęć danego ucznia.
+     * @return ArrayList typu Zajecia.
+     */
     public static ArrayList<Zajecia> posortujZajecia(Set zajecia) {
         ArrayList<Zajecia> zajeciaPosortowane = new ArrayList<Zajecia>();
 
@@ -103,6 +136,11 @@ public class Utils {
         return zajeciaPosortowane;
     }
 
+    /**
+     * Metoda wstawiająca zajęcia z danego dna do odpowiedniej kolumny.
+     * @param kol - TableColumn (Integer, String) kolumna do której zajęcia z danego dnia są wstawiane.
+     * @param dzien - ArrayList typu String zawierająca dni tygodnia.
+     */
     public static void wstawianieZajecDoKolumn(TableColumn<Integer, String> kol, ArrayList<String> dzien) {
         kol.setCellValueFactory(cellData -> {
             Integer rowIndex = cellData.getValue();
@@ -114,6 +152,13 @@ public class Utils {
         });
     }
 
+    /**
+     * Metoda pobierająca zajęcia z danego dnia tygodnia, jeśli występuje przerwa między zajęciami wstawiany jest null.
+     * @param dzien - dany dzień tygodnia typu String,
+     * @param zajeciaPosortowane - ArrayList typu Zajecia, posortowana lista zajęć od najmniejszej godziny do największej,
+     * @param godzina - ArrayList typu String zawierająca godziny zajęć ( od najmniejszej do największej).
+     * @return - ArrayList typu String zawierająca zajęcia danego dnia.
+     */
     public static ArrayList<String> pobierzZajeciaDnia(String dzien, ArrayList<Zajecia> zajeciaPosortowane,
             ArrayList<String> godzina) {
 
@@ -144,12 +189,25 @@ public class Utils {
         return zajeciaDnia;
     }
 
+    /**
+     *
+     * @param data
+     * @return
+     * @throws ParseException
+     */
     public static String dateToString(Date data) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String date = format.format(data);
         return date;
     }
 
+    /**
+     *
+     * @param year
+     * @param month
+     * @param ktoreDniZwrocic
+     * @return
+     */
     public static List<Integer> zwrocDatyWktorychMamZajecia(int year, int month, List<Integer> ktoreDniZwrocic) {
 
         List<LocalDate> datyZajec = new ArrayList<>();
@@ -176,6 +234,11 @@ public class Utils {
 
     }
 
+    /**
+     * Metoda służąca do dopasowania ocen ucznia do danych przedmiotów oraz obliczenia średniej z nich.
+     * @param oceny - oceny danego ucznia
+     * @return ArrayList typu UczenPDF zawiwerająca obiekty przedmiotów wraz z ocenami i średnią.
+     */
     public static ArrayList<UczenPDF> zwrocOceny(Set oceny) {
         ArrayList<UczenPDF> listaPDF = new ArrayList<>();
         String[] nazwyPrzedmiotow = HibernateUtil.pobieranieNazwPrzedmiotow();
@@ -193,6 +256,11 @@ public class Utils {
         return listaPDF;
     }
 
+    /**
+     * Metoda tworząca pfd, wywołująca metoda z biblioteki Pdf.
+     * @param uczen - Typ Uczen, uczen dla którego pdf zostanie utworzony,
+     * @throws FileNotFoundException
+     */
     public static void tworzeniePDF(Uczen uczen) throws FileNotFoundException {
         ArrayList<UczenPDF> listaPDF = zwrocOceny(uczen.getOcenas());
         String imie = uczen.getImie();
@@ -211,7 +279,12 @@ public class Utils {
 
     }
   
-public static LocalDate convertToLocalDate(Date dateToConvert) {
+    /**
+     *
+     * @param dateToConvert
+     * @return
+     */
+    public static LocalDate convertToLocalDate(Date dateToConvert) {
     return LocalDate.ofInstant(
       dateToConvert.toInstant(), ZoneId.systemDefault());
 }

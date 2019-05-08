@@ -29,6 +29,10 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 
+/**
+ *
+ * @author Krystian
+ */
 public class HibernateUtil {
 
     private static final SessionFactory sessionFactory = buildSessionFactory();
@@ -47,10 +51,19 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
+    /**
+     * Metoda zwracająca nazwy przedmiotów z bazy danych.
+     *
+     * @return Tablice typu String
+     */
     public static String[] pobieranieNazwPrzedmiotow() {
 
         SessionFactory factory = HibernateUtil.getSessionFactory();
@@ -80,6 +93,11 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     *
+     * @param pesel
+     * @return
+     */
     public static String zwrocKtoZalogowany(Long pesel) {
 
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
@@ -92,6 +110,11 @@ public class HibernateUtil {
 
     }
 
+    /**
+     *
+     * @param pesel
+     * @return
+     */
     public static String zwrocKlaseKtoraWychowuje(Long pesel) {
         CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
         Root<Nauczyciel> root = criteria.from(Nauczyciel.class);
@@ -104,6 +127,11 @@ public class HibernateUtil {
         return klasa;
     }
 
+    /**
+     *
+     * @param pesel
+     * @return
+     */
     public static List<Klasa> zwrocKlasyKtorychUcze(Long pesel) {
 
         CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
@@ -117,6 +145,11 @@ public class HibernateUtil {
 
     }
 
+    /**
+     *
+     * @param pesel
+     * @return
+     */
     public static String[] zwrocNazwyKlasKtorychUcze(Long pesel) {
 
         List<Klasa> klasy = zwrocKlasyKtorychUcze(pesel);
@@ -131,6 +164,11 @@ public class HibernateUtil {
         return nazwyKlas;
     }
 
+    /**
+     *
+     * @param klasa
+     * @return
+     */
     public static List<Uczen> zwrocUczniowZklasy(String klasa) {
 
         EntityManager em = sessionFactory.createEntityManager();
@@ -149,6 +187,12 @@ public class HibernateUtil {
         return uczniowie;
     }
 
+    /**
+     *
+     * @param klasa
+     * @param pesel
+     * @return
+     */
     public static List<Przedmiot> zwrocPrzedmiotyKtorychUczeDanaKlase(String klasa, Long pesel) {
 
         CriteriaQuery<Przedmiot> criteria = builder.createQuery(Przedmiot.class);
@@ -163,6 +207,12 @@ public class HibernateUtil {
         return przedmioty;
     }
 
+    /**
+     * Metoda zwracająca z bazy danych ucznia, weryfikująca po peselu.
+     *
+     * @param pesel - long, pesel ucznia
+     * @return Obiekt typu Uczenu.
+     */
     public static Uczen zwrocUcznia(Long pesel) {
         CriteriaQuery<Uczen> criteria = builder.createQuery(Uczen.class);
         Root<Uczen> root = criteria.from(Uczen.class);
@@ -174,6 +224,10 @@ public class HibernateUtil {
 
     }
 
+    /**
+     *
+     * @return
+     */
     public static List<String> zwrocRodzajeOcen() {
 
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
@@ -184,6 +238,12 @@ public class HibernateUtil {
         return rodzajeOcen;
     }
 
+    /**
+     *
+     * @param gagatek
+     * @param przedmiot
+     * @return
+     */
     public static List<Ocena> zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(Uczen gagatek, Przedmiot przedmiot) {
 
         CriteriaQuery<Ocena> criteria = builder.createQuery(Ocena.class);
@@ -195,6 +255,12 @@ public class HibernateUtil {
 
     }
 
+    /**
+     *
+     * @param login
+     * @param haslo
+     * @return
+     */
     public static Long uzyskajPeselZalogowany(String login, String haslo) {
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
@@ -211,6 +277,11 @@ public class HibernateUtil {
         return nr_pesel;
     }
 
+    /**
+     *
+     * @param login
+     * @return
+     */
     public static Long uzyskajPesel(String login) {
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
@@ -226,6 +297,11 @@ public class HibernateUtil {
         return nr_pesel;
     }
 
+    /**
+     *
+     * @param pesel
+     * @return
+     */
     public static String uzyskajKtoZalogowany(Long pesel) {
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
@@ -242,6 +318,11 @@ public class HibernateUtil {
         return osoba;
     }
 
+    /**
+     *
+     * @param pesel
+     * @return
+     */
     public static String uzyskajLoginZalogowany(Long pesel) {
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
@@ -263,6 +344,10 @@ public class HibernateUtil {
         //Exception in thread "main" javax.persistence.NoResultException: No entity found for query
     }
 
+    /**
+     *
+     * @param ocena
+     */
     public static void wstawOcene(Ocena ocena) {
 
         Session session = sessionFactory.openSession();
@@ -284,6 +369,10 @@ public class HibernateUtil {
 
     }
 
+    /**
+     *
+     * @param ocena
+     */
     public static void edytujOcene(Ocena ocena) {
 
         Session session = sessionFactory.openSession();
@@ -305,6 +394,11 @@ public class HibernateUtil {
 
     }
 
+    /**
+     * Metoda zwracająca plan zajęć danej klasy.
+     * @param klasa - String, klasa której plan zostanie zwrócony.
+     * @return obiekt Klasa zawierający plan.
+     */
     public static Klasa zwrocPlan(String klasa) {
         CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
         Root<Klasa> root = criteria.from(Klasa.class);
@@ -315,12 +409,23 @@ public class HibernateUtil {
         return plan;
     }
 
+    /**
+     *
+     * @param przedmiot
+     * @param klasa
+     * @return
+     */
     public static List<Obecnosc> zwrocObecnosciMoichUczniowZmojegoPrzedmiotu(Przedmiot przedmiot, Klasa klasa) {
         List<Obecnosc> obecnosci = new ArrayList<>();
 
         return obecnosci;
     }
 
+    /**
+     *
+     * @param pesel
+     * @return
+     */
     public static Nauczyciel zwrocNauczyciela(Long pesel) {
 
         CriteriaQuery<Nauczyciel> criteria = builder.createQuery(Nauczyciel.class);
@@ -333,6 +438,11 @@ public class HibernateUtil {
     }
 
     // DO SKONCZENIA do wstawiania 2 buttonow jak mam 2 zajecia w danym dniu
+    /**
+     *
+     * @param pesel
+     * @param przedmiot
+     */
     public static void zwrocIleMamZajecWdanymDniu(Long pesel, Przedmiot przedmiot) {
         // DO SKONCZENIA
         //Przedmiot przedmiot = new Przedmiot("algebra_liniowa");
@@ -349,6 +459,12 @@ public class HibernateUtil {
 
     }
 
+    /**
+     *
+     * @param pesel
+     * @param przedmiot
+     * @return
+     */
     public static List<Integer> zwrocWJakieDniTygodniaMamZajecia(Long pesel, Przedmiot przedmiot) {
 
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
@@ -377,6 +493,12 @@ public class HibernateUtil {
 
     }
 
+    /**
+     *
+     * @param przedmiot
+     * @param uczniowie
+     * @return
+     */
     public static List<Obecnosc> zwrocObecnosciZprzedmiotu(Przedmiot przedmiot, List<Uczen> uczniowie) {
 
         CriteriaQuery<Obecnosc> criteria = builder.createQuery(Obecnosc.class);
@@ -392,6 +514,12 @@ public class HibernateUtil {
 
     }
 
+    /**
+     * Metoda zwracająca listę nieobecności danego ucznia.
+     *
+     * @param uczen - typ Uczen, obiekt
+     * @return List typu Obecnosc.
+     */
     public static List<Obecnosc> zwrocNieobecnosciUcznia(Uczen uczen) {
 
         CriteriaQuery<Obecnosc> criteria = builder.createQuery(Obecnosc.class);
@@ -406,6 +534,9 @@ public class HibernateUtil {
 
     }
 
+    /**
+     *
+     */
     public static void edytujNieobecnosc(Obecnosc obecnosc) {
         Session session = sessionFactory.openSession();
 
@@ -426,6 +557,10 @@ public class HibernateUtil {
 
     }
 
+    /**
+     *
+     * @param nieobecny
+     */
     public static void dodajNieobecnosc(Obecnosc nieobecny) {
         Session session = sessionFactory.openSession();
 
@@ -445,6 +580,10 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     *
+     * @param nieobecny
+     */
     public static void usunNieobecnosc(Obecnosc nieobecny) {
         Session session = sessionFactory.openSession();
 
@@ -464,6 +603,10 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     * Metoda usprawiedliwiająća nieobecność.
+     * @param obecnosc - typ Obecnosc, nieobecność do usprawiedliwienia
+     */
     public static void usprawiedliwNieobecnosc(Obecnosc obecnosc) {
         Session session = sessionFactory.openSession();
 
@@ -484,6 +627,12 @@ public class HibernateUtil {
 
     }
 
+    /**
+     *
+     * @param item
+     * @param dataWkomorce
+     * @return
+     */
     public static Obecnosc zwrocNieobecnoscZdanegoDnia(Obecnosc item, Date dataWkomorce) {
 
         CriteriaQuery<Obecnosc> criteria = builder.createQuery(Obecnosc.class);
@@ -496,6 +645,11 @@ public class HibernateUtil {
         return obecnosc;
     }
 
+    /**
+     *
+     * @param pesel
+     * @return
+     */
     public static Autoryzacja zwrocAutoryzacje(Long pesel) {
         CriteriaQuery<Autoryzacja> criteria = builder.createQuery(Autoryzacja.class);
         Root<Autoryzacja> root = criteria.from(Autoryzacja.class);
@@ -506,6 +660,13 @@ public class HibernateUtil {
         return aut;
     }
 
+    /**
+     *
+     * @param pesel
+     * @param login
+     * @param haslo
+     * @param kto
+     */
     public static void wstawAutoryzacje(long pesel, String login, String haslo, String kto) {
         Autoryzacja nowa_os = new Autoryzacja(pesel, login, haslo, kto);
         Session session = sessionFactory.openSession();
@@ -526,6 +687,12 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     *
+     * @param pesel
+     * @param imie
+     * @param nazwisko
+     */
     public static void wstawNauczyciela(long pesel, String imie, String nazwisko) {
         Autoryzacja aut = zwrocAutoryzacje(pesel);
         Nauczyciel nowa_os = new Nauczyciel(pesel, imie, nazwisko);
@@ -547,6 +714,15 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     *
+     * @param pesel_r
+     * @param pesel_uczen
+     * @param imie_o
+     * @param nazwisko_o
+     * @param imie_m
+     * @param nazwisko_m
+     */
     public static void wstawRodzica(long pesel_r, long pesel_uczen, String imie_o, String nazwisko_o, String imie_m, String nazwisko_m) {
         Autoryzacja aut = zwrocAutoryzacje(pesel_r);
         Autoryzacja aut_ucz = zwrocAutoryzacje(pesel_uczen);
@@ -571,6 +747,13 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     *
+     * @param pesel_u
+     * @param imie_u
+     * @param nazwisko_u
+     * @param klasa
+     */
     public static void wstawUcznia(long pesel_u, String imie_u, String nazwisko_u, Klasa klasa) {
         Autoryzacja aut = zwrocAutoryzacje(pesel_u);
         Uczen nowy_ucz = new Uczen(pesel_u, imie_u, nazwisko_u, klasa);
@@ -592,6 +775,10 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public static List<Klasa> pobierzKlasy() {
         CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
         Root root = criteria.from(Klasa.class);
@@ -602,6 +789,10 @@ public class HibernateUtil {
 
     }
 
+    /**
+     *
+     * @return
+     */
     public static List<Long> pobierzListePeseli() {
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
         Root root = criteria.from(Autoryzacja.class);
@@ -611,6 +802,10 @@ public class HibernateUtil {
         return pesele;
     }
 
+    /**
+     *
+     * @return
+     */
     public static List<Long> podajPeseleNauczycielaBezDanych() {
         List<Long> peselki = new ArrayList<>();
 
@@ -646,6 +841,10 @@ public class HibernateUtil {
         return peselki;
     }
 
+    /**
+     *
+     * @return
+     */
     public static List<Long> podajPeseleUczniaBezDanych() {
         List<Long> peselki = new ArrayList<>();
 
@@ -681,6 +880,10 @@ public class HibernateUtil {
         return peselki;
     }
 
+    /**
+     *
+     * @return
+     */
     public static List<Long> podajPeseleRodzicaBezDanych() {
         List<Long> peselki = new ArrayList<>();
 
@@ -716,6 +919,10 @@ public class HibernateUtil {
         return peselki;
     }
 
+    /**
+     *
+     * @return
+     */
     public static List<Long> podajPeseleUczniaBezRodzica() {
         List<Long> peselki = new ArrayList<>();
 
@@ -747,6 +954,10 @@ public class HibernateUtil {
         return peselki;
     }
 
+    /**
+     *
+     * @return
+     */
     public static List<Long> pobierzListePeseliUczniowZRodzica() {
         CriteriaQuery<Uczen> criteria = builder.createQuery(Uczen.class);
         Root root = criteria.from(Rodzic.class);
@@ -760,6 +971,10 @@ public class HibernateUtil {
         return peselki;
     }
 
+    /**
+     *
+     * @return
+     */
     public static List<Long> pobierzListePeseliRodzicow() {
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
         Root root = criteria.from(Rodzic.class);
@@ -769,6 +984,10 @@ public class HibernateUtil {
         return pesele;
     }
 
+    /**
+     *
+     * @return
+     */
     public static List<Long> pobierzListePeseliNauczycieli() {
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
         Root root = criteria.from(Nauczyciel.class);
@@ -778,6 +997,10 @@ public class HibernateUtil {
         return pesele;
     }
 
+    /**
+     *
+     * @return
+     */
     public static List<Long> pobierzListePeseliUczniow() {
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
         Root root = criteria.from(Uczen.class);
@@ -787,6 +1010,11 @@ public class HibernateUtil {
         return pesele;
     }
 
+    /**
+     * Metoda zwracająca z bazdy danych rodzica, weryfikująca po peselu.
+     * @param pesel - typ Long, pesel rodzica.
+     * @return obiekt typu Rodzic
+     */
     public static Rodzic zwrocRodzica(Long pesel) {
         CriteriaQuery<Rodzic> criteria = builder.createQuery(Rodzic.class);
         Root<Rodzic> root = criteria.from(Rodzic.class);
