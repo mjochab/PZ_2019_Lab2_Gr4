@@ -123,7 +123,7 @@ public class KlasaController implements Initializable {
       przejdzDoWychowankow.addEventHandler(MouseEvent.MOUSE_CLICKED, przejdzDoWychowankowHandler());
       wyloguj.setOnAction((ActionEvent event) -> {
 
-        poprosze o metode do wylogowywania
+      //  poprosze o metode do wylogowywania
       });
 
       gagatek.setVisible(false);

@@ -25,6 +25,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -37,9 +38,13 @@ import javafx.util.Callback;
 import mapping.Obecnosc;
 import mapping.Ocena;
 import mapping.Przedmiot;
+import mapping.Rodzic;
 import mapping.Uczen;
 import mapping.Zajecia;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import utilities.HibernateUtil;
+import static utilities.HibernateUtil.uzyskajPesel;
 import utilities.Utils;
 
 public class RodzicNieobecnosciController implements Initializable {
@@ -66,8 +71,11 @@ public class RodzicNieobecnosciController implements Initializable {
     private TableColumn<Obecnosc, String> kolWartosc;
     @FXML
     private Button usprawiedliwBtn;
+    @FXML
+    private Label userid;
 
-    private final long PESEL = 32222222221L;
+    private long pesel;
+    private String username;
     ArrayList<Obecnosc> listaNieobecnosci;
 
     /**
@@ -75,9 +83,12 @@ public class RodzicNieobecnosciController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        wstawNieobecnosci();
         tabelaNieob.setColumnResizePolicy((param) -> true);
-        Platform.runLater(() -> Utils.customResize(tabelaNieob));
+        Platform.runLater(() -> {
+            Utils.customResize(tabelaNieob);
+            pesel = getPesel();
+            wstawNieobecnosci();
+        });
     }
 
     @FXML
@@ -94,27 +105,57 @@ public class RodzicNieobecnosciController implements Initializable {
     //ładujemy okno z ocenami uczenia.
     @FXML
     private void LoadNieobecnosci(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("RodzicNieobecnosci.fxml"));
-        rootPane.getChildren().setAll(pane);
-        tabelaNieob.setColumnResizePolicy((param) -> true);
-        Platform.runLater(() -> Utils.customResize(tabelaNieob));
-        wstawNieobecnosci();
+        AnchorPane pane;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("RodzicNieobecnosci.fxml"));
+        try {
+            pane = fxmlLoader.load();
+            rootPane.getChildren().setAll(pane);
+        } catch (IOException ex) {
+            Logger.getLogger(RodzicNieobecnosciController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        RodzicNieobecnosciController controller = fxmlLoader.getController();
+        controller.wstawUseraDoZalogowanoJako(username);
+        controller.przekazNazweUzytkownikaIPesel(username, pesel);
+
     }
 
     @FXML
     private void LoadOceny(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("Rodzic.fxml"));
-        rootPane.getChildren().setAll(pane);
+        AnchorPane pane;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("Rodzic.fxml"));
+        try {
+            pane = fxmlLoader.load();
+            rootPane.getChildren().setAll(pane);
+        } catch (IOException ex) {
+            Logger.getLogger(RodzicController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        RodzicController controller = fxmlLoader.getController();
+        controller.wstawUseraDoZalogowanoJako(username);
+        controller.przekazNazweUzytkownikaIPesel(username, pesel);
     }
 
     @FXML
     private void LoadUwagi(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("RodzicPlan.fxml"));
-        rootPane.getChildren().setAll(pane);
+        AnchorPane pane;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("RodzicPlan.fxml"));
+        try {
+            pane = fxmlLoader.load();
+            rootPane.getChildren().setAll(pane);
+        } catch (IOException ex) {
+            Logger.getLogger(RodzicPlanController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        RodzicPlanController controller = fxmlLoader.getController();
+        controller.wstawUseraDoZalogowanoJako(username);
+        controller.przekazNazweUzytkownikaIPesel(username, pesel);
+
     }
 
     public void wstawNieobecnosci() {
-        Uczen uczen = HibernateUtil.zwrocUcznia(PESEL);
+        Rodzic rodzic = HibernateUtil.zwrocRodzica(pesel);
+        Uczen uczen = rodzic.getUczen();
         kolData.setCellValueFactory(new PropertyValueFactory<>("data"));
         kolWartosc.setCellValueFactory(new PropertyValueFactory<>("wartosc"));
         kolPrzedmiot.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
@@ -217,5 +258,19 @@ public class RodzicNieobecnosciController implements Initializable {
         colBtn.setCellFactory(cellFactory);
         colBtn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<Obecnosc>(data.getValue()));
         tabelaNieob.getColumns().add(colBtn);
+    }
+
+    public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
+        this.username = username;
+        this.pesel = pesel;
+    }
+
+    public void wstawUseraDoZalogowanoJako(String username) {
+        userid.setText(username);
+    }
+
+    private Long getPesel() {
+        String login = userid.getText();
+        return uzyskajPesel(login);
     }
 }

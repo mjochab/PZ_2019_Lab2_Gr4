@@ -29,8 +29,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.TableColumn;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mapping.*;
 import utilities.*;
+import static utilities.HibernateUtil.uzyskajPesel;
 
 public class RodzicController implements Initializable {
 
@@ -64,8 +67,8 @@ public class RodzicController implements Initializable {
     @FXML
     private Label userid;
 
-    private long pesel = 32222222221L;
-    private String username = "uzytkownik";
+    private long pesel;
+    private String username;
     public String[] nazwyKolumn;
     public ObservableList<TableColumn> kolumna;
     public Uczen uczen;
@@ -76,11 +79,16 @@ public class RodzicController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        wstawUseraDoZalogowanoJako(username);
-        zmianaNazwKolumn();
+
         tabelaOcen.setColumnResizePolicy((param) -> true);
-        Platform.runLater(() -> Utils.customResize(tabelaOcen));
-        wpisywanieOcen();
+        Platform.runLater(() -> {
+            Utils.customResize(tabelaOcen);
+            wstawUseraDoZalogowanoJako(username);
+            zmianaNazwKolumn();
+            pesel = getPesel();
+            wpisywanieOcen();
+
+        });
 
     }
 
@@ -99,22 +107,54 @@ public class RodzicController implements Initializable {
     private void LoadOceny(ActionEvent event) throws IOException {
         tabelaOcen.setColumnResizePolicy((param) -> true);
         Platform.runLater(() -> Utils.customResize(tabelaOcen));
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("Rodzic.fxml"));
-        rootPane.getChildren().setAll(pane);
-        wpisywanieOcen();
+        AnchorPane pane;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("Rodzic.fxml"));
+        try {
+            pane = fxmlLoader.load();
+            rootPane.getChildren().setAll(pane);
+        } catch (IOException ex) {
+            Logger.getLogger(RodzicController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        RodzicController controller = fxmlLoader.getController();
+        controller.wstawUseraDoZalogowanoJako(username);
+        controller.przekazNazweUzytkownikaIPesel(username, pesel);
 
     }
 
     @FXML
     private void LoadNieobecnosci(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("RodzicNieobecnosci.fxml"));
-        rootPane.getChildren().setAll(pane);
+        AnchorPane pane;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("RodzicNieobecnosci.fxml"));
+        try {
+            pane = fxmlLoader.load();
+            rootPane.getChildren().setAll(pane);
+        } catch (IOException ex) {
+            Logger.getLogger(RodzicNieobecnosciController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        RodzicNieobecnosciController controller = fxmlLoader.getController();
+
+        controller.wstawUseraDoZalogowanoJako(username);
+        controller.przekazNazweUzytkownikaIPesel(username, pesel);
+
     }
 
     @FXML
     private void LoadUwagi(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("RodzicPlan.fxml"));
-        rootPane.getChildren().setAll(pane);
+        AnchorPane pane;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("RodzicPlan.fxml"));
+        try {
+            pane = fxmlLoader.load();
+            rootPane.getChildren().setAll(pane);
+        } catch (IOException ex) {
+            Logger.getLogger(RodzicPlanController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        RodzicPlanController controller = fxmlLoader.getController();
+        controller.wstawUseraDoZalogowanoJako(username);
+        controller.przekazNazweUzytkownikaIPesel(username, pesel);
+
     }
 
     @FXML
@@ -160,10 +200,8 @@ public class RodzicController implements Initializable {
     }
 
     public void wpisywanieOcen() {
-        //String login = LogowanieController.getPassword_field().getText();
-        //  String haslo = LogowanieController.getLogin_field().getText();
-        // pesel = HibernateUtil.uzyskajPeselZalogowany(login, haslo);
-        uczen = HibernateUtil.zwrocUcznia(pesel);
+        Rodzic rodzic = HibernateUtil.zwrocRodzica(pesel);
+        uczen = rodzic.getUczen();
         Set oceny = uczen.getOcenas();
 
         for (int i = 0; i < oceny.size(); i++) {
@@ -186,5 +224,10 @@ public class RodzicController implements Initializable {
 
     public void wstawUseraDoZalogowanoJako(String username) {
         userid.setText(username);
+    }
+
+    private Long getPesel() {
+        String login = userid.getText();
+        return uzyskajPesel(login);
     }
 }
