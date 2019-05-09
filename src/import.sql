@@ -11,7 +11,8 @@ INSERT INTO `rodzic` (`pesel`, `imie_ojca`, `nazwisko_ojca`, `imie_matki`, `nazw
 INSERT INTO `rodzic` (`pesel`, `imie_ojca`, `nazwisko_ojca`, `imie_matki`, `nazwisko_matki`) VALUES(11111111116, 'Frazier', 'Heller', 'Kristina', 'Raine');
 INSERT INTO `rodzic` (`pesel`, `imie_ojca`, `nazwisko_ojca`, `imie_matki`, `nazwisko_matki`) VALUES(11111111117, 'Matthiew', 'Scargle', 'Moyna', 'Frankham');
 INSERT INTO `rodzic` (`pesel`, `imie_ojca`, `nazwisko_ojca`, `imie_matki`, `nazwisko_matki`) VALUES(11111111118, 'Rudie', 'Birrel', 'Libbey', 'Gammett');
-INSERT INTO `rodzic` (`pesel`, `imie_ojca`, `nazwisko_ojca`, `imie_matki`, `nazwisko_matki`) VALUES(11111111119, 'Aldous', 'Nowakowski', 'Thomasin', 'Moule');INSERT INTO `uczen` (`pesel`, `nazwa_klasy`, `imie`, `nazwisko`, `rodzic`) VALUES(32222222220, '1b', 'Zenon', 'Szmit', 11111111110);
+INSERT INTO `rodzic` (`pesel`, `imie_ojca`, `nazwisko_ojca`, `imie_matki`, `nazwisko_matki`) VALUES(11111111119, 'Aldous', 'Nowakowski', 'Thomasin', 'Moule');
+INSERT INTO `uczen` (`pesel`, `nazwa_klasy`, `imie`, `nazwisko`, `rodzic`) VALUES(32222222220, '1b', 'Zenon', 'Szmit', 11111111110);
 INSERT INTO `uczen` (`pesel`, `nazwa_klasy`, `imie`, `nazwisko`, `rodzic`) VALUES(32222222221, '1a', 'Gniewomir', 'Iryd', 11111111111);
 INSERT INTO `uczen` (`pesel`, `nazwa_klasy`, `imie`, `nazwisko`, `rodzic`) VALUES(32222222222, '1a', 'Adrian', 'Bury', 11111111112);
 INSERT INTO `uczen` (`pesel`, `nazwa_klasy`, `imie`, `nazwisko`, `rodzic`) VALUES(32222222223, '1a', 'Krystian', 'Drozd', 11111111113);
