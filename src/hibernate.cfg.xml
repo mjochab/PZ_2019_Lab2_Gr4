@@ -46,16 +46,16 @@ Contributor(s):
     <property name="hibernate.connection.url">jdbc:mysql://localhost/dziennik_elektroniczny?createDatabaseIfNotExist=true</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.hbm2ddl.auto">update</property>
-    <mapping resource="mapping/Ocena.hbm.xml"/>
-    <mapping resource="mapping/RodzajOceny.hbm.xml"/>
-    <mapping resource="mapping/Autoryzacja.hbm.xml"/>
-    <mapping resource="mapping/Uczen.hbm.xml"/>
-    <mapping resource="mapping/Klasa.hbm.xml"/>
     <mapping resource="mapping/Przedmiot.hbm.xml"/>
-    <mapping resource="mapping/Zajecia.hbm.xml"/>
+    <mapping resource="mapping/RodzajOceny.hbm.xml"/>
+    <mapping resource="mapping/Uczen.hbm.xml"/>
     <mapping resource="mapping/Nauczyciel.hbm.xml"/>
-    <mapping resource="mapping/Obecnosc.hbm.xml"/>
     <mapping resource="mapping/Rodzic.hbm.xml"/>
+    <mapping resource="mapping/Ocena.hbm.xml"/>
+    <mapping resource="mapping/Klasa.hbm.xml"/>
     <mapping resource="mapping/SkladKlasy.hbm.xml"/>
+    <mapping resource="mapping/Zajecia.hbm.xml"/>
+    <mapping resource="mapping/Autoryzacja.hbm.xml"/>
+    <mapping resource="mapping/Obecnosc.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

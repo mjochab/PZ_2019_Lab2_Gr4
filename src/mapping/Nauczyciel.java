@@ -1,6 +1,5 @@
 package mapping;
-
-// Generated 25 kwi 2019, 13:51:48 by Hibernate Tools 4.3.1
+// Generated 9 maj 2019, 12:00:04 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -21,13 +20,8 @@ public class Nauczyciel  implements java.io.Serializable {
 
     public Nauczyciel() {
     }
-    
-    public Nauczyciel(long pesel, String imie, String nazwisko) {
-       this.imie = imie;
-       this.nazwisko = nazwisko;
-       this.pesel = pesel;
-    }
-    
+
+	
     public Nauczyciel(Autoryzacja autoryzacja) {
         this.autoryzacja = autoryzacja;
     }
