@@ -54,6 +54,7 @@ public class RodzicController implements Initializable {
     private Button wylogujbtn;
     @FXML
     private TableView<Uczen> dzieciTB;
+
     public void setDzieciTB(TableView<Uczen> dzieciTB) {
         this.dzieciTB = dzieciTB;
     }
@@ -87,7 +88,8 @@ public class RodzicController implements Initializable {
     public ObservableList<TableColumn> kolumna;
     public Uczen uczen;
     public Rodzic rodzic;
-    public void setRodzic(Rodzic rodzic){
+
+    public void setRodzic(Rodzic rodzic) {
         this.rodzic = rodzic;
     }
     //public 
@@ -105,7 +107,10 @@ public class RodzicController implements Initializable {
             zmianaNazwKolumn();
             pesel = getPesel();
             wstawianieDzieci();
-            dzieciTB.addEventHandler(MouseEvent.MOUSE_CLICKED, zwrocEventHandleraDlaDzieci(dzieciTB));
+            if (dzieciTB.getItems().isEmpty()) {
+            } else {
+                dzieciTB.addEventHandler(MouseEvent.MOUSE_CLICKED, zwrocEventHandleraDlaDzieci(dzieciTB));
+            }
         });
 
     }
@@ -245,11 +250,14 @@ public class RodzicController implements Initializable {
     private void wstawianieDzieci() {
         rodzic = HibernateUtil.zwrocRodzica(pesel);
         Set dzieci = rodzic.getUczens();
-        imie.setCellValueFactory(new PropertyValueFactory<>("imie"));
-        nazwisko.setCellValueFactory(new PropertyValueFactory<>("nazwisko"));
+        if (dzieci.isEmpty()) {
+        } else {
+            imie.setCellValueFactory(new PropertyValueFactory<>("imie"));
+            nazwisko.setCellValueFactory(new PropertyValueFactory<>("nazwisko"));
 
-        ObservableList<Uczen> dane = FXCollections.observableArrayList(dzieci);
-        dzieciTB.setItems(dane);
+            ObservableList<Uczen> dane = FXCollections.observableArrayList(dzieci);
+            dzieciTB.setItems(dane);
+        }
     }
 
     public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {

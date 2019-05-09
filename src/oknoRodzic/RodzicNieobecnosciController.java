@@ -104,7 +104,10 @@ public class RodzicNieobecnosciController implements Initializable {
         Platform.runLater(() -> {
             pesel = getPesel();
             wstawianieDzieci();
-            dzieciTB.addEventHandler(MouseEvent.MOUSE_CLICKED, zwrocEventHandleraDlaDzieci(dzieciTB));
+            if (dzieciTB.getItems().isEmpty()) {
+            } else {
+                dzieciTB.addEventHandler(MouseEvent.MOUSE_CLICKED, zwrocEventHandleraDlaDzieci(dzieciTB));
+            }
         });
     }
 
@@ -175,8 +178,8 @@ public class RodzicNieobecnosciController implements Initializable {
     private void wstawNieobecnosci(Uczen uczen) {
         tabelaNieob.getItems().clear();
         Set nieobecnosciSet = uczen.getObecnoscs();
-       /*TU BUG */ listaNieobecnosci = posortujNieobecnosci(nieobecnosciSet);
-        data = FXCollections.observableArrayList(nieobecnosciSet);
+        listaNieobecnosci = posortujNieobecnosci(nieobecnosciSet);
+        data = FXCollections.observableArrayList(listaNieobecnosci);
         tabelaNieob.setItems(data);
         addButtonToTable();
     }
@@ -187,14 +190,7 @@ public class RodzicNieobecnosciController implements Initializable {
 
         while (it.hasNext()) {
             Obecnosc ob = it.next();
-            if (ob.getWartosc().equals("n")) {
-                ob.setWartosc("nieobecny");
-                obecnosci.add(ob);
-            } else if (ob.getWartosc().equals("nr")) {
-                ob.setWartosc("oczekujace");
-                obecnosci.add(ob);
-            } else if (ob.getWartosc().equals("u")) {
-                ob.setWartosc("usprawiedliwione");
+            if (!ob.getWartosc().equals("o")) {
                 obecnosci.add(ob);
             }
         }
@@ -210,7 +206,7 @@ public class RodzicNieobecnosciController implements Initializable {
         Iterator<Obecnosc> it = listaNieobecnosci.iterator();
         while (it.hasNext()) {
             Obecnosc ob = it.next();
-            if (ob.getWartosc().equals("nieobecny")) {
+            if (ob.getWartosc().equals("n")) {
                 ob.setWartosc("u");
                 HibernateUtil.edytujNieobecnosc(ob);
                 tabelaNieob.refresh();
@@ -231,7 +227,7 @@ public class RodzicNieobecnosciController implements Initializable {
                     {
                         btn.setOnAction((ActionEvent event) -> {
                             Obecnosc data = getTableView().getItems().get(getIndex());
-                            if (data.getWartosc().equals("nieobecny")) {
+                            if (data.getWartosc().equals("n")) {
                                 data.setWartosc("u");
                                 HibernateUtil.edytujNieobecnosc(data);
                                 tabelaNieob.refresh();
@@ -249,7 +245,7 @@ public class RodzicNieobecnosciController implements Initializable {
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            if (!item.getWartosc().equals("nieobecny")) {
+                            if (!item.getWartosc().equals("n")) {
                                 btn.setDisable(true);
                                 setGraphic(btn);
                             } else {
@@ -286,21 +282,38 @@ public class RodzicNieobecnosciController implements Initializable {
 
     private void wstawianieDzieci() {
         Set dzieci = rodzic.getUczens();
-        imie.setCellValueFactory(new PropertyValueFactory<>("imie"));
-        nazwisko.setCellValueFactory(new PropertyValueFactory<>("nazwisko"));
+        if (dzieci.isEmpty()) {
+        } else {
+            imie.setCellValueFactory(new PropertyValueFactory<>("imie"));
+            nazwisko.setCellValueFactory(new PropertyValueFactory<>("nazwisko"));
 
-        ObservableList<Uczen> dane = FXCollections.observableArrayList(dzieci);
-        dzieciTB.setItems(dane);
+            ObservableList<Uczen> dane = FXCollections.observableArrayList(dzieci);
+            dzieciTB.setItems(dane);
 
-        kolData.setCellValueFactory(new PropertyValueFactory<>("data"));
-        kolWartosc.setCellValueFactory(new PropertyValueFactory<>("wartosc"));
-        kolPrzedmiot.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
-            public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> p) {
-                StringProperty nazwaPrzedmiotu = new SimpleStringProperty();
-                nazwaPrzedmiotu.setValue(p.getValue().getPrzedmiot().getNazwaPrzedmiotu());
-                return nazwaPrzedmiotu;
-            }
-        });
+            kolData.setCellValueFactory(new PropertyValueFactory<>("data"));
+            kolWartosc.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
+                public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> p) {
+                    StringProperty wartosc = new SimpleStringProperty();
+                    if (p.getValue().getWartosc().equals("n")) {
+                        wartosc.setValue("nieobecny");
+                    }
+                    if (p.getValue().getWartosc().equals("nr")) {
+                        wartosc.setValue("oczekujące");
+                    }
+                    if (p.getValue().getWartosc().equals("u")) {
+                        wartosc.setValue("usprawiedliwione");
+                    }
+                    return wartosc;
+                }
+            });
+            kolPrzedmiot.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
+                public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> p) {
+                    StringProperty nazwaPrzedmiotu = new SimpleStringProperty();
+                    nazwaPrzedmiotu.setValue(p.getValue().getPrzedmiot().getNazwaPrzedmiotu());
+                    return nazwaPrzedmiotu;
+                }
+            });
+        }
     }
 
     public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {

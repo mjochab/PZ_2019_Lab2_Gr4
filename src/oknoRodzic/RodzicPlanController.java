@@ -70,6 +70,7 @@ public class RodzicPlanController implements Initializable {
     private TableColumn<Uczen, String> imie;
     @FXML
     private TableColumn<Uczen, String> nazwisko;
+    @FXML
     private TableColumn<Integer, String> godzina;
     @FXML
     private TableColumn<Integer, String> pon;
@@ -89,6 +90,7 @@ public class RodzicPlanController implements Initializable {
     private ObservableList<TableColumn> kolumna;
 
     private Rodzic rodzic;
+
     public void setRodzic(Rodzic rodzic) {
         this.rodzic = rodzic;
     }
@@ -103,7 +105,10 @@ public class RodzicPlanController implements Initializable {
         Platform.runLater(() -> {
             pesel = getPesel();
             wstawianieDzieci();
-            dzieciTB.addEventHandler(MouseEvent.MOUSE_CLICKED, zwrocEventHandleraDlaDzieci(dzieciTB));          
+            if (dzieciTB.getItems().isEmpty()) {
+            } else {
+                dzieciTB.addEventHandler(MouseEvent.MOUSE_CLICKED, zwrocEventHandleraDlaDzieci(dzieciTB));
+            }
         });
 
     }
@@ -171,6 +176,7 @@ public class RodzicPlanController implements Initializable {
     }
 
     private void wstawPlan(Uczen uczen) {
+        tabelaZajec.getItems().clear();
         Klasa plan = zwrocPlan(uczen.getKlasa().getNazwaKlasy());
         Set zajecia = plan.getZajecias();
         ArrayList<Zajecia> zajeciaPosortowane = Utils.posortujZajecia(zajecia);
@@ -209,11 +215,14 @@ public class RodzicPlanController implements Initializable {
 
     private void wstawianieDzieci() {
         Set dzieci = rodzic.getUczens();
-        imie.setCellValueFactory(new PropertyValueFactory<>("imie"));
-        nazwisko.setCellValueFactory(new PropertyValueFactory<>("nazwisko"));
+        if (dzieci.isEmpty()) {
+        } else {
+            imie.setCellValueFactory(new PropertyValueFactory<>("imie"));
+            nazwisko.setCellValueFactory(new PropertyValueFactory<>("nazwisko"));
 
-        ObservableList<Uczen> dane = FXCollections.observableArrayList(dzieci);
-        dzieciTB.setItems(dane);
+            ObservableList<Uczen> dane = FXCollections.observableArrayList(dzieci);
+            dzieciTB.setItems(dane);
+        }
     }
 
     public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
