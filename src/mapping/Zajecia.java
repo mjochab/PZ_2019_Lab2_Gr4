@@ -1,6 +1,6 @@
 package mapping;
+// Generated 9 maj 2019, 12:00:04 by Hibernate Tools 4.3.1
 
-// Generated 25 kwi 2019, 13:51:48 by Hibernate Tools 4.3.1
 
 import java.util.Date;
 

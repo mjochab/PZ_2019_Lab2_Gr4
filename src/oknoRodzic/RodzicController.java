@@ -29,12 +29,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.TableColumn;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import mapping.*;
 import utilities.*;
+import static utilities.HibernateUtil.uzyskajPesel;
 
 public class RodzicController implements Initializable {
 
-    //private final long PESEL = 32222222220L;
     @FXML
     private AnchorPane rootPane;
     @FXML
@@ -45,6 +52,17 @@ public class RodzicController implements Initializable {
     private Button uwagibtn;
     @FXML
     private Button wylogujbtn;
+    @FXML
+    private TableView<Uczen> dzieciTB;
+
+    public void setDzieciTB(TableView<Uczen> dzieciTB) {
+        this.dzieciTB = dzieciTB;
+    }
+    @FXML
+    private TableColumn<Uczen, String> imie;
+    @FXML
+    private TableColumn<Uczen, String> nazwisko;
+
     @FXML
     private TableView tabelaOcen;
     @FXML
@@ -62,13 +80,18 @@ public class RodzicController implements Initializable {
     @FXML
     private TableColumn<Integer, Number> kolumna7;
     @FXML
-    private Label userid;
+    private Label userLogin;
 
-    private long pesel = 32222222221L;
     private String username = "uzytkownik";
+    private Long pesel;
     public String[] nazwyKolumn;
     public ObservableList<TableColumn> kolumna;
     public Uczen uczen;
+    public Rodzic rodzic;
+
+    public void setRodzic(Rodzic rodzic) {
+        this.rodzic = rodzic;
+    }
     //public 
 
     /**
@@ -76,16 +99,20 @@ public class RodzicController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        wstawUseraDoZalogowanoJako(username);
-        zmianaNazwKolumn();
+
         tabelaOcen.setColumnResizePolicy((param) -> true);
-        Platform.runLater(() -> Utils.customResize(tabelaOcen));
-        wpisywanieOcen();
+        Platform.runLater(() -> {
+            Utils.customResize(tabelaOcen);
+            wstawUseraDoZalogowanoJako(username);
+            zmianaNazwKolumn();
+            pesel = getPesel();
+            wstawianieDzieci();
+            if (dzieciTB.getItems().isEmpty()) {
+            } else {
+                dzieciTB.addEventHandler(MouseEvent.MOUSE_CLICKED, zwrocEventHandleraDlaDzieci(dzieciTB));
+            }
+        });
 
-    }
-
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
     }
 
     @FXML
@@ -99,26 +126,58 @@ public class RodzicController implements Initializable {
     private void LoadOceny(ActionEvent event) throws IOException {
         tabelaOcen.setColumnResizePolicy((param) -> true);
         Platform.runLater(() -> Utils.customResize(tabelaOcen));
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("Rodzic.fxml"));
-        rootPane.getChildren().setAll(pane);
-        wpisywanieOcen();
-
+        AnchorPane pane;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("Rodzic.fxml"));
+        try {
+            pane = fxmlLoader.load();
+            rootPane.getChildren().setAll(pane);
+        } catch (IOException ex) {
+            Logger.getLogger(RodzicController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        RodzicController controller = fxmlLoader.getController();
+        controller.wstawUseraDoZalogowanoJako(username);
+        controller.przekazNazweUzytkownikaIPesel(username, pesel);
+        controller.setRodzic(rodzic);
     }
 
     @FXML
     private void LoadNieobecnosci(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("RodzicNieobecnosci.fxml"));
-        rootPane.getChildren().setAll(pane);
+        AnchorPane pane;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("RodzicNieobecnosci.fxml"));
+        try {
+            pane = fxmlLoader.load();
+            rootPane.getChildren().setAll(pane);
+        } catch (IOException ex) {
+            Logger.getLogger(RodzicNieobecnosciController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        RodzicNieobecnosciController controller = fxmlLoader.getController();
+        controller.wstawUseraDoZalogowanoJako(username);
+        controller.przekazNazweUzytkownikaIPesel(username, pesel);
+        controller.setRodzic(rodzic);
     }
 
     @FXML
     private void LoadUwagi(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("RodzicPlan.fxml"));
-        rootPane.getChildren().setAll(pane);
+        AnchorPane pane;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("RodzicPlan.fxml"));
+        try {
+            pane = fxmlLoader.load();
+            rootPane.getChildren().setAll(pane);
+        } catch (IOException ex) {
+            Logger.getLogger(RodzicPlanController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        RodzicPlanController controller = fxmlLoader.getController();
+        controller.wstawUseraDoZalogowanoJako(username);
+        controller.przekazNazweUzytkownikaIPesel(username, pesel);
+        controller.setRodzic(rodzic);
+
     }
 
     @FXML
-    public void zmianaNazwKolumn() {
+    private void zmianaNazwKolumn() {
         nazwyKolumn = HibernateUtil.pobieranieNazwPrzedmiotow();
         kolumna = tabelaOcen.getColumns();
 
@@ -133,7 +192,7 @@ public class RodzicController implements Initializable {
         }
     }
 
-    public List<String> zwrocOcenyDlaPrzedmiotu(Set oceny, String nazwaKolumny) {
+    private List<String> zwrocOcenyDlaPrzedmiotu(Set oceny, String nazwaKolumny) {
         List<String> lista = new ArrayList<>();
         Iterator<Ocena> it = oceny.iterator();
 
@@ -148,7 +207,7 @@ public class RodzicController implements Initializable {
         return lista;
     }
 
-    public void wstawianieOcenDoKolumn(TableColumn<Integer, String> kol, List<String> listaOcen) {
+    private void wstawianieOcenDoKolumn(TableColumn<Integer, String> kol, List<String> listaOcen) {
         kol.setCellValueFactory(cellData -> {
             Integer rowIndex = cellData.getValue();
             if (rowIndex >= listaOcen.size()) {
@@ -159,13 +218,9 @@ public class RodzicController implements Initializable {
         });
     }
 
-    public void wpisywanieOcen() {
-        //String login = LogowanieController.getPassword_field().getText();
-        //  String haslo = LogowanieController.getLogin_field().getText();
-        // pesel = HibernateUtil.uzyskajPeselZalogowany(login, haslo);
-        uczen = HibernateUtil.zwrocUcznia(pesel);
+    private void wpisywanieOcen(Uczen uczen) {
+        tabelaOcen.getItems().clear();
         Set oceny = uczen.getOcenas();
-
         for (int i = 0; i < oceny.size(); i++) {
             tabelaOcen.getItems().add(i);
         }
@@ -179,12 +234,43 @@ public class RodzicController implements Initializable {
         }
     }
 
+    private EventHandler zwrocEventHandleraDlaDzieci(TableView<Uczen> table) {
+
+        EventHandler eventHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+
+                Uczen selectedItem = table.getSelectionModel().getSelectedItem();
+                wpisywanieOcen(selectedItem);
+            }
+        };
+        return eventHandler;
+    }
+
+    private void wstawianieDzieci() {
+        rodzic = HibernateUtil.zwrocRodzica(pesel);
+        Set dzieci = rodzic.getUczens();
+        if (dzieci.isEmpty()) {
+        } else {
+            imie.setCellValueFactory(new PropertyValueFactory<>("imie"));
+            nazwisko.setCellValueFactory(new PropertyValueFactory<>("nazwisko"));
+
+            ObservableList<Uczen> dane = FXCollections.observableArrayList(dzieci);
+            dzieciTB.setItems(dane);
+        }
+    }
+
     public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
         this.username = username;
         this.pesel = pesel;
     }
 
     public void wstawUseraDoZalogowanoJako(String username) {
-        userid.setText(username);
+        userLogin.setText(username);
+    }
+
+    private Long getPesel() {
+        String login = userLogin.getText();
+        return uzyskajPesel(login);
     }
 }

@@ -41,6 +41,7 @@ import mapping.Przedmiot;
 import mapping.Uczen;
 import mapping.Zajecia;
 import utilities.HibernateUtil;
+import static utilities.HibernateUtil.uzyskajPesel;
 import utilities.Utils;
 
 public class UczenNieobecnosciController implements Initializable {
@@ -76,16 +77,14 @@ public class UczenNieobecnosciController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        przekazNazweUzytkownikaIPesel(username,pesel);       
+        przekazNazweUzytkownikaIPesel(username, pesel);
         wstawUseraDoZalogowanoJako(username);
-        wstawNieobecnosci();
         tabelaNieob.setColumnResizePolicy((param) -> true);
-        Platform.runLater(() -> Utils.customResize(tabelaNieob));
-    }
-
-    @FXML
-    private void handleButtonAction(ActionEvent event) throws IOException {
-
+        Platform.runLater(() -> {
+            Utils.customResize(tabelaNieob);
+            pesel = getPesel();
+            wstawNieobecnosci();
+        });
     }
 
     @FXML
@@ -97,68 +96,59 @@ public class UczenNieobecnosciController implements Initializable {
     //ładujemy okno z ocenami uczenia.
     @FXML
     private void LoadNieobecnosci(ActionEvent event) throws IOException {
-            AnchorPane pane;
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("UczenNieobecnosci.fxml"));
-            try{
-               pane = fxmlLoader.load();
-               rootPane.getChildren().setAll(pane);
-            }
-            catch(IOException ex){
-               Logger.getLogger(UczenNieobecnosciController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            UczenNieobecnosciController controller = fxmlLoader.getController();
-            controller.wstawUseraDoZalogowanoJako(username);
-            controller.przekazNazweUzytkownikaIPesel(username, pesel);
-        
-        //AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
-        //rootPane.getChildren().setAll(pane);
-        tabelaNieob.setColumnResizePolicy((param) -> true);
-        Platform.runLater(() -> Utils.customResize(tabelaNieob));
-        wstawNieobecnosci();
+        AnchorPane pane;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("UczenNieobecnosci.fxml"));
+        try {
+            pane = fxmlLoader.load();
+            rootPane.getChildren().setAll(pane);
+        } catch (IOException ex) {
+            Logger.getLogger(UczenNieobecnosciController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        UczenNieobecnosciController controller = fxmlLoader.getController();
+        controller.wstawUseraDoZalogowanoJako(username);
+        controller.przekazNazweUzytkownikaIPesel(username, pesel);
     }
 
-   @FXML
+    @FXML
     private void LoadOceny(ActionEvent event) throws IOException {
-            AnchorPane pane;
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("UczenOceny.fxml"));
-            try{
-               pane = fxmlLoader.load();
-               rootPane.getChildren().setAll(pane);
-            }
-            catch(IOException ex){
-               Logger.getLogger(UczenNieobecnosciController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            UczenOcenyController controller = fxmlLoader.getController();
-            controller.wstawUseraDoZalogowanoJako(username);
-            controller.przekazNazweUzytkownikaIPesel(username, pesel);
-        
+        AnchorPane pane;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("UczenOceny.fxml"));
+        try {
+            pane = fxmlLoader.load();
+            rootPane.getChildren().setAll(pane);
+        } catch (IOException ex) {
+            Logger.getLogger(UczenNieobecnosciController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        UczenOcenyController controller = fxmlLoader.getController();
+        controller.wstawUseraDoZalogowanoJako(username);
+        controller.przekazNazweUzytkownikaIPesel(username, pesel);
+
         //AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
         //rootPane.getChildren().setAll(pane);
     }
 
-     @FXML
+    @FXML
     private void LoadUwagi(ActionEvent event) throws IOException {
-            AnchorPane pane;
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("UczenUwagi.fxml"));
-            try{
-               pane = fxmlLoader.load();
-               rootPane.getChildren().setAll(pane);
-            }
-            catch(IOException ex){
-               Logger.getLogger(UczenNieobecnosciController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            UczenUwagiController controller = fxmlLoader.getController();
-            controller.wstawUseraDoZalogowanoJako(username);
-            controller.przekazNazweUzytkownikaIPesel(username, pesel);
-            
+        AnchorPane pane;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("UczenUwagi.fxml"));
+        try {
+            pane = fxmlLoader.load();
+            rootPane.getChildren().setAll(pane);
+        } catch (IOException ex) {
+            Logger.getLogger(UczenNieobecnosciController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        UczenUwagiController controller = fxmlLoader.getController();
+        controller.wstawUseraDoZalogowanoJako(username);
+        controller.przekazNazweUzytkownikaIPesel(username, pesel);
+
         //AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
         //rootPane.getChildren().setAll(pane);
     }
 
-    public void wstawNieobecnosci() {
+    private void wstawNieobecnosci() {
         Uczen uczen = HibernateUtil.zwrocUcznia(pesel);
         kolData.setCellValueFactory(new PropertyValueFactory<>("data"));
         kolWartosc.setCellValueFactory(new PropertyValueFactory<>("wartosc"));
@@ -176,7 +166,7 @@ public class UczenNieobecnosciController implements Initializable {
         tabelaNieob.setItems(dane);
     }
 
-    public ArrayList<Obecnosc> posortujNieobecnosci(Set nieobecnosciSet) {
+    private ArrayList<Obecnosc> posortujNieobecnosci(Set nieobecnosciSet) {
         ArrayList<Obecnosc> obecnosci = new ArrayList<Obecnosc>();
         Iterator<Obecnosc> it = nieobecnosciSet.iterator();
 
@@ -208,6 +198,10 @@ public class UczenNieobecnosciController implements Initializable {
     public void wstawUseraDoZalogowanoJako(String username) {
         userid.setText(username);
     }
-    
+
+    private Long getPesel() {
+        String login = userid.getText();
+        return uzyskajPesel(login);
+    }
 
 }

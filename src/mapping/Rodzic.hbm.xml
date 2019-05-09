@@ -1,9 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-
-<!-- Generated 25 kwi 2019, 13:51:48 by Hibernate Tools 4.3.1 -->
-
+<!-- Generated 9 maj 2019, 12:00:05 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="mapping.Rodzic" table="rodzic" catalog="dziennik_elektroniczny" optimistic-lock="version">
         <id name="pesel" type="long">
@@ -13,9 +11,6 @@
             </generator>
         </id>
         <one-to-one name="autoryzacja" class="mapping.Autoryzacja" constrained="true"></one-to-one>
-        <many-to-one name="uczen" class="mapping.Uczen" fetch="select">
-            <column name="dziecko" />
-        </many-to-one>
         <property name="imieOjca" type="string">
             <column name="imie_ojca" length="30" />
         </property>
@@ -28,5 +23,11 @@
         <property name="nazwiskoMatki" type="string">
             <column name="nazwisko_matki" length="30" />
         </property>
+        <set name="uczens" table="uczen" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="rodzic" not-null="true" />
+            </key>
+            <one-to-many class="mapping.Uczen" />
+        </set>
     </class>
 </hibernate-mapping>
