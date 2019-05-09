@@ -35,9 +35,15 @@
             <Button fx:id="nieobecnoscibtn" layoutX="14.0" layoutY="91.0" mnemonicParsing="false" onAction="#LoadNieobecnosci" prefHeight="25.0" prefWidth="248.0" text="Nieobecności" />
             <Button fx:id="wylogujbtn" layoutX="14.0" layoutY="171.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />
                <Label fx:id="userid1" layoutX="14.0" layoutY="14.0" prefHeight="17.0" prefWidth="177.0" text="Dziennik elektroniczny.net" />
+            <TableView fx:id="dzieciTB" layoutX="14.0" layoutY="311.0" prefHeight="220.0" prefWidth="248.0">
+              <columns>
+                <TableColumn fx:id="imie"  prefWidth="99.0" text="Imie" />
+                <TableColumn fx:id="nazwisko" prefWidth="148.0" text="Nazwisko" />
+              </columns>
+            </TableView>
          </children>
       </AnchorPane>
       <Label layoutX="1026.0" layoutY="14.0" prefHeight="17.0" prefWidth="217.0" text="Zalogowano jako " />
-       <Label fx:id="userid" layoutX="1123.0" layoutY="14.0" prefHeight="17.0" prefWidth="97.0" text="tu login" />
+      <Label fx:id="userLogin" layoutX="1123.0" layoutY="14.0" prefHeight="17.0" prefWidth="97.0" text="tu login" />
    </children>
 </AnchorPane>

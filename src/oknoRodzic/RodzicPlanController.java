@@ -32,6 +32,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import mapping.Klasa;
 import mapping.Obecnosc;
@@ -61,6 +65,11 @@ public class RodzicPlanController implements Initializable {
     @FXML
     private TableView tabelaZajec;
     @FXML
+    private TableView dzieciTB;
+    @FXML
+    private TableColumn<Uczen, String> imie;
+    @FXML
+    private TableColumn<Uczen, String> nazwisko;
     private TableColumn<Integer, String> godzina;
     @FXML
     private TableColumn<Integer, String> pon;
@@ -79,14 +88,22 @@ public class RodzicPlanController implements Initializable {
     private String username = "uzytkownik";
     private ObservableList<TableColumn> kolumna;
 
+    private Rodzic rodzic;
+    public void setRodzic(Rodzic rodzic) {
+        this.rodzic = rodzic;
+    }
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        przekazNazweUzytkownikaIPesel(username, pesel);
+        wstawUseraDoZalogowanoJako(username);
         Platform.runLater(() -> {
             pesel = getPesel();
-            wstawPlan();
+            wstawianieDzieci();
+            dzieciTB.addEventHandler(MouseEvent.MOUSE_CLICKED, zwrocEventHandleraDlaDzieci(dzieciTB));          
         });
 
     }
@@ -116,7 +133,7 @@ public class RodzicPlanController implements Initializable {
         RodzicController controller = fxmlLoader.getController();
         controller.wstawUseraDoZalogowanoJako(username);
         controller.przekazNazweUzytkownikaIPesel(username, pesel);
-
+        controller.setRodzic(rodzic);
     }
 
     @FXML
@@ -133,7 +150,7 @@ public class RodzicPlanController implements Initializable {
         RodzicNieobecnosciController controller = fxmlLoader.getController();
         controller.wstawUseraDoZalogowanoJako(username);
         controller.przekazNazweUzytkownikaIPesel(username, pesel);
-
+        controller.setRodzic(rodzic);
     }
 
     @FXML
@@ -150,20 +167,10 @@ public class RodzicPlanController implements Initializable {
         RodzicPlanController controller = fxmlLoader.getController();
         controller.wstawUseraDoZalogowanoJako(username);
         controller.przekazNazweUzytkownikaIPesel(username, pesel);
-
+        controller.setRodzic(rodzic);
     }
 
-    private void ustawIdKolumn() {
-        pon.setId("pon");
-        wt.setId("wt");
-        sr.setId("sr");
-        czw.setId("czw");
-        pt.setId("pt");
-    }
-
-    private void wstawPlan() {
-        Rodzic rodzic = HibernateUtil.zwrocRodzica(pesel);
-        Uczen uczen = rodzic.getUczen();
+    private void wstawPlan(Uczen uczen) {
         Klasa plan = zwrocPlan(uczen.getKlasa().getNazwaKlasy());
         Set zajecia = plan.getZajecias();
         ArrayList<Zajecia> zajeciaPosortowane = Utils.posortujZajecia(zajecia);
@@ -185,6 +192,28 @@ public class RodzicPlanController implements Initializable {
                 Utils.wstawianieZajecDoKolumn(kol, zajeciaDnia);
             }
         }
+    }
+
+    private EventHandler zwrocEventHandleraDlaDzieci(TableView<Uczen> table) {
+
+        EventHandler eventHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+
+                Uczen selectedItem = table.getSelectionModel().getSelectedItem();
+                wstawPlan(selectedItem);
+            }
+        };
+        return eventHandler;
+    }
+
+    private void wstawianieDzieci() {
+        Set dzieci = rodzic.getUczens();
+        imie.setCellValueFactory(new PropertyValueFactory<>("imie"));
+        nazwisko.setCellValueFactory(new PropertyValueFactory<>("nazwisko"));
+
+        ObservableList<Uczen> dane = FXCollections.observableArrayList(dzieci);
+        dzieciTB.setItems(dane);
     }
 
     public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
