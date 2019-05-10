@@ -8,6 +8,7 @@ package oknoDyrektor;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -154,25 +155,38 @@ public class Dyrektor_AutoryzacjaController implements Initializable {
         String haslo = haslo_uz.getText();
         String kto = kto_box.getSelectionModel().getSelectedItem().toString();
         Long peselek = null;
-        try {
-            peselek = Long.parseLong(pesel_uz.getText());
-        } catch (Exception e) {
-            error_label.setText("Niepoprawny pesel!");
-        }
+
         if (login.isEmpty() || haslo.isEmpty()) {
             error_label.setText("Niepoprawne dane!");
-        }
-        else if (pesel_uz.getText().isEmpty() || pesel_uz.getText().length() != 11){
+        } else if (pesel_uz.getText().isEmpty() || pesel_uz.getText().length() != 11) {
             error_label.setText("Niepoprawny pesel!");
+        } else {
+            try {
+                peselek = Long.parseLong(pesel_uz.getText());
+                if (porownaniePeseliZAutoryzacji(peselek)) {
+                    error_label.setText("Taki pesel już jest w bazie!");
+                } else {
+                    wstawAutoryzacje(peselek, login, haslo, kto);
+                    login_uz.setText("");
+                    haslo_uz.setText("");
+                    pesel_uz.setText("");
+                    error_label.setText("Dodano do bazy!");
+                }
+
+            } catch (Exception e) {
+                error_label.setText("Niepoprawny pesel!");
+            }
+            //wstawAutoryzacje(peselek, login, haslo, kto);
+
         }
-        else{
-            wstawAutoryzacje(peselek, login,haslo, kto);
-            login_uz.setText("");
-            haslo_uz.setText("");
-            pesel_uz.setText("");
-            error_label.setText("Dodano do bazy!");
-        }
-        
+    }
+
+    private boolean porownaniePeseliZAutoryzacji(Long pesel) {
+        //boolean zmienna = true;
+        List<Long> peseleAut = new ArrayList<>();
+        peseleAut = pobierzListePeseli();
+
+        return peseleAut.contains(pesel);
     }
 
 }
