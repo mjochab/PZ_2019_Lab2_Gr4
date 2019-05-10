@@ -725,11 +725,9 @@ public class HibernateUtil {
      * @param imie_m
      * @param nazwisko_m
      */
-    public static void wstawRodzica(long pesel_r, long pesel_uczen, String imie_o, String nazwisko_o, String imie_m, String nazwisko_m) {
+    public static void wstawRodzica(long pesel_r, String imie_o, String nazwisko_o, String imie_m, String nazwisko_m) {
         Autoryzacja aut = zwrocAutoryzacje(pesel_r);
-        Autoryzacja aut_ucz = zwrocAutoryzacje(pesel_uczen);
-        Uczen uczniak = aut_ucz.getUczen();
-
+       
         Rodzic nowy_rodzic = new Rodzic(aut);
         nowy_rodzic.setImieMatki(imie_m);
         nowy_rodzic.setImieOjca(imie_o);

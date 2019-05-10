@@ -64,6 +64,7 @@
             <Label layoutX="230.0" layoutY="70.0" text="Pesel rodzica" />
             <Separator layoutX="17.0" layoutY="140.0" prefHeight="4.0" prefWidth="923.0" />
             <Label fx:id="ucz_error" layoutX="522.0" layoutY="101.0" prefHeight="17.0" prefWidth="142.0" textAlignment="CENTER" textFill="#d00404" />
+            <Label fx:id="rodzic_error" layoutX="530.0" layoutY="245.0" prefHeight="17.0" prefWidth="142.0" textAlignment="CENTER" textFill="#bf0000" />
             </children>
         </AnchorPane>
         <AnchorPane layoutX="-6.0" prefHeight="726.0" prefWidth="265.0">
