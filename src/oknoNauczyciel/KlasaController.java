@@ -69,17 +69,24 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import mapping.Klasa;
 import mapping.Obecnosc;
 import mapping.Ocena;
 import mapping.Przedmiot;
 import mapping.RodzajOceny;
 import mapping.Uczen;
+import mapping.Zajecia;
 import org.jboss.logging.Logger;
 import utilities.HibernateUtil;
 import static utilities.HibernateUtil.*;
+import utilities.Utils;
 import static utilities.Utils.customResize;
 import static utilities.Utils.zwrocDatyWktorychMamZajecia;
 
+/**
+ *
+ * @author Veth
+ */
 public class KlasaController implements Initializable {
 
   @FXML
@@ -100,14 +107,18 @@ public class KlasaController implements Initializable {
   private Button przejdzDoWychowankow;
   @FXML
   private Button przejdzDoObecnosci;
-  @FXML
-  private Button wyloguj;
+
 
   private static String klasa = null;
   private String username = null;
   private Long pesel = null;
   List<Uczen> uczniowie = new ArrayList<>();
 
+  /**
+   *
+   * @param url
+   * @param rb
+   */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
 
@@ -116,16 +127,9 @@ public class KlasaController implements Initializable {
       wstawUseraDoZalogowanoJako(username);
       wstawKlaseDoLabela(klasa);
       setUczniowie();
-      //stworzZakladkiOceny();
-      //stworzZakladkiZobecnosciami();
       przejdzDoObecnosci.addEventHandler(MouseEvent.MOUSE_CLICKED, stworzTabeleObecnosci());
       przejdzDoOcen.addEventHandler(MouseEvent.MOUSE_CLICKED, stworzTabeleOceny());
       przejdzDoWychowankow.addEventHandler(MouseEvent.MOUSE_CLICKED, przejdzDoWychowankowHandler());
-      wyloguj.setOnAction((ActionEvent event) -> {
-
-      //  poprosze o metode do wylogowywania
-      });
-
       gagatek.setVisible(false);
     });
 
@@ -137,6 +141,12 @@ public class KlasaController implements Initializable {
 
   }
 
+  /**
+   *
+   * @param klasa klasa przekazana z okna wczesniej
+   * @param username nazwa uzytkownika wyciagnieta z bazy okno wczesniej
+   * @param pesel pesel przekazany z okna wczesniej
+   */
   public void przekazKlaseIusername(String klasa, String username, Long pesel) {
     this.username = username;
     this.klasa = klasa;
@@ -144,10 +154,17 @@ public class KlasaController implements Initializable {
 
   }
 
+  /**
+   *
+   * @return
+   */
   public String getKlasa() {
     return klasa;
   }
 
+  /**
+   * przypisuje do listy uczniow liste uczniow z bazy z konkretnej klasy
+   */
   public void setUczniowie() {
     this.uczniowie = zwrocUczniowZklasy(klasa);
   }
@@ -259,7 +276,6 @@ public class KlasaController implements Initializable {
             if (empty) {
               setGraphic(null);
             } else {
-              //if (!item.getWartosc().equals("nieobecny")) {
               Set obecnosciUczniaKtoregoUcze = item.getObecnoscs();
               for (Iterator iterator = obecnosciUczniaKtoregoUcze.iterator(); iterator.hasNext();) {
                 Obecnosc obecnosc = (Obecnosc) iterator.next();
@@ -406,11 +422,6 @@ public class KlasaController implements Initializable {
     listaRodzajow.setPrefWidth(60);
     listaRodzajow.setPrefHeight(35);
 
-//    Button test = new Button("testuj liste");
-//    test.setOnAction(action -> {
-//      String value = listaRodzajow.getSelectionModel().getSelectedItem().toString();
-//      System.out.println(value);
-//    });
     DatePicker datePicker = new DatePicker();
     datePicker.setMaxWidth(150);
     datePicker.setConverter(new StringConverter<LocalDate>() {
@@ -471,7 +482,6 @@ public class KlasaController implements Initializable {
 
     table.addEventHandler(MouseEvent.MOUSE_CLICKED, dodajButtonyWypelnijTextFieldyHandler(table, ocenaPole, listaRodzajow, dodajOcene, edytujOcene, cancel, uczen, przedmiot, tab, datePicker, label));
 
-    //DOROBIC CHOWANIE BUTTONOW, USUWANIE STAREJ TABELI
   }
 
   private TableView stworzTabeleZkolumnamiOceny(Przedmiot przedmiot, Tab tab) {
@@ -569,18 +579,15 @@ public class KlasaController implements Initializable {
           LocalDate dateLocal = sqlDate.toLocalDate();
 
           datePicker.setValue(dateLocal);
-          //data.setText(selectedItem.getData().toString());
           cancel.setVisible(true);
           dodaj.setVisible(false);
           edytuj.setVisible(true);
           edytuj.addEventHandler(MouseEvent.MOUSE_CLICKED, edytujOceneButtonHandler(table, ocena, listaRodzajow, datePicker, uczen, przedmiot, tab, selectedItem, dodaj, cancel, edytuj, label));
-          //TableView<Ocena> table, TextField ocena, TextField rodzaj, TextField data, Uczen uczen, Przedmiot przedmiot, Tab tab, Ocena obiektOcenaDoEdycji, Button dodaj, Button cancel
           cancel.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
               ocena.setText("");
               listaRodzajow.getSelectionModel().clearSelection();
-              //data.setText("");
               dodaj.setVisible(true);
               cancel.setVisible(false);
               edytuj.setVisible(false);
@@ -626,8 +633,8 @@ public class KlasaController implements Initializable {
           wstawOcene(obiektOcenaDoWstawienia);
           label.setText("Dodano ocene");
           odswiezTabele(table, przedmiot, tab, uczen);
-          // usuwa date z datepickera, ale lepiej chyba zostawić ją jakby nauczyciel wprowadzal 30 ocen z danego dnia 
-          //datePicker.getEditor().clear();
+          // usuwa date z datepickera, ale lepiej chyba zostawić ją jakby nauczyciel wprowadzal 30 ocen z danego dnia:
+          // datePicker.getEditor().clear();
         } catch (NullPointerException npx) {
           label.setVisible(true);
           label.setText("Podaj poprawne wartosci do edycji oceny!!!");
@@ -658,7 +665,8 @@ public class KlasaController implements Initializable {
           }
 
           edytujOcene(obiektOcenaDoEdycji);
-          label.setText("Zedytowano ocene");
+          label.setVisible(true);
+          label.setText("Zedytowano ocene na: " + obiektOcenaDoEdycji.getStopien());
           odswiezTabele(table, przedmiot, tab, uczen);
           cancel.setVisible(false);
           dodaj.setVisible(true);
@@ -702,17 +710,16 @@ public class KlasaController implements Initializable {
   }
 
   // UTILS---------------------------
-  public void odswiezTabele(TableView<Ocena> tableOcena, Przedmiot przedmiot, Tab tab, Uczen uczen) {
+  private void odswiezTabele(TableView<Ocena> tableOcena, Przedmiot przedmiot, Tab tab, Uczen uczen) {
 
     int ktoryTabJestWybrany = tabsPane.getSelectionModel().getSelectedIndex();
-    //SingleSelectionModel wybierz = new SingleSelectionModel();
     Tab odswiezonyTab = stworzPojedynczaZakladke(przedmiot);
     tabsPane.getTabs().remove(ktoryTabJestWybrany);
     tabsPane.getTabs().add(odswiezonyTab);
     tableOcena.refresh();
     // wybierz nowo dodanego taba
     SingleSelectionModel<Tab> selectionModel = tabsPane.getSelectionModel();
-    selectionModel.select(odswiezonyTab); //select by object
+    selectionModel.select(odswiezonyTab);
 
     ObservableList<Ocena> data
             = FXCollections.observableArrayList(zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(uczen, przedmiot));
