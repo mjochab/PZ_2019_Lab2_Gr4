@@ -8,11 +8,14 @@ package oknoDyrektor;
 import Okna.LogowanieController;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,7 +28,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import static utilities.HibernateUtil.podajPeseleNauczycielaBezDanych;
+import static utilities.HibernateUtil.uzyskajLoginZalogowany;
 import static utilities.HibernateUtil.uzyskajPesel;
+import static utilities.HibernateUtil.wstawAutoryzacje;
 import static utilities.HibernateUtil.wstawNauczyciela;
 
 /**
@@ -48,6 +53,10 @@ public class DyrektorController implements Initializable {
     @FXML
     private Label userid;
     @FXML
+    private Label err_label;
+    @FXML
+    private Label label_login;
+    @FXML
     private TextField imie_n;
     @FXML
     private TextField nazwisko_n;
@@ -60,10 +69,9 @@ public class DyrektorController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //ustawWartosciBox();
+        ustawWartosciPeseliLoginow();
         wstawUseraDoZalogowanoJako(username);
         Platform.runLater(() -> {
-            System.out.println(getPesel());
-            //pesel = getPesel();
             //wstawUseraDoZalogowanoJako(username);
         });
     }
@@ -150,25 +158,69 @@ public class DyrektorController implements Initializable {
         String login = userid.getText();
         return uzyskajPesel(login);
     }
-    // wyłapać null jeśli brak rekordów
+
+    //usuniety label w oknie - uwaga
     private void ustawWartosciBox() {
-        //ChoiceBox cb = new ChoiceBox();
         List<Long> peselki = podajPeseleNauczycielaBezDanych();
         ObservableList<Long> lista = FXCollections.observableArrayList(peselki);
         pesel_n.setItems(lista);
-        pesel_n.setValue(peselki.get(0));
-        //System.out.println(kto_box.getSelectionModel().getSelectedItem().toString());
+        if (peselki.size() > 0) {
+            pesel_n.setValue(peselki.get(0));
+            label_login.setText(uzyskajLoginZalogowany(peselki.get(0)));
+
+            pesel_n.valueProperty().addListener(new ChangeListener<Long>() {
+                @Override
+                public void changed(ObservableValue ov, Long poprzednia, Long nowa) {
+                    label_login.setText(uzyskajLoginZalogowany(nowa));
+                }
+            });
+        }
+    }
+
+    private void ustawWartosciPeseliLoginow() {
+        List<String> peselki = zrobListePeseliILoginow();
+        ObservableList<String> lista = FXCollections.observableArrayList(peselki);
+        pesel_n.setItems(lista);
+        if (peselki.size() > 0) {
+            pesel_n.setValue(peselki.get(0));
+        }
+    }
+
+    private List<String> zrobListePeseliILoginow() {
+        List<Long> peselki = podajPeseleNauczycielaBezDanych();
+        List<String> loginy = new ArrayList<String>();
+        for (int i = 0; i < peselki.size(); i++) {
+            String log = uzyskajLoginZalogowany(peselki.get(i));
+            loginy.add(peselki.get(i) + " - " + log);
+        }
+        return loginy;
     }
 
     @FXML
     private void wstawNowegoNauczyciela() {
-        System.out.println(pesel_n.getSelectionModel().getSelectedItem().toString() + " " + imie_n.getText() + " " + nazwisko_n.getText());
-        //String kto_wpisany = kto_box.getSelectionModel().getSelectedItem().toString();
-        //Long peselek = Long.parseLong(pesel_uz.getText());
-        //wstawNauczyciela(peselek,login_uz.getText(),haslo_uz.getText(),kto_box.getSelectionModel().getSelectedItem().toString());
-        Long peselN = Long.parseLong(pesel_n.getSelectionModel().getSelectedItem().toString());
-        wstawNauczyciela(peselN,imie_n.getText(),nazwisko_n.getText());
+        String imie = imie_n.getText();
+        String nazwisko = nazwisko_n.getText();
+        Long peselek = null;
+        List<Long> pesele_naucz = podajPeseleNauczycielaBezDanych();
+        int indeks = pesel_n.getSelectionModel().getSelectedIndex();
+
+        if (imie.isEmpty() || nazwisko.isEmpty()) {
+            err_label.setText("Niepoprawne dane!");
+        } else {
+            try {
+                peselek = pesele_naucz.get(indeks);
+                wstawNauczyciela(peselek, imie, nazwisko);
+                imie_n.setText("");
+                nazwisko_n.setText("");
+                err_label.setText("Dodano do bazy!");
+                ustawWartosciPeseliLoginow();
+            } catch (Exception e) {
+                err_label.setText("Niepoprawne dane!");
+            }
+        }
+
+        //Long peselN = Long.parseLong(pesel_n.getSelectionModel().getSelectedItem().toString());
+        // wstawNauczyciela(peselN, imie_n.getText(), nazwisko_n.getText());
     }
-    
 
 }

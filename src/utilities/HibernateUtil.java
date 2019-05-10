@@ -291,7 +291,7 @@ public class HibernateUtil {
         try {
             nr_pesel = entityManager.createQuery(criteria).getSingleResult();
         } catch (NoResultException e) {
-            System.out.println("nic nie pasuje");
+            //System.out.println("nic nie pasuje");
         }
 
         return nr_pesel;
@@ -311,7 +311,7 @@ public class HibernateUtil {
         try {
             osoba = entityManager.createQuery(criteria).getSingleResult();
         } catch (NoResultException e) {
-            System.out.println("nic nie pasuje");
+            //System.out.println("nic nie pasuje");
         }
         // String osoba = entityManager.createQuery(criteria).getSingleResult();
 
@@ -332,7 +332,7 @@ public class HibernateUtil {
         try {
             osoba = entityManager.createQuery(criteria).getSingleResult();
         } catch (NoResultException e) {
-            System.out.println("nic nie pasuje");
+            //System.out.println("nic nie pasuje");
         }
         //String osoba = entityManager.createQuery(criteria).getSingleResult();
 
@@ -697,7 +697,7 @@ public class HibernateUtil {
         Autoryzacja aut = zwrocAutoryzacje(pesel);
         Nauczyciel nowa_os = new Nauczyciel();
         nowa_os.setImie(imie);
-        nowa_os.setNazwisko(imie);
+        nowa_os.setNazwisko(nazwisko);
         nowa_os.setAutoryzacja(aut);
         Session session = sessionFactory.openSession();
 

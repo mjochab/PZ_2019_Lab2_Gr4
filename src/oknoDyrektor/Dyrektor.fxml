@@ -22,37 +22,38 @@
         </AnchorPane>
         <Label fx:id="userid" layoutX="1080.0" layoutY="16.0" prefHeight="17.0" prefWidth="97.0" text="tu login" />
         <Label layoutX="974.0" layoutY="16.0" prefHeight="17.0" prefWidth="97.0" text="Zalogowano jako" />
-        <AnchorPane layoutX="278.0" layoutY="45.0" prefHeight="566.0" prefWidth="954.0">
+        <AnchorPane layoutX="278.0" layoutY="45.0" prefHeight="616.0" prefWidth="954.0">
             <children>
-                <TextField fx:id="imie_n" layoutX="65.0" layoutY="41.0" />
-                <TextField fx:id="nazwisko_n" layoutX="301.0" layoutY="41.0" />
-                <Label layoutX="21.0" layoutY="45.0" text="Imię" />
-                <Label layoutX="234.0" layoutY="45.0" text="Nazwisko" />
+                <TextField fx:id="imie_n" layoutX="303.0" layoutY="41.0" />
+                <TextField fx:id="nazwisko_n" layoutX="550.0" layoutY="41.0" />
+                <Label layoutX="264.0" layoutY="45.0" text="Imię" />
+                <Label layoutX="483.0" layoutY="45.0" text="Nazwisko" />
                 <Label layoutX="19.0" layoutY="6.0" text="Dodawanie nowego nauczyciela" />
                 <Button fx:id="dodajbtn" layoutX="753.0" layoutY="41.0" mnemonicParsing="false" onMouseClicked="#wstawNowegoNauczyciela" prefHeight="25.0" prefWidth="149.0" text="Dodaj " />
-                <ChoiceBox fx:id="pesel_n" layoutX="541.0" layoutY="41.0" prefWidth="150.0" />
-                <Label layoutX="499.0" layoutY="45.0" prefHeight="17.0" prefWidth="28.0" text="Pesel" />
-                <Separator layoutX="21.0" layoutY="80.0" prefHeight="4.0" prefWidth="923.0" />
-                <Label layoutX="19.0" layoutY="97.0" text="Edytowanie danych nauczyciela" />
-                <TableView fx:id="tabela_nauczycieli" layoutX="19.0" layoutY="122.0" prefHeight="198.0" prefWidth="888.0">
+            <Label fx:id="err_label" layoutX="753.0" layoutY="73.0" prefHeight="17.0" prefWidth="149.0" textFill="#e40101" />
+                <ChoiceBox fx:id="pesel_n" layoutX="61.0" layoutY="41.0" prefHeight="25.0" prefWidth="166.0" />
+                <Label layoutX="19.0" layoutY="45.0" prefHeight="17.0" prefWidth="28.0" text="Pesel" />
+                <Separator layoutX="23.0" layoutY="110.0" prefHeight="4.0" prefWidth="923.0" />
+                <Label layoutX="21.0" layoutY="127.0" text="Edytowanie danych nauczyciela" />
+                <TableView fx:id="tabela_nauczycieli" layoutX="21.0" layoutY="152.0" prefHeight="198.0" prefWidth="888.0">
                     <columns>
                         <TableColumn fx:id="kol_imie" prefWidth="243.0" text="Imie" />
                         <TableColumn fx:id="kol_nazwisko" prefWidth="233.0" text="Nazwisko" />
                         <TableColumn fx:id="kol_pesel" prefWidth="223.0" text="Pesel" />
                     </columns>
                 </TableView>
-                <TextField fx:id="e_imie_n" layoutX="65.0" layoutY="339.0" />
-                <TextField fx:id="e_nazwisko_n" layoutX="301.0" layoutY="339.0" />
-                <Label layoutX="21.0" layoutY="343.0" text="Imię" />
-                <Label layoutX="234.0" layoutY="343.0" text="Nazwisko" />
-                <ChoiceBox layoutX="541.0" layoutY="339.0" prefWidth="150.0" />
-                <Label layoutX="499.0" layoutY="343.0" text="Pesel" />
-                <Button fx:id="edytujbtn" layoutX="753.0" layoutY="339.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Edytuj " />
-                <Separator layoutX="25.0" layoutY="390.0" prefHeight="4.0" prefWidth="923.0" />
-                <Label layoutX="19.0" layoutY="406.0" text="Usuwanie nauczyciela" />
-                <Label layoutX="19.0" layoutY="434.0" text="Lista" />
-                <ChoiceBox layoutX="65.0" layoutY="430.0" prefWidth="150.0" />
-                <Button layoutX="301.0" layoutY="430.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="149.0" text="Usuń" />
+                <TextField fx:id="e_imie_n" layoutX="67.0" layoutY="369.0" />
+                <TextField fx:id="e_nazwisko_n" layoutX="303.0" layoutY="369.0" />
+                <Label layoutX="23.0" layoutY="373.0" text="Imię" />
+                <Label layoutX="236.0" layoutY="373.0" text="Nazwisko" />
+                <ChoiceBox layoutX="543.0" layoutY="369.0" prefWidth="150.0" />
+                <Label layoutX="501.0" layoutY="373.0" text="Pesel" />
+                <Button fx:id="edytujbtn" layoutX="755.0" layoutY="369.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Edytuj " />
+                <Separator layoutX="27.0" layoutY="420.0" prefHeight="4.0" prefWidth="923.0" />
+                <Label layoutX="21.0" layoutY="436.0" text="Usuwanie nauczyciela" />
+                <Label layoutX="21.0" layoutY="464.0" text="Lista" />
+                <ChoiceBox layoutX="67.0" layoutY="460.0" prefWidth="150.0" />
+                <Button layoutX="303.0" layoutY="460.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="149.0" text="Usuń" />
             </children>
         </AnchorPane>
     </children>
