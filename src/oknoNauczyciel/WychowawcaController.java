@@ -313,25 +313,33 @@ public class WychowawcaController implements Initializable {
     EventHandler eventHandler = new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent e) {
+        String stan = "";
         Obecnosc selectedItem = table.getSelectionModel().getSelectedItem();
         if (selectedItem.getWartosc().equals("nr")) {
+          stan = "usprawiedliwiony";
           selectedItem.setWartosc("u");
           HibernateUtil.usprawiedliwNieobecnosc(selectedItem);
         } else if (selectedItem.getWartosc().equals("n")) {
+          stan = "usprawiedliwiony";
           selectedItem.setWartosc("u");
           HibernateUtil.usprawiedliwNieobecnosc(selectedItem);
         } else if (selectedItem.getWartosc().equals("u")) {
+          stan = "nieusprawiedliwiony";
           selectedItem.setWartosc("n");
           HibernateUtil.usprawiedliwNieobecnosc(selectedItem);
         }
+        
+        ustawLabel(stan, label, selectedItem);
         label.setVisible(true);
-        label.setText("Usprawiedliwiono nieobecnosc z dnia: " + selectedItem.getData().toString() + " \r\n ucznia: " + selectedItem.getUczen().getImie() + " " + selectedItem.getUczen().getNazwisko());
         table.refresh();
       }
     };
     return eventHandler;
   }
 
+  private void ustawLabel(String stan, Label label, Obecnosc selectedItem){
+    label.setText("Zmieniono stan obecnosci z dnia: " + selectedItem.getData().toString() + " \r\n ucznia: " + selectedItem.getUczen().getImie() + " " + selectedItem.getUczen().getNazwisko()+"\r\n na: "+stan);
+  }
   private void wstawUseraDoZalogowanoJako(String username) {
 
     userid.setText(username);
