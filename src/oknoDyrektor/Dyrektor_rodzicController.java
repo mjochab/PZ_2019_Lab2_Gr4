@@ -78,7 +78,7 @@ public class Dyrektor_rodzicController implements Initializable {
     @FXML
     private ChoiceBox pesel_r;
     @FXML
-    private ChoiceBox pesel_dz;
+    private ChoiceBox ucz_pesel_r;
     @FXML
     private TextField e_imie_u;
     @FXML
@@ -96,7 +96,7 @@ public class Dyrektor_rodzicController implements Initializable {
     @FXML
     private ChoiceBox e_pesel_r;
     @FXML
-    private ChoiceBox e_pesel_dz;
+    private Label ucz_error;
     @FXML
     private ChoiceBox klasa;
     @FXML
@@ -108,8 +108,7 @@ public class Dyrektor_rodzicController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //System.out.println(pesel);
-        //ustawWartosciBox();
+        ustawWartosciBox();
         //ustawWartosciBoxEdycja();
         //obslugaBoxEdycjiPeseluRodzica();
         wstawUseraDoZalogowanoJako(username);
@@ -210,11 +209,11 @@ public class Dyrektor_rodzicController implements Initializable {
             pesel_u.setValue(peselki_u.get(0));
         }
 
-        List<Long> peselki_dz = podajPeseleUczniaBezRodzica();
-        ObservableList<Long> lista_dz = FXCollections.observableArrayList(peselki_dz);
-        pesel_dz.setItems(lista_dz);
-        if (peselki_dz.size() > 0) {
-            pesel_dz.setValue(peselki_dz.get(0));
+        List<Long> pesel_rodzica = pobierzListePeseliRodzicow();
+        ObservableList<Long> lista_rodzicow = FXCollections.observableArrayList(pesel_rodzica);
+        ucz_pesel_r.setItems(lista_rodzicow);
+        if (pesel_rodzica.size() > 0) {
+            ucz_pesel_r.setValue(pesel_rodzica.get(0));
         }
 
         ObservableList<String> nazwy_k = FXCollections.observableArrayList("1a", "1b", "1c");
@@ -241,10 +240,10 @@ public class Dyrektor_rodzicController implements Initializable {
         if (peselki_r.size() > 0) {
             e_pesel_r.setValue(peselki_r.get(0));
             Rodzic rodzic = zwrocRodzica(peselki_r.get(0));
-                e_imie_o.setText(rodzic.getImieOjca());
-                e_nazwisko_o.setText(rodzic.getNazwiskoOjca());
-                e_imie_m.setText(rodzic.getImieMatki());
-                e_nazwisko_m.setText(rodzic.getNazwiskoMatki());
+            e_imie_o.setText(rodzic.getImieOjca());
+            e_nazwisko_o.setText(rodzic.getNazwiskoOjca());
+            e_imie_m.setText(rodzic.getImieMatki());
+            e_nazwisko_m.setText(rodzic.getNazwiskoMatki());
         }
 
         ObservableList<String> nazwy_k = FXCollections.observableArrayList("1a", "1b", "1c");
@@ -275,7 +274,7 @@ public class Dyrektor_rodzicController implements Initializable {
                 e_imie_m.setText(rodzic.getImieMatki());
                 e_nazwisko_m.setText(rodzic.getNazwiskoMatki());
                 //e_pesel_dz.setValue(uczniak.getPesel());
-                
+
             }
         });
     }
@@ -283,16 +282,31 @@ public class Dyrektor_rodzicController implements Initializable {
     //koniecznie parsowanie w razie null
     @FXML
     private void wstawNowegoUcznia() {
-        Long peselU = Long.parseLong(pesel_u.getSelectionModel().getSelectedItem().toString());
+
+        Long peselR = Long.parseLong(ucz_pesel_r.getSelectionModel().getSelectedItem().toString());
         Klasa klasa_U = new Klasa(klasa.getSelectionModel().getSelectedItem().toString());
-       // wstawUcznia(peselU, imie_u.getText(), nazwisko_u.getText(), klasa_U);
+        if (imie_u.getText().isEmpty() || nazwisko_u.getText().isEmpty()) {
+            ucz_error.setText("Niepoprawne dane!");
+        } else {
+            try {
+                Long peselU = Long.parseLong(pesel_u.getSelectionModel().getSelectedItem().toString());
+                wstawUcznia(peselU, peselR, imie_u.getText(), nazwisko_u.getText(), klasa_U);
+                ucz_error.setText("Dodano ucznia!");
+                imie_u.setText("");
+                nazwisko_u.setText("");
+                ustawWartosciBox();
+            } catch (Exception e) {
+                ucz_error.setText("Niepoprawny pesel!");
+            }
+
+        }
+
     }
 
     @FXML
     private void wstawNowegoRodzica() {
-        Long peselU = Long.parseLong(pesel_dz.getSelectionModel().getSelectedItem().toString());
         Long peselR = Long.parseLong(pesel_r.getSelectionModel().getSelectedItem().toString());
         //Uczen uczenU = new Uczen(zwrocAutoryzacje(peselU));
-       // wstawRodzica(peselR, peselU, imie_o.getText(), nazwisko_o.getText(), imie_m.getText(), nazwisko_m.getText());
+        // wstawRodzica(peselR, peselU, imie_o.getText(), nazwisko_o.getText(), imie_m.getText(), nazwisko_m.getText());
     }
 }
