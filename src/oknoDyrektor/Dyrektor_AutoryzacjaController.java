@@ -40,12 +40,6 @@ public class Dyrektor_AutoryzacjaController implements Initializable {
      * Initializes the controller class.
      */
     @FXML
-    private Button nauczycielbtn;
-    @FXML
-    private Button rodzicbtn;
-    @FXML
-    private Button wylogujbtn;
-    @FXML
     private AnchorPane rootPane;
     @FXML
     private Label userid;
@@ -59,15 +53,17 @@ public class Dyrektor_AutoryzacjaController implements Initializable {
     private Button dodajbtn;
     @FXML
     private ChoiceBox kto_box;
+    @FXML
+    private Label error_label;
 
     private Long pesel = null;
-    private String username = "uczen";
+    private String username = "uzytkownik";
     private String password = " ";
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         wstawUseraDoZalogowanoJako(username);
-        //ustawWartosciBox();
+        ustawWartosciBox();
         Platform.runLater(() -> {
             //wstawNowaAutoryzacje();
         });
@@ -95,8 +91,6 @@ public class Dyrektor_AutoryzacjaController implements Initializable {
         controller.wstawUseraDoZalogowanoJako(username);
         controller.przekazNazweUzytkownikaIPesel(username, pesel);
 
-        //AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor.fxml"));
-        //rootPane.getChildren().setAll(pane);
     }
 
     @FXML
@@ -114,8 +108,6 @@ public class Dyrektor_AutoryzacjaController implements Initializable {
         controller.wstawUseraDoZalogowanoJako(username);
         controller.przekazNazweUzytkownikaIPesel(username, pesel);
 
-        //AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor_rodzic.fxml"));
-        //rootPane.getChildren().setAll(pane);
     }
 
     @FXML
@@ -133,8 +125,6 @@ public class Dyrektor_AutoryzacjaController implements Initializable {
         controller.wstawUseraDoZalogowanoJako(username);
         controller.przekazNazweUzytkownikaIPesel(username, pesel);
 
-        //AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor_uczen.fxml"));
-        //rootPane.getChildren().setAll(pane);
     }
 
     public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
@@ -152,20 +142,37 @@ public class Dyrektor_AutoryzacjaController implements Initializable {
     }
 
     private void ustawWartosciBox() {
-        //ChoiceBox cb = new ChoiceBox();
         ObservableList<String> kto_list = FXCollections.observableArrayList("n", "u", "r");
         kto_box.setItems(kto_list);
         kto_box.setValue(kto_list.get(0));
         //System.out.println(kto_box.getSelectionModel().getSelectedItem().toString());
     }
-    
+
     @FXML
     private void wstawNowaAutoryzacje() {
-        System.out.println(pesel_uz.getText()+" "+login_uz.getText()+" "+haslo_uz.getText()+" "
-                + kto_box.getSelectionModel().getSelectedItem().toString());
-        //String kto_wpisany = kto_box.getSelectionModel().getSelectedItem().toString();
-        Long peselek = Long.parseLong(pesel_uz.getText());
-        wstawAutoryzacje(peselek,login_uz.getText(),haslo_uz.getText(),kto_box.getSelectionModel().getSelectedItem().toString());
+        String login = login_uz.getText();
+        String haslo = haslo_uz.getText();
+        String kto = kto_box.getSelectionModel().getSelectedItem().toString();
+        Long peselek = null;
+        try {
+            peselek = Long.parseLong(pesel_uz.getText());
+        } catch (Exception e) {
+            error_label.setText("Niepoprawny pesel!");
+        }
+        if (login.isEmpty() || haslo.isEmpty()) {
+            error_label.setText("Niepoprawne dane!");
+        }
+        else if (pesel_uz.getText().isEmpty() || pesel_uz.getText().length() != 11){
+            error_label.setText("Niepoprawny pesel!");
+        }
+        else{
+            wstawAutoryzacje(peselek, login,haslo, kto);
+            login_uz.setText("");
+            haslo_uz.setText("");
+            pesel_uz.setText("");
+            error_label.setText("Dodano do bazy!");
+        }
+        
     }
 
 }
