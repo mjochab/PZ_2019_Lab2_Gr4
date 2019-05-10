@@ -109,11 +109,11 @@ public class Dyrektor_rodzicController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //System.out.println(pesel);
-        ustawWartosciBox();
-        ustawWartosciBoxEdycja();
-        obslugaBoxEdycjiPeseluRodzica();
+        //ustawWartosciBox();
+        //ustawWartosciBoxEdycja();
+        //obslugaBoxEdycjiPeseluRodzica();
         wstawUseraDoZalogowanoJako(username);
-        obslugaBoxEdycjiPeseluUcznia();
+        //obslugaBoxEdycjiPeseluUcznia();
         // TODO
     }
 
@@ -269,12 +269,12 @@ public class Dyrektor_rodzicController implements Initializable {
             @Override
             public void changed(ObservableValue ov, Long poprzednia, Long nowa) {
                 Rodzic rodzic = zwrocRodzica(nowa);
-                Uczen uczniak = rodzic.getUczen();
+                //Uczen uczniak = rodzic.getUczen();
                 e_imie_o.setText(rodzic.getImieOjca());
                 e_nazwisko_o.setText(rodzic.getNazwiskoOjca());
                 e_imie_m.setText(rodzic.getImieMatki());
                 e_nazwisko_m.setText(rodzic.getNazwiskoMatki());
-                e_pesel_dz.setValue(uczniak.getPesel());
+                //e_pesel_dz.setValue(uczniak.getPesel());
                 
             }
         });
@@ -285,14 +285,14 @@ public class Dyrektor_rodzicController implements Initializable {
     private void wstawNowegoUcznia() {
         Long peselU = Long.parseLong(pesel_u.getSelectionModel().getSelectedItem().toString());
         Klasa klasa_U = new Klasa(klasa.getSelectionModel().getSelectedItem().toString());
-        wstawUcznia(peselU, imie_u.getText(), nazwisko_u.getText(), klasa_U);
+       // wstawUcznia(peselU, imie_u.getText(), nazwisko_u.getText(), klasa_U);
     }
 
     @FXML
     private void wstawNowegoRodzica() {
         Long peselU = Long.parseLong(pesel_dz.getSelectionModel().getSelectedItem().toString());
         Long peselR = Long.parseLong(pesel_r.getSelectionModel().getSelectedItem().toString());
-        Uczen uczenU = new Uczen(zwrocAutoryzacje(peselU));
-        wstawRodzica(peselR, peselU, imie_o.getText(), nazwisko_o.getText(), imie_m.getText(), nazwisko_m.getText());
+        //Uczen uczenU = new Uczen(zwrocAutoryzacje(peselU));
+       // wstawRodzica(peselR, peselU, imie_o.getText(), nazwisko_o.getText(), imie_m.getText(), nazwisko_m.getText());
     }
 }

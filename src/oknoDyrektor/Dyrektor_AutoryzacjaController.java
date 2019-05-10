@@ -67,7 +67,7 @@ public class Dyrektor_AutoryzacjaController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         wstawUseraDoZalogowanoJako(username);
-        ustawWartosciBox();
+        //ustawWartosciBox();
         Platform.runLater(() -> {
             //wstawNowaAutoryzacje();
         });

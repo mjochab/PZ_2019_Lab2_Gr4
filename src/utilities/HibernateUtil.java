@@ -695,7 +695,9 @@ public class HibernateUtil {
      */
     public static void wstawNauczyciela(long pesel, String imie, String nazwisko) {
         Autoryzacja aut = zwrocAutoryzacje(pesel);
-        Nauczyciel nowa_os = new Nauczyciel(pesel, imie, nazwisko);
+        Nauczyciel nowa_os = new Nauczyciel();
+        nowa_os.setImie(imie);
+        nowa_os.setNazwisko(imie);
         nowa_os.setAutoryzacja(aut);
         Session session = sessionFactory.openSession();
 
@@ -728,8 +730,12 @@ public class HibernateUtil {
         Autoryzacja aut_ucz = zwrocAutoryzacje(pesel_uczen);
         Uczen uczniak = aut_ucz.getUczen();
 
-        Rodzic nowy_rodzic = new Rodzic(pesel_r, uczniak, imie_o, nazwisko_o, imie_m, nazwisko_m);
-        nowy_rodzic.setAutoryzacja(aut);
+        Rodzic nowy_rodzic = new Rodzic(aut);
+        nowy_rodzic.setImieMatki(imie_m);
+        nowy_rodzic.setImieOjca(imie_o);
+        nowy_rodzic.setNazwiskoMatki(nazwisko_m);
+        nowy_rodzic.setNazwiskoOjca(nazwisko_o);
+
         Session session = sessionFactory.openSession();
 
         Transaction tx = null;
@@ -754,10 +760,15 @@ public class HibernateUtil {
      * @param nazwisko_u
      * @param klasa
      */
-    public static void wstawUcznia(long pesel_u, String imie_u, String nazwisko_u, Klasa klasa) {
+    public static void wstawUcznia(long pesel_u, long pesel_r, String imie_u, String nazwisko_u, Klasa klasa) {
         Autoryzacja aut = zwrocAutoryzacje(pesel_u);
-        Uczen nowy_ucz = new Uczen(pesel_u, imie_u, nazwisko_u, klasa);
-        nowy_ucz.setAutoryzacja(aut);
+        Autoryzacja aut_rodz = zwrocAutoryzacje(pesel_r);
+        Rodzic rodzic = aut_rodz.getRodzic();
+        Uczen nowy_ucz = new Uczen(aut,rodzic);
+        nowy_ucz.setImie(imie_u);
+        nowy_ucz.setNazwisko(nazwisko_u);
+        nowy_ucz.setKlasa(klasa);
+       
         Session session = sessionFactory.openSession();
 
         Transaction tx = null;

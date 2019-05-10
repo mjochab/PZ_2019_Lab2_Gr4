@@ -59,7 +59,7 @@ public class DyrektorController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        ustawWartosciBox();
+        //ustawWartosciBox();
         wstawUseraDoZalogowanoJako(username);
         Platform.runLater(() -> {
             System.out.println(getPesel());
