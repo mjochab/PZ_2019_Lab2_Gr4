@@ -53,7 +53,7 @@ public class HibernateUtil {
 
     /**
      *
-     * @return
+     * @return zwraca zmienna klasowa sessionFactory
      */
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
@@ -111,9 +111,9 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param pesel
-     * @return
+     * Metoda zwraca klase którą wychowuje nauczyciel o danym peselu. 
+     * @param pesel long, pesel nauczyciela 
+     * @return string z nazwa klasy np '1a'
      */
     public static String zwrocKlaseKtoraWychowuje(Long pesel) {
         CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
@@ -128,9 +128,9 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param pesel
-     * @return
+     * Metoda zwraca klasy ktorych uczy dany nauczyciel (dowolny przedmiot)
+     * @param pesel long, pesel nauczyciela 
+     * @return lista obiektow typu Klasa
      */
     public static List<Klasa> zwrocKlasyKtorychUcze(Long pesel) {
 
@@ -146,9 +146,9 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param pesel
-     * @return
+     * Metoda zwraca tablice stringów z nazwami klas których uczy dany nauczyciel
+     * @param pesel long, pesel nauczyciela 
+     * @return tablica stringów 
      */
     public static String[] zwrocNazwyKlasKtorychUcze(Long pesel) {
 
@@ -165,9 +165,9 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param klasa
-     * @return
+     * Metoda zwraca uczniów z konkretnej klasy
+     * @param klasa string z nazwą klasy np '1a'
+     * @return array lista typu uczen
      */
     public static List<Uczen> zwrocUczniowZklasy(String klasa) {
 
@@ -188,10 +188,10 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param klasa
-     * @param pesel
-     * @return
+     *  zwraca przedmioty ktorych uczy dany nauczyciel
+     * @param klasa string z nazwa klasy
+     * @param pesel long, pesel nauczyciela 
+     * @return lista z obiektami typu przedmiot
      */
     public static List<Przedmiot> zwrocPrzedmiotyKtorychUczeDanaKlase(String klasa, Long pesel) {
 
@@ -225,8 +225,8 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @return
+     * Metoda zwraca rodzaje dostępnych ocen z bazy
+     * @return lista stringów
      */
     public static List<String> zwrocRodzajeOcen() {
 
@@ -239,10 +239,10 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param gagatek
-     * @param przedmiot
-     * @return
+     * Metoda zwraca oceny konkretnego ucznia z konkretnego przedmiotu
+     * @param gagatek obiekt Uczen
+     * @param przedmiot obiekt Przedmiot
+     * @return lista z obiektami typu Ocena
      */
     public static List<Ocena> zwrocObiektyOcenyGagatkaZmojegoPrzedmiotu(Uczen gagatek, Przedmiot przedmiot) {
 
@@ -345,8 +345,8 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param ocena
+     * Metoda wstawia ocene do bazy
+     * @param ocena obiekt ocena
      */
     public static void wstawOcene(Ocena ocena) {
 
@@ -370,8 +370,8 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param ocena
+     * Metoda edytuje ocene z bazy
+     * @param ocena obiekt ocena
      */
     public static void edytujOcene(Ocena ocena) {
 
@@ -410,21 +410,9 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param przedmiot
-     * @param klasa
-     * @return
-     */
-    public static List<Obecnosc> zwrocObecnosciMoichUczniowZmojegoPrzedmiotu(Przedmiot przedmiot, Klasa klasa) {
-        List<Obecnosc> obecnosci = new ArrayList<>();
-
-        return obecnosci;
-    }
-
-    /**
-     *
-     * @param pesel
-     * @return
+     * Metoda współdziałająca w kolejnej metodzie: zwrocIleMamZajecWdanymDniu. Sluzy do zwracania nauczyciela po peselu
+     * @param pesel long, pesel nauczyciela
+     * @return obiekt Nauczyciel
      */
     public static Nauczyciel zwrocNauczyciela(Long pesel) {
 
@@ -437,14 +425,12 @@ public class HibernateUtil {
         return nauczyciel;
     }
 
-    // DO SKONCZENIA do wstawiania 2 buttonow jak mam 2 zajecia w danym dniu
     /**
-     *
-     * @param pesel
-     * @param przedmiot
+     * Metoda testowa, oblicza ile dany nauczyciel ma zajęć z danego przedmiotu w danym dniu
+     * @param pesel long, pesel nauczyciela
+     * @param przedmiot obiekt Przedmiot
      */
     public static void zwrocIleMamZajecWdanymDniu(Long pesel, Przedmiot przedmiot) {
-        // DO SKONCZENIA
         //Przedmiot przedmiot = new Przedmiot("algebra_liniowa");
         CriteriaQuery<Tuple> criteria = builder.createQuery(Tuple.class);
         Root<Zajecia> root = criteria.from(Zajecia.class);
@@ -460,9 +446,9 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param pesel
-     * @param przedmiot
+     * Metoda zwraca liste integerow w ktorych dniach tygodnia ma zajecia dany nauczyciel, np. 1 - poniedzialek, 2 - wtorek itd
+     * @param pesel long, pesel nauczyciela
+     * @param przedmiot obiekt Przedmiot
      * @return
      */
     public static List<Integer> zwrocWJakieDniTygodniaMamZajecia(Long pesel, Przedmiot przedmiot) {
@@ -492,28 +478,7 @@ public class HibernateUtil {
         return zwrocDniTygodnia;
 
     }
-
-    /**
-     *
-     * @param przedmiot
-     * @param uczniowie
-     * @return
-     */
-    public static List<Obecnosc> zwrocObecnosciZprzedmiotu(Przedmiot przedmiot, List<Uczen> uczniowie) {
-
-        CriteriaQuery<Obecnosc> criteria = builder.createQuery(Obecnosc.class);
-        Root<Obecnosc> root = criteria.from(Obecnosc.class);
-        criteria.select(root);
-        criteria.where(root.get("uczen").in(uczniowie));
-        criteria.where(builder.equal(root.get("przedmiot"), przedmiot));
-        List<Obecnosc> obecnosci = entityManager.createQuery(criteria).getResultList();
-        for (Obecnosc obecnosc : obecnosci) {
-
-        }
-        return obecnosci;
-
-    }
-
+    
     /**
      * Metoda zwracająca listę nieobecności danego ucznia.
      *
@@ -535,7 +500,8 @@ public class HibernateUtil {
     }
 
     /**
-     *
+     * Metoda edytuje nieobecnosc w bazie
+     * @param obecnosc obiekt typu Obecnosc
      */
     public static void edytujNieobecnosc(Obecnosc obecnosc) {
         Session session = sessionFactory.openSession();
@@ -558,8 +524,8 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param nieobecny
+     * Metoda dodaje nieobecnosc do bazy
+     * @param nieobecny obiekt Obecnosc
      */
     public static void dodajNieobecnosc(Obecnosc nieobecny) {
         Session session = sessionFactory.openSession();
@@ -581,8 +547,8 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param nieobecny
+     * Metoda usuwa daną nieobecnosc z bazy
+     * @param nieobecny obiekt Obecnosc
      */
     public static void usunNieobecnosc(Obecnosc nieobecny) {
         Session session = sessionFactory.openSession();
@@ -625,24 +591,6 @@ public class HibernateUtil {
             session.close();
         }
 
-    }
-
-    /**
-     *
-     * @param item
-     * @param dataWkomorce
-     * @return
-     */
-    public static Obecnosc zwrocNieobecnoscZdanegoDnia(Obecnosc item, Date dataWkomorce) {
-
-        CriteriaQuery<Obecnosc> criteria = builder.createQuery(Obecnosc.class);
-        Root<Obecnosc> root = criteria.from(Obecnosc.class);
-        criteria.select(root);
-        criteria.where(builder.equal(root.get("uczen"), item.getUczen()), (builder.equal(root.get("przedmiot"), item.getPrzedmiot())), builder.equal(root.get("data"), dataWkomorce));
-
-        Obecnosc obecnosc = entityManager.createQuery(criteria).getSingleResult();
-
-        return obecnosc;
     }
 
     /**
