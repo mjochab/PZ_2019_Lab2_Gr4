@@ -207,7 +207,7 @@ public class RodzicNieobecnosciController implements Initializable {
         while (it.hasNext()) {
             Obecnosc ob = it.next();
             if (ob.getWartosc().equals("n")) {
-                ob.setWartosc("u");
+                ob.setWartosc("nr");
                 HibernateUtil.edytujNieobecnosc(ob);
                 tabelaNieob.refresh();
             }
@@ -228,7 +228,7 @@ public class RodzicNieobecnosciController implements Initializable {
                         btn.setOnAction((ActionEvent event) -> {
                             Obecnosc data = getTableView().getItems().get(getIndex());
                             if (data.getWartosc().equals("n")) {
-                                data.setWartosc("u");
+                                data.setWartosc("nr");
                                 HibernateUtil.edytujNieobecnosc(data);
                                 tabelaNieob.refresh();
                                 btn.setDisable(true);
