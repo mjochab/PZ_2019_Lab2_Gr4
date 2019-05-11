@@ -736,11 +736,11 @@ public class HibernateUtil {
      *
      * @return
      */
-    public static List<Klasa> pobierzKlasy() {
-        CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
+    public static List<String> pobierzKlasy() {
+        CriteriaQuery<String> criteria = builder.createQuery(String.class);
         Root root = criteria.from(Klasa.class);
-        criteria.select(root.get("nazwa_klasy"));
-        List<Klasa> klasy = entityManager.createQuery(criteria).getResultList();
+        criteria.select(root.get("nazwaKlasy"));
+        List<String> klasy = entityManager.createQuery(criteria).getResultList();
 
         return klasy;
 
@@ -981,5 +981,6 @@ public class HibernateUtil {
 
         return rodzic;
     }
+    
 
 }
