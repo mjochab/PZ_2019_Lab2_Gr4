@@ -176,13 +176,11 @@ public class Dyrektor_AutoryzacjaController implements Initializable {
             } catch (Exception e) {
                 error_label.setText("Niepoprawny pesel!");
             }
-            //wstawAutoryzacje(peselek, login, haslo, kto);
 
         }
     }
 
     private boolean porownaniePeseliZAutoryzacji(Long pesel) {
-        //boolean zmienna = true;
         List<Long> peseleAut = new ArrayList<>();
         peseleAut = pobierzListePeseli();
 

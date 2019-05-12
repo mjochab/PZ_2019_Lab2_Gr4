@@ -107,6 +107,10 @@ public class Dyrektor_rodzicController implements Initializable {
     @FXML
     private Label rodzic_error;
     @FXML
+    private Label label_e_rodzic;
+    @FXML
+    private Label label_e_uczen;
+    @FXML
     private ChoiceBox klasa;
     @FXML
     private ChoiceBox e_klasa;
@@ -206,7 +210,6 @@ public class Dyrektor_rodzicController implements Initializable {
         klasa.setItems(nazwy_k);
         klasa.setValue(nazwy_k.get(0));
 
-        //System.out.println(kto_box.getSelectionModel().getSelectedItem().toString());
     }
 
     private void ustawWartosciBoxEdycja() {
@@ -258,7 +261,7 @@ public class Dyrektor_rodzicController implements Initializable {
                 edytuj_rodzicabox.setValue(uczniak.getRodzic().getImieMatki() + " " + uczniak.getRodzic().getNazwiskoMatki());
                 e_klasa.setValue(uczniak.getKlasa().getNazwaKlasy());
                 field_uczen_p.setText(peselek.toString());
-                //field_rodzic_p.setText(pesel_rodzica);
+                label_e_uczen.setText("");
             }
         });
     }
@@ -278,7 +281,7 @@ public class Dyrektor_rodzicController implements Initializable {
                 e_imie_m.setText(rodzic.getImieMatki());
                 e_nazwisko_m.setText(rodzic.getNazwiskoMatki());
                 pesel_r_e.setText(pesel_rodz);
-
+                label_e_rodzic.setText("");
             }
         });
     }
@@ -344,8 +347,7 @@ public class Dyrektor_rodzicController implements Initializable {
         Long pesel_rodzic = pesele_rodzica.get(indeks);
 
         edytujRodzicaNoweDane(pesel_rodzic, e_imie_o.getText(), e_nazwisko_o.getText(), e_imie_m.getText(), e_nazwisko_m.getText());
-        obslugaBoxEdycjiPeseluUcznia();
-        obslugaBoxEdycjiPeseluRodzica();
+        label_e_rodzic.setText("Edytowano!");
     }
 
     @FXML
@@ -359,8 +361,7 @@ public class Dyrektor_rodzicController implements Initializable {
         Long pesel_rodz = pesele_rodzicow.get(indeks_r);
 
         edytujUczniaNoweDane(pesel_uczniak,pesel_rodz, e_imie_u.getText(), e_nazwisko_u.getText(),klasa_U);
-        //obslugaBoxEdycjiPeseluUcznia();
-        //obslugaBoxEdycjiPeseluRodzica();
+        label_e_uczen.setText("Edytowano!");
     }
 
     private void ustawWartosciPeseliLoginowUcznia() {

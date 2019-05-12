@@ -23,10 +23,10 @@
                 <Label layoutX="19.0" layoutY="290.0" prefHeight="17.0" prefWidth="142.0" text="Edycja danych ucznia" />
                 <Button fx:id="edytujbtn" layoutX="693.0" layoutY="379.0" mnemonicParsing="false" onMouseClicked="#edytujUcznia" prefHeight="25.0" prefWidth="149.0" text="Edytuj ucznia" />
                 <Separator layoutX="6.0" layoutY="560.0" prefHeight="4.0" prefWidth="923.0" />
-                <Label layoutX="12.0" layoutY="574.0" text="Usuwanie" />
-                <Label layoutX="12.0" layoutY="602.0" text="Lista" />
-                <ChoiceBox layoutX="58.0" layoutY="598.0" prefWidth="150.0" />
-                <Button layoutX="231.0" layoutY="598.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="149.0" text="Usuń" />
+                <Label layoutX="12.0" layoutY="574.0" text="Usuwanie dostępu do dziennika" textFill="#790000" />
+                <Label layoutX="56.0" layoutY="623.0" text="Lista rodziców" />
+                <ChoiceBox fx:id="box_u_rodzic" layoutX="19.0" layoutY="598.0" prefWidth="150.0" />
+                <Button fx:id="btn_u_rodzic" layoutX="190.0" layoutY="598.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="149.0" text="Usuń rodzica" />
             <ChoiceBox fx:id="pesel_r" layoutX="21.0" layoutY="182.0" prefWidth="150.0" />
             <Label layoutX="26.0" layoutY="207.0" prefHeight="17.0" prefWidth="142.0" text="Pesel jednego z rodziców" />
             <TextField fx:id="imie_m" layoutX="190.0" layoutY="182.0" />
@@ -73,6 +73,11 @@
             <TextField fx:id="pesel_r_e" disable="true" editable="false" layoutX="25.0" layoutY="513.0" />
             <Label layoutX="65.0" layoutY="538.0" text="Pesel rodzica" />
             <ChoiceBox fx:id="edytuj_rodzicabox" layoutX="188.0" layoutY="327.0" prefWidth="150.0" />
+            <Label fx:id="label_e_uczen" layoutX="532.0" layoutY="383.0" prefHeight="17.0" prefWidth="142.0" textFill="#d30303" />
+            <Label fx:id="label_e_rodzic" layoutX="538.0" layoutY="517.0" prefHeight="17.0" prefWidth="150.0" textFill="#bf0202" />
+            <Label layoutX="565.0" layoutY="627.0" text="Lista uczniów" />
+            <ChoiceBox fx:id="box_u_uczen" layoutX="528.0" layoutY="602.0" prefWidth="150.0" />
+            <Button fx:id="btn_u_uczen" layoutX="699.0" layoutY="602.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="149.0" text="Usuń ucznia" />
             </children>
         </AnchorPane>
         <AnchorPane layoutX="-6.0" prefHeight="726.0" prefWidth="265.0">
