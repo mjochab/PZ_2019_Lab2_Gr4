@@ -28,6 +28,8 @@ import javafx.scene.layout.AnchorPane;
 import mapping.Klasa;
 import mapping.Rodzic;
 import mapping.Uczen;
+import static utilities.HibernateUtil.edytujRodzicaNoweDane;
+import static utilities.HibernateUtil.edytujUczniaNoweDane;
 import static utilities.HibernateUtil.pobierzKlasy;
 import static utilities.HibernateUtil.pobierzListePeseliRodzicow;
 import static utilities.HibernateUtil.pobierzListePeseliUczniow;
@@ -48,9 +50,6 @@ import static utilities.HibernateUtil.zwrocRodzica;
  */
 public class Dyrektor_rodzicController implements Initializable {
 
-    /**
-     * Initializes the controller class.
-     */
     @FXML
     private Button uczenbtn;
     @FXML
@@ -111,18 +110,16 @@ public class Dyrektor_rodzicController implements Initializable {
     private ChoiceBox klasa;
     @FXML
     private ChoiceBox e_klasa;
+    @FXML
+    private ChoiceBox edytuj_rodzicabox;
 
     private Long pesel = null;
     private String username = "rodzic";
-    private String password = " ";
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ustawWartosciBox();
-        //ustawWartosciBoxEdycja();
-        //obslugaBoxEdycjiPeseluRodzica();
         wstawUseraDoZalogowanoJako(username);
-        //ustawWartosciPeseliUczniaEdycja();
         obslugaBoxEdycjiPeseluUcznia();
         obslugaBoxEdycjiPeseluRodzica();
 
@@ -149,8 +146,6 @@ public class Dyrektor_rodzicController implements Initializable {
         controller.wstawUseraDoZalogowanoJako(username);
         controller.przekazNazweUzytkownikaIPesel(username, pesel);
 
-        //AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor.fxml"));
-        //rootPane.getChildren().setAll(pane);
     }
 
     @FXML
@@ -168,8 +163,6 @@ public class Dyrektor_rodzicController implements Initializable {
         controller.wstawUseraDoZalogowanoJako(username);
         controller.przekazNazweUzytkownikaIPesel(username, pesel);
 
-        //AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor_rodzic.fxml"));
-        //rootPane.getChildren().setAll(pane);
     }
 
     @FXML
@@ -187,8 +180,6 @@ public class Dyrektor_rodzicController implements Initializable {
         controller.wstawUseraDoZalogowanoJako(username);
         controller.przekazNazweUzytkownikaIPesel(username, pesel);
 
-        //AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor_uczen.fxml"));
-        //rootPane.getChildren().setAll(pane);
     }
 
     public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
@@ -206,31 +197,11 @@ public class Dyrektor_rodzicController implements Initializable {
     }
 
     private void ustawWartosciBox() {
-        //ChoiceBox cb = new ChoiceBox();
-//        List<Long> peselki_r = podajPeseleRodzicaBezDanych();
-//        ObservableList<Long> lista_r = FXCollections.observableArrayList(peselki_r);
-//        pesel_r.setItems(lista_r);
-//        if (peselki_r.size() > 0) {
-//            pesel_r.setValue(peselki_r.get(0));
-//        }
-
-//        List<Long> peselki_u = podajPeseleUczniaBezDanych();
-//        ObservableList<Long> lista_u = FXCollections.observableArrayList(peselki_u);
-//        pesel_u.setItems(lista_u);
-//        if (peselki_u.size() > 0) {
-//            pesel_u.setValue(peselki_u.get(0));
-//        }
-//        List<Long> pesel_rodzica = pobierzListePeseliRodzicow();
-//        ObservableList<Long> lista_rodzicow = FXCollections.observableArrayList(pesel_rodzica);
-//        ucz_pesel_r.setItems(lista_rodzicow);
-//        if (pesel_rodzica.size() > 0) {
-//            ucz_pesel_r.setValue(pesel_rodzica.get(0));
-//        }
         ustawWartosciPeseliLoginowUcznia();
         ustawWartosciPeseliLoginowRodzica();
         ustawWartosciPeseliRodzicaDlaUcznia();
-        
-        List<String> nazwy_klas= pobierzKlasy();
+
+        List<String> nazwy_klas = pobierzKlasy();
         ObservableList<String> nazwy_k = FXCollections.observableArrayList(nazwy_klas);
         klasa.setItems(nazwy_k);
         klasa.setValue(nazwy_k.get(0));
@@ -268,8 +239,11 @@ public class Dyrektor_rodzicController implements Initializable {
 
     private void obslugaBoxEdycjiPeseluUcznia() {
         ustawWartosciPeseliUczniaEdycja();
-        List<String> nazwy_klas= pobierzKlasy();
+        List<String> nazwy_klas = pobierzKlasy();
         ObservableList<String> nazwy_k = FXCollections.observableArrayList(nazwy_klas);
+        List<String> nazwy_rodzicow = zrobListeImieINazwiskoRodzica();
+        ObservableList<String> nazwy_r = FXCollections.observableArrayList(nazwy_rodzicow);
+        edytuj_rodzicabox.setItems(nazwy_r);
         e_klasa.setItems(nazwy_k);
         e_pesel_u.valueProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -278,12 +252,13 @@ public class Dyrektor_rodzicController implements Initializable {
                 List<Long> pesele_ucznia = pobierzListePeseliUczniow();
                 Long peselek = pesele_ucznia.get(indeks);
                 Uczen uczniak = zwrocUcznia(peselek);
-                String pesel_rodzica = uczniak.getRodzic().getPesel()+"";
+                String pesel_rodzica = uczniak.getRodzic().getPesel() + "";
                 e_imie_u.setText(uczniak.getImie());
                 e_nazwisko_u.setText(uczniak.getNazwisko());
+                edytuj_rodzicabox.setValue(uczniak.getRodzic().getImieMatki() + " " + uczniak.getRodzic().getNazwiskoMatki());
                 e_klasa.setValue(uczniak.getKlasa().getNazwaKlasy());
                 field_uczen_p.setText(peselek.toString());
-                field_rodzic_p.setText(pesel_rodzica);
+                //field_rodzic_p.setText(pesel_rodzica);
             }
         });
     }
@@ -297,7 +272,7 @@ public class Dyrektor_rodzicController implements Initializable {
                 List<Long> pesele_rodzica = pobierzListePeseliRodzicow();
                 Long peselek = pesele_rodzica.get(indeks);
                 Rodzic rodzic = zwrocRodzica(peselek);
-                String pesel_rodz = rodzic.getPesel()+"";
+                String pesel_rodz = rodzic.getPesel() + "";
                 e_imie_o.setText(rodzic.getImieOjca());
                 e_nazwisko_o.setText(rodzic.getNazwiskoOjca());
                 e_imie_m.setText(rodzic.getImieMatki());
@@ -308,11 +283,8 @@ public class Dyrektor_rodzicController implements Initializable {
         });
     }
 
-    //koniecznie parsowanie w razie null
     @FXML
     private void wstawNowegoUcznia() {
-
-        //Long peselR = Long.parseLong(ucz_pesel_r.getSelectionModel().getSelectedItem().toString());
         Klasa klasa_U = new Klasa(klasa.getSelectionModel().getSelectedItem().toString());
         if (imie_u.getText().isEmpty() || nazwisko_u.getText().isEmpty()) {
             ucz_error.setText("Niepoprawne dane!");
@@ -330,6 +302,8 @@ public class Dyrektor_rodzicController implements Initializable {
                 imie_u.setText("");
                 nazwisko_u.setText("");
                 ustawWartosciBox();
+                obslugaBoxEdycjiPeseluUcznia();
+                obslugaBoxEdycjiPeseluRodzica();
             } catch (Exception e) {
                 ucz_error.setText("Niepoprawny pesel!");
             }
@@ -355,10 +329,38 @@ public class Dyrektor_rodzicController implements Initializable {
                 imie_o.setText("");
                 nazwisko_o.setText("");
                 ustawWartosciBox();
+                obslugaBoxEdycjiPeseluUcznia();
+                obslugaBoxEdycjiPeseluRodzica();
             } catch (Exception e) {
                 rodzic_error.setText("Niepoprawny pesel!");
             }
         }
+    }
+
+    @FXML
+    private void edytujRodzica() {
+        int indeks = e_pesel_r.getSelectionModel().getSelectedIndex();
+        List<Long> pesele_rodzica = pobierzListePeseliRodzicow();
+        Long pesel_rodzic = pesele_rodzica.get(indeks);
+
+        edytujRodzicaNoweDane(pesel_rodzic, e_imie_o.getText(), e_nazwisko_o.getText(), e_imie_m.getText(), e_nazwisko_m.getText());
+        obslugaBoxEdycjiPeseluUcznia();
+        obslugaBoxEdycjiPeseluRodzica();
+    }
+
+    @FXML
+    private void edytujUcznia() {
+        Klasa klasa_U = new Klasa(e_klasa.getSelectionModel().getSelectedItem().toString());
+        int indeks = e_pesel_u.getSelectionModel().getSelectedIndex();
+        List<Long> pesele_uczniow = pobierzListePeseliUczniow();
+        Long pesel_uczniak = pesele_uczniow.get(indeks);
+        int indeks_r = edytuj_rodzicabox.getSelectionModel().getSelectedIndex();
+        List<Long> pesele_rodzicow = pobierzListePeseliRodzicow();
+        Long pesel_rodz = pesele_rodzicow.get(indeks_r);
+
+        edytujUczniaNoweDane(pesel_uczniak,pesel_rodz, e_imie_u.getText(), e_nazwisko_u.getText(),klasa_U);
+        //obslugaBoxEdycjiPeseluUcznia();
+        //obslugaBoxEdycjiPeseluRodzica();
     }
 
     private void ustawWartosciPeseliLoginowUcznia() {
@@ -417,16 +419,16 @@ public class Dyrektor_rodzicController implements Initializable {
         }
         return loginy;
     }
-    
+
     private void ustawWartosciPeseliUczniaEdycja() {
         List<String> peselki = zrobListeImieINazwiskoUcznia();
         ObservableList<String> lista = FXCollections.observableArrayList(peselki);
         e_pesel_u.setItems(lista);
         if (peselki.size() > 0) {
-            e_pesel_u.setValue(peselki.get(0));
+            //e_pesel_u.setValue(peselki.get(0));
         }
     }
-    
+
     private List<String> zrobListeImieINazwiskoUcznia() {
         List<Long> peselki = pobierzListePeseliUczniow();
         List<String> przedstawienie = new ArrayList<String>();
@@ -438,16 +440,16 @@ public class Dyrektor_rodzicController implements Initializable {
         }
         return przedstawienie;
     }
-    
-     private void ustawWartosciPeseliRodzicaEdycja() {
+
+    private void ustawWartosciPeseliRodzicaEdycja() {
         List<String> peselki = zrobListeImieINazwiskoRodzica();
         ObservableList<String> lista = FXCollections.observableArrayList(peselki);
         e_pesel_r.setItems(lista);
         if (peselki.size() > 0) {
-            e_pesel_r.setValue(peselki.get(0));
+            // e_pesel_r.setValue(peselki.get(0));
         }
     }
-    
+
     private List<String> zrobListeImieINazwiskoRodzica() {
         List<Long> peselki = pobierzListePeseliRodzicow();
         List<String> przedstawienie = new ArrayList<String>();

@@ -156,7 +156,8 @@ public class LogowanieController implements Initializable {
             //rootPane.getChildren().setAll(pane);
         } else {
             //pane = FXMLLoader.load(getClass().getResource("/okna/Logowanie.fxml"));
-            System.out.println("coś nie pykło");
+            //System.out.println("coś nie pykło");
+            niepoprawne_dane.setText("Nie ma takiego użytkownika!");
         }
     }
 

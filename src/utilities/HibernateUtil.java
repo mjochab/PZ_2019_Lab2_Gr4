@@ -111,8 +111,9 @@ public class HibernateUtil {
     }
 
     /**
-     * Metoda zwraca klase którą wychowuje nauczyciel o danym peselu. 
-     * @param pesel long, pesel nauczyciela 
+     * Metoda zwraca klase którą wychowuje nauczyciel o danym peselu.
+     *
+     * @param pesel long, pesel nauczyciela
      * @return string z nazwa klasy np '1a'
      */
     public static String zwrocKlaseKtoraWychowuje(Long pesel) {
@@ -129,7 +130,8 @@ public class HibernateUtil {
 
     /**
      * Metoda zwraca klasy ktorych uczy dany nauczyciel (dowolny przedmiot)
-     * @param pesel long, pesel nauczyciela 
+     *
+     * @param pesel long, pesel nauczyciela
      * @return lista obiektow typu Klasa
      */
     public static List<Klasa> zwrocKlasyKtorychUcze(Long pesel) {
@@ -146,9 +148,11 @@ public class HibernateUtil {
     }
 
     /**
-     * Metoda zwraca tablice stringów z nazwami klas których uczy dany nauczyciel
-     * @param pesel long, pesel nauczyciela 
-     * @return tablica stringów 
+     * Metoda zwraca tablice stringów z nazwami klas których uczy dany
+     * nauczyciel
+     *
+     * @param pesel long, pesel nauczyciela
+     * @return tablica stringów
      */
     public static String[] zwrocNazwyKlasKtorychUcze(Long pesel) {
 
@@ -166,6 +170,7 @@ public class HibernateUtil {
 
     /**
      * Metoda zwraca uczniów z konkretnej klasy
+     *
      * @param klasa string z nazwą klasy np '1a'
      * @return array lista typu uczen
      */
@@ -188,9 +193,10 @@ public class HibernateUtil {
     }
 
     /**
-     *  zwraca przedmioty ktorych uczy dany nauczyciel
+     * zwraca przedmioty ktorych uczy dany nauczyciel
+     *
      * @param klasa string z nazwa klasy
-     * @param pesel long, pesel nauczyciela 
+     * @param pesel long, pesel nauczyciela
      * @return lista z obiektami typu przedmiot
      */
     public static List<Przedmiot> zwrocPrzedmiotyKtorychUczeDanaKlase(String klasa, Long pesel) {
@@ -226,6 +232,7 @@ public class HibernateUtil {
 
     /**
      * Metoda zwraca rodzaje dostępnych ocen z bazy
+     *
      * @return lista stringów
      */
     public static List<String> zwrocRodzajeOcen() {
@@ -240,6 +247,7 @@ public class HibernateUtil {
 
     /**
      * Metoda zwraca oceny konkretnego ucznia z konkretnego przedmiotu
+     *
      * @param gagatek obiekt Uczen
      * @param przedmiot obiekt Przedmiot
      * @return lista z obiektami typu Ocena
@@ -346,6 +354,7 @@ public class HibernateUtil {
 
     /**
      * Metoda wstawia ocene do bazy
+     *
      * @param ocena obiekt ocena
      */
     public static void wstawOcene(Ocena ocena) {
@@ -371,6 +380,7 @@ public class HibernateUtil {
 
     /**
      * Metoda edytuje ocene z bazy
+     *
      * @param ocena obiekt ocena
      */
     public static void edytujOcene(Ocena ocena) {
@@ -396,6 +406,7 @@ public class HibernateUtil {
 
     /**
      * Metoda zwracająca plan zajęć danej klasy.
+     *
      * @param klasa - String, klasa której plan zostanie zwrócony.
      * @return obiekt Klasa zawierający plan.
      */
@@ -410,7 +421,9 @@ public class HibernateUtil {
     }
 
     /**
-     * Metoda współdziałająca w kolejnej metodzie: zwrocIleMamZajecWdanymDniu. Sluzy do zwracania nauczyciela po peselu
+     * Metoda współdziałająca w kolejnej metodzie: zwrocIleMamZajecWdanymDniu.
+     * Sluzy do zwracania nauczyciela po peselu
+     *
      * @param pesel long, pesel nauczyciela
      * @return obiekt Nauczyciel
      */
@@ -426,7 +439,9 @@ public class HibernateUtil {
     }
 
     /**
-     * Metoda testowa, oblicza ile dany nauczyciel ma zajęć z danego przedmiotu w danym dniu
+     * Metoda testowa, oblicza ile dany nauczyciel ma zajęć z danego przedmiotu
+     * w danym dniu
+     *
      * @param pesel long, pesel nauczyciela
      * @param przedmiot obiekt Przedmiot
      */
@@ -446,7 +461,9 @@ public class HibernateUtil {
     }
 
     /**
-     * Metoda zwraca liste integerow w ktorych dniach tygodnia ma zajecia dany nauczyciel, np. 1 - poniedzialek, 2 - wtorek itd
+     * Metoda zwraca liste integerow w ktorych dniach tygodnia ma zajecia dany
+     * nauczyciel, np. 1 - poniedzialek, 2 - wtorek itd
+     *
      * @param pesel long, pesel nauczyciela
      * @param przedmiot obiekt Przedmiot
      * @return
@@ -478,7 +495,7 @@ public class HibernateUtil {
         return zwrocDniTygodnia;
 
     }
-    
+
     /**
      * Metoda zwracająca listę nieobecności danego ucznia.
      *
@@ -501,6 +518,7 @@ public class HibernateUtil {
 
     /**
      * Metoda edytuje nieobecnosc w bazie
+     *
      * @param obecnosc obiekt typu Obecnosc
      */
     public static void edytujNieobecnosc(Obecnosc obecnosc) {
@@ -525,6 +543,7 @@ public class HibernateUtil {
 
     /**
      * Metoda dodaje nieobecnosc do bazy
+     *
      * @param nieobecny obiekt Obecnosc
      */
     public static void dodajNieobecnosc(Obecnosc nieobecny) {
@@ -548,6 +567,7 @@ public class HibernateUtil {
 
     /**
      * Metoda usuwa daną nieobecnosc z bazy
+     *
      * @param nieobecny obiekt Obecnosc
      */
     public static void usunNieobecnosc(Obecnosc nieobecny) {
@@ -571,6 +591,7 @@ public class HibernateUtil {
 
     /**
      * Metoda usprawiedliwiająća nieobecność.
+     *
      * @param obecnosc - typ Obecnosc, nieobecność do usprawiedliwienia
      */
     public static void usprawiedliwNieobecnosc(Obecnosc obecnosc) {
@@ -675,7 +696,7 @@ public class HibernateUtil {
      */
     public static void wstawRodzica(long pesel_r, String imie_o, String nazwisko_o, String imie_m, String nazwisko_m) {
         Autoryzacja aut = zwrocAutoryzacje(pesel_r);
-       
+
         Rodzic nowy_rodzic = new Rodzic(aut);
         nowy_rodzic.setImieMatki(imie_m);
         nowy_rodzic.setImieOjca(imie_o);
@@ -710,11 +731,11 @@ public class HibernateUtil {
         Autoryzacja aut = zwrocAutoryzacje(pesel_u);
         Autoryzacja aut_rodz = zwrocAutoryzacje(pesel_r);
         Rodzic rodzic = aut_rodz.getRodzic();
-        Uczen nowy_ucz = new Uczen(aut,rodzic);
+        Uczen nowy_ucz = new Uczen(aut, rodzic);
         nowy_ucz.setImie(imie_u);
         nowy_ucz.setNazwisko(nazwisko_u);
         nowy_ucz.setKlasa(klasa);
-       
+
         Session session = sessionFactory.openSession();
 
         Transaction tx = null;
@@ -969,6 +990,7 @@ public class HibernateUtil {
 
     /**
      * Metoda zwracająca z bazdy danych rodzica, weryfikująca po peselu.
+     *
      * @param pesel - typ Long, pesel rodzica.
      * @return obiekt typu Rodzic
      */
@@ -981,6 +1003,119 @@ public class HibernateUtil {
 
         return rodzic;
     }
-    
 
+    public static void edytujRodzicaNoweDane(long pesel_r, String imie_o, String nazwisko_o, String imie_m, String nazwisko_m) {
+        Rodzic nowy_rodzic = zwrocRodzica(pesel_r);
+        nowy_rodzic.setImieMatki(imie_m);
+        nowy_rodzic.setImieOjca(imie_o);
+        nowy_rodzic.setNazwiskoMatki(nazwisko_m);
+        nowy_rodzic.setNazwiskoOjca(nazwisko_o);
+
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+            session.merge(nowy_rodzic);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+    }
+    
+        public static void edytujUczniaNoweDane(long pesel_u,long pesel_r, String imie_u, String nazwisko_u, Klasa klasa) {
+        Uczen uczen_nowy = zwrocUcznia(pesel_u);
+        Rodzic rodzic = zwrocRodzica(pesel_r);
+        uczen_nowy.setRodzic(rodzic);
+        uczen_nowy.setImie(imie_u);
+        uczen_nowy.setNazwisko(nazwisko_u);
+        uczen_nowy.setKlasa(klasa);
+
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+            session.merge(uczen_nowy);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+    }
+
+    public static void przekopiujAutoryzacjeNaNowyPesel(long stary_pesel, long nowy_pesel) {
+        Autoryzacja nowa_aut = zwrocAutoryzacje(stary_pesel);
+        Autoryzacja stara_aut = zwrocAutoryzacje(stary_pesel);
+        nowa_aut.setPesel(nowy_pesel);
+
+        Session session = sessionFactory.openSession();
+
+        Transaction tx = null;
+        Transaction tx2 = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+
+            session.merge(nowa_aut);
+            tx.commit();
+            tx2 = session.beginTransaction();
+            session.delete(stara_aut);
+            tx2.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+    }
+
+    public static void edytujRodzicaDlaUcznia(long pesel_r,long pesel_u) {
+        Rodzic nowy_rodzic = zwrocRodzica(pesel_r);
+        Uczen uczniak = zwrocUcznia(pesel_u);
+        uczniak.setRodzic(nowy_rodzic);
+        Session session = sessionFactory.openSession();
+
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+            session.merge(uczniak);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+    }
+
+    public static void usunAutoryzacje(long pesel) {
+        Autoryzacja stara_aut = zwrocAutoryzacje(pesel);
+        stara_aut.setKto("v");
+        Session session = sessionFactory.openSession();
+
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+            session.update(stara_aut);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+    }
 }
