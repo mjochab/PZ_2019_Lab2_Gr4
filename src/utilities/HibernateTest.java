@@ -39,7 +39,6 @@ import static utilities.HibernateUtil.podajPeseleNauczycielaBezDanych;
 import static utilities.HibernateUtil.podajPeseleRodzicaBezDanych;
 import static utilities.HibernateUtil.podajPeseleUczniaBezDanych;
 import static utilities.HibernateUtil.podajPeseleUczniaBezRodzica;
-import static utilities.HibernateUtil.usunAutoryzacje;
 import static utilities.HibernateUtil.zwrocKlasyKtorychUcze;
 import static utilities.HibernateUtil.zwrocKtoZalogowany;
 

@@ -9,6 +9,7 @@ import Okna.LogowanieController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -25,13 +26,26 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+
+import mapping.Nauczyciel;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
+import static utilities.HibernateUtil.edytujNauczyciela;
+import static utilities.HibernateUtil.pobierzListePeseliNauczycieli;
 import static utilities.HibernateUtil.podajPeseleNauczycielaBezDanych;
+import static utilities.HibernateUtil.usunAutoryzacjeNauczyciela;
 import static utilities.HibernateUtil.uzyskajLoginZalogowany;
 import static utilities.HibernateUtil.uzyskajPesel;
 import static utilities.HibernateUtil.wstawAutoryzacje;
 import static utilities.HibernateUtil.wstawNauczyciela;
+import static utilities.HibernateUtil.zwrocNauczyciela;
 
 /**
  * FXML Controller class
@@ -57,23 +71,44 @@ public class DyrektorController implements Initializable {
     @FXML
     private Label label_login;
     @FXML
+    private Label label_edycja;
+    @FXML
+    private Label label_usuwanie;
+    @FXML
     private TextField imie_n;
     @FXML
     private TextField nazwisko_n;
     @FXML
     private ChoiceBox pesel_n;
+    @FXML
+    private ChoiceBox box_nauczycieli;
+    @FXML
+    private TextField e_imie_n;
+    @FXML
+    private TextField e_nazwisko_n;
+    @FXML
+    private TextField pesel_edycja;
+
+    @FXML
+    private TableView<Nauczyciel> tabela_nauczycieli;
+    @FXML
+    private TableColumn<Nauczyciel, Long> kol_pesel;
+    @FXML
+    private TableColumn<Nauczyciel, String> kol_imie;
+    @FXML
+    private TableColumn<Nauczyciel, String> kol_nazwisko;
+    public ObservableList<Nauczyciel> data;
 
     private String username = "xd";
-    private Long pesel = null;
+    private Long peselN = null;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //ustawWartosciBox();
         ustawWartosciPeseliLoginow();
         wstawUseraDoZalogowanoJako(username);
-        Platform.runLater(() -> {
-            //wstawUseraDoZalogowanoJako(username);
-        });
+        wstawienieDoTabeli();
+        wstawianieDanychNauczycielaDoTextField();
+        ustawWartosciPeseliRodzicaEdycja();
     }
 
     @FXML
@@ -95,10 +130,8 @@ public class DyrektorController implements Initializable {
         }
         DyrektorController controller = fxmlLoader.getController();
         controller.wstawUseraDoZalogowanoJako(username);
-        controller.przekazNazweUzytkownikaIPesel(username, pesel);
+        controller.przekazNazweUzytkownikaIPesel(username, peselN);
 
-        //AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor.fxml"));
-        //rootPane.getChildren().setAll(pane);
     }
 
     @FXML
@@ -114,10 +147,8 @@ public class DyrektorController implements Initializable {
         }
         Dyrektor_rodzicController controller = fxmlLoader.getController();
         controller.wstawUseraDoZalogowanoJako(username);
-        controller.przekazNazweUzytkownikaIPesel(username, pesel);
+        controller.przekazNazweUzytkownikaIPesel(username, peselN);
 
-        //AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor_rodzic.fxml"));
-        //rootPane.getChildren().setAll(pane);
     }
 
     @FXML
@@ -133,8 +164,6 @@ public class DyrektorController implements Initializable {
         }
         Dyrektor_AutoryzacjaController controller = fxmlLoader.getController();
 
-        //AnchorPane pane = FXMLLoader.load(getClass().getResource("Dyrektor_uczen.fxml"));
-        //rootPane.getChildren().setAll(pane);
     }
 
     public void wstawUseraDoZalogowanoJako(String username) {
@@ -147,7 +176,7 @@ public class DyrektorController implements Initializable {
 
     public void przekazNazweUzytkownikaIPesel(String username, Long nr_pesel) {
         this.username = username;
-        pesel = nr_pesel;
+        peselN = nr_pesel;
     }
 
     public void przekazNazweUzytkownika(String username) {
@@ -218,9 +247,95 @@ public class DyrektorController implements Initializable {
                 err_label.setText("Niepoprawne dane!");
             }
         }
-
-        //Long peselN = Long.parseLong(pesel_n.getSelectionModel().getSelectedItem().toString());
-        // wstawNauczyciela(peselN, imie_n.getText(), nazwisko_n.getText());
+        ;
     }
 
+    private void wstawienieDoTabeli() {
+        kol_pesel.setCellValueFactory(new PropertyValueFactory<Nauczyciel, Long>("pesel")); // here id is a variable name which is define in pojo.
+        kol_imie.setCellValueFactory(new PropertyValueFactory<Nauczyciel, String>("imie"));
+        kol_nazwisko.setCellValueFactory(new PropertyValueFactory<Nauczyciel, String>("nazwisko"));
+
+        data = FXCollections.observableArrayList();
+        SessionFactory sf = new Configuration().configure().buildSessionFactory();
+        Session sess = sf.openSession();
+        Query qee = sess.createQuery("from Nauczyciel");
+        Iterator ite = qee.iterate();
+        while (ite.hasNext()) {
+            Nauczyciel obj = (Nauczyciel) ite.next();
+
+            data.add(obj);
+        }
+        tabela_nauczycieli.setItems(data);
+    }
+
+    @FXML
+    private void wstawianieDanychNauczycielaDoTextField() {
+        tabela_nauczycieli.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                //tabela_nauczycieli.getSelectionModel().clearSelection();
+                Nauczyciel naucz_tabela = tabela_nauczycieli.getSelectionModel().getSelectedItem();
+                e_imie_n.setText(naucz_tabela.getImie());
+                e_nazwisko_n.setText(naucz_tabela.getNazwisko());
+                pesel_edycja.setText(naucz_tabela.getPesel() + "");
+            }
+        });
+
+    }
+
+    @FXML
+    private void edytowanieNauczycielaPrzezTabelke() {
+        String imie = e_imie_n.getText();
+        String nazwisko = e_nazwisko_n.getText();
+        Long peselek = Long.parseLong(pesel_edycja.getText());
+
+        try {
+            edytujNauczyciela(peselek, imie, nazwisko);
+            e_imie_n.setText("");
+            e_nazwisko_n.setText("");
+            pesel_edycja.setText("");
+            label_edycja.setText("Edytowano!");
+            wstawienieDoTabeli();
+            ustawWartosciPeseliRodzicaEdycja();
+        } catch (Exception e) {
+            label_edycja.setText("Niepoprawne dane!");
+        }
+
+    }
+
+    @FXML
+    private void usunNauczycielowiDostep() {
+        int indeks = box_nauczycieli.getSelectionModel().getSelectedIndex();
+        if (indeks >= 0) {
+            List<Long> pesele_n = pobierzListePeseliNauczycieli();
+            Long pesel_naucz = pesele_n.get(indeks);
+            usunAutoryzacjeNauczyciela(pesel_naucz);
+            label_usuwanie.setText("Usunięto dostęp nauczycielowi!");
+        }
+    }
+    
+    @FXML
+    private void czyszczenieLabelaUsuwanie(){
+        label_usuwanie.setText("");
+    }
+    
+     private void ustawWartosciPeseliRodzicaEdycja() {
+        List<String> peselki = zrobListeImieINazwiskoNauczyciela();
+        ObservableList<String> lista = FXCollections.observableArrayList(peselki);
+        box_nauczycieli.setItems(lista);
+        if (peselki.size() > 0) {
+            // e_pesel_r.setValue(peselki.get(0));
+        }
+    }
+
+    private List<String> zrobListeImieINazwiskoNauczyciela() {
+        List<Long> peselki = pobierzListePeseliNauczycieli();
+        List<String> przedstawienie = new ArrayList<String>();
+        for (int i = 0; i < peselki.size(); i++) {
+            Nauczyciel rodzic = zwrocNauczyciela(peselki.get(i));
+            String imie = rodzic.getImie();
+            String nazwisko = rodzic.getNazwisko();
+            przedstawienie.add(imie + " " + nazwisko);
+        }
+        return przedstawienie;
+    }
 }

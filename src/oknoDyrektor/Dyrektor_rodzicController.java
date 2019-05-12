@@ -36,7 +36,8 @@ import static utilities.HibernateUtil.pobierzListePeseliUczniow;
 import static utilities.HibernateUtil.podajPeseleRodzicaBezDanych;
 import static utilities.HibernateUtil.podajPeseleUczniaBezDanych;
 import static utilities.HibernateUtil.podajPeseleUczniaBezRodzica;
-import static utilities.HibernateUtil.usunAutoryzacje;
+import static utilities.HibernateUtil.usunAutoryzacjeUcznia;
+import static utilities.HibernateUtil.usunAutoryzacjeRodzica;
 import static utilities.HibernateUtil.uzyskajLoginZalogowany;
 import static utilities.HibernateUtil.wstawRodzica;
 import static utilities.HibernateUtil.wstawUcznia;
@@ -361,7 +362,7 @@ public class Dyrektor_rodzicController implements Initializable {
         if (indeks >= 0) {
             List<Long> pesele_uczniow = pobierzListePeseliUczniow();
             Long pesel_uczniak = pesele_uczniow.get(indeks);
-            usunAutoryzacje(pesel_uczniak);
+            usunAutoryzacjeUcznia(pesel_uczniak);
             usuwanie_label.setText("Usunięto dostęp dla ucznia!");
         }
 
@@ -373,7 +374,7 @@ public class Dyrektor_rodzicController implements Initializable {
         if (indeks >= 0) {
             List<Long> pesele_r = pobierzListePeseliRodzicow();
             Long pesel_rodzica = pesele_r.get(indeks);
-            usunAutoryzacje(pesel_rodzica);
+            usunAutoryzacjeRodzica(pesel_rodzica);
             usuwanie_label.setText("Usunięto dostęp rodzicowi!");
         }
     }

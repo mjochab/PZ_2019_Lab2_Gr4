@@ -798,10 +798,17 @@ public class HibernateUtil {
         criteria2.select(root2.get("pesel"));
         List<Long> pesele_naucz = entityManager.createQuery(criteria2).getResultList();
 
+        CriteriaQuery<Long> criteria3 = builder.createQuery(Long.class);
+        Root<Autoryzacja> root3 = criteria3.from(Autoryzacja.class);
+        criteria3.select(root3.get("pesel"));
+        criteria3.where(builder.equal(root3.get("kto"), "b"));
+        List<Long> pesele_rodz_aut2 = entityManager.createQuery(criteria3).getResultList();
+        
         List<Long> pelna_lista = new ArrayList<>();
         pelna_lista.addAll(pesele_naucz);
         pelna_lista.addAll(pesele_naucz_aut);
-
+        pelna_lista.addAll(pesele_rodz_aut2);
+    
         for (int i = 0; i < pelna_lista.size(); i++) {
             boolean uniq = true;
             for (int j = 0; j < pelna_lista.size(); j++) {
@@ -837,9 +844,16 @@ public class HibernateUtil {
         criteria2.select(root2.get("pesel"));
         List<Long> pesele_ucz = entityManager.createQuery(criteria2).getResultList();
 
+        CriteriaQuery<Long> criteria3 = builder.createQuery(Long.class);
+        Root<Autoryzacja> root3 = criteria3.from(Autoryzacja.class);
+        criteria3.select(root3.get("pesel"));
+        criteria3.where(builder.equal(root3.get("kto"), "a"));
+        List<Long> pesele_rodz_aut2 = entityManager.createQuery(criteria3).getResultList();
+        
         List<Long> pelna_lista = new ArrayList<>();
         pelna_lista.addAll(pesele_ucz);
         pelna_lista.addAll(pesele_ucz_aut);
+        pelna_lista.addAll(pesele_rodz_aut2);
 
         for (int i = 0; i < pelna_lista.size(); i++) {
             boolean uniq = true;
@@ -875,10 +889,17 @@ public class HibernateUtil {
         Root<Rodzic> root2 = criteria2.from(Rodzic.class);
         criteria2.select(root2.get("pesel"));
         List<Long> pesele_rodz = entityManager.createQuery(criteria2).getResultList();
-
+        
+        CriteriaQuery<Long> criteria3 = builder.createQuery(Long.class);
+        Root<Autoryzacja> root3 = criteria3.from(Autoryzacja.class);
+        criteria3.select(root3.get("pesel"));
+        criteria3.where(builder.equal(root3.get("kto"), "c"));
+        List<Long> pesele_rodz_aut2 = entityManager.createQuery(criteria3).getResultList();
+        
         List<Long> pelna_lista = new ArrayList<>();
         pelna_lista.addAll(pesele_rodz);
         pelna_lista.addAll(pesele_rodz_aut);
+        pelna_lista.addAll(pesele_rodz_aut2);
 
         for (int i = 0; i < pelna_lista.size(); i++) {
             boolean uniq = true;
@@ -1050,7 +1071,28 @@ public class HibernateUtil {
             session.close();
         }
     }
+        
+    public static void edytujNauczyciela(long pesel, String imie, String nazwisko) {
+        Nauczyciel nowa_os = zwrocNauczyciela(pesel);
+        nowa_os.setImie(imie);
+        nowa_os.setNazwisko(nazwisko);
 
+        Session session = sessionFactory.openSession();
+
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+            session.merge(nowa_os);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+    }
     public static void przekopiujAutoryzacjeNaNowyPesel(long stary_pesel, long nowy_pesel) {
         Autoryzacja nowa_aut = zwrocAutoryzacje(stary_pesel);
         Autoryzacja stara_aut = zwrocAutoryzacje(stary_pesel);
@@ -1099,9 +1141,49 @@ public class HibernateUtil {
         }
     }
 
-    public static void usunAutoryzacje(long pesel) {
+    public static void usunAutoryzacjeUcznia(long pesel) {
         Autoryzacja stara_aut = zwrocAutoryzacje(pesel);
-        stara_aut.setKto("v");
+        stara_aut.setKto("a");
+        Session session = sessionFactory.openSession();
+
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+            session.merge(stara_aut);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+    }
+    
+    public static void usunAutoryzacjeNauczyciela(long pesel) {
+        Autoryzacja stara_aut = zwrocAutoryzacje(pesel);
+        stara_aut.setKto("b");
+        Session session = sessionFactory.openSession();
+
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+            session.merge(stara_aut);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+    }
+    
+    public static void usunAutoryzacjeRodzica(long pesel) {
+        Autoryzacja stara_aut = zwrocAutoryzacje(pesel);
+        stara_aut.setKto("c");
         Session session = sessionFactory.openSession();
 
         Transaction tx = null;

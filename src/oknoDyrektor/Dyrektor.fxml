@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="722.0" prefWidth="1238.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="oknoDyrektor.DyrektorController">
     <children>
@@ -28,7 +29,7 @@
                 <TextField fx:id="nazwisko_n" layoutX="550.0" layoutY="41.0" />
                 <Label layoutX="264.0" layoutY="45.0" text="Imię" />
                 <Label layoutX="483.0" layoutY="45.0" text="Nazwisko" />
-                <Label layoutX="19.0" layoutY="6.0" text="Dodawanie nowego nauczyciela" />
+                <Label layoutX="19.0" layoutY="6.0" text="Dodawanie danych nowego nauczyciela" />
                 <Button fx:id="dodajbtn" layoutX="753.0" layoutY="41.0" mnemonicParsing="false" onMouseClicked="#wstawNowegoNauczyciela" prefHeight="25.0" prefWidth="149.0" text="Dodaj " />
             <Label fx:id="err_label" layoutX="753.0" layoutY="73.0" prefHeight="17.0" prefWidth="149.0" textFill="#e40101" />
                 <ChoiceBox fx:id="pesel_n" layoutX="61.0" layoutY="41.0" prefHeight="25.0" prefWidth="166.0" />
@@ -46,14 +47,24 @@
                 <TextField fx:id="e_nazwisko_n" layoutX="303.0" layoutY="369.0" />
                 <Label layoutX="23.0" layoutY="373.0" text="Imię" />
                 <Label layoutX="236.0" layoutY="373.0" text="Nazwisko" />
-                <ChoiceBox layoutX="543.0" layoutY="369.0" prefWidth="150.0" />
                 <Label layoutX="501.0" layoutY="373.0" text="Pesel" />
-                <Button fx:id="edytujbtn" layoutX="755.0" layoutY="369.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Edytuj " />
-                <Separator layoutX="27.0" layoutY="420.0" prefHeight="4.0" prefWidth="923.0" />
-                <Label layoutX="21.0" layoutY="436.0" text="Usuwanie nauczyciela" />
-                <Label layoutX="21.0" layoutY="464.0" text="Lista" />
-                <ChoiceBox layoutX="67.0" layoutY="460.0" prefWidth="150.0" />
-                <Button layoutX="303.0" layoutY="460.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="149.0" text="Usuń" />
+                <Button fx:id="edytujbtn" layoutX="755.0" layoutY="369.0" mnemonicParsing="false" onMouseClicked="#edytowanieNauczycielaPrzezTabelke" prefHeight="25.0" prefWidth="149.0" text="Edytuj " />
+                <Separator layoutX="26.0" layoutY="432.0" prefHeight="4.0" prefWidth="923.0" />
+                <Label layoutX="20.0" layoutY="448.0" text="Usuwanie nauczyciela" />
+                <Label layoutX="20.0" layoutY="476.0" text="Lista" />
+                <ChoiceBox fx:id="box_nauczycieli" layoutX="66.0" layoutY="472.0" onMouseClicked="#czyszczenieLabelaUsuwanie" prefWidth="150.0" />
+                <Button fx:id="btn_usuwanie" layoutX="302.0" layoutY="472.0" mnemonicParsing="false" onMouseClicked="#usunNauczycielowiDostep" prefHeight="17.0" prefWidth="149.0" text="Usuń" />
+            <TextField fx:id="pesel_edycja" disable="true" editable="false" layoutX="550.0" layoutY="369.0" />
+            <Label fx:id="label_edycja" layoutX="760.0" layoutY="401.0" prefHeight="17.0" prefWidth="140.0" textAlignment="CENTER" textFill="#e10000">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="label_usuwanie" layoutX="487.0" layoutY="476.0" prefHeight="17.0" prefWidth="227.0" textFill="#ee0202">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
             </children>
         </AnchorPane>
     </children>
