@@ -1108,7 +1108,7 @@ public class HibernateUtil {
         Integer stId = null;
         try {
             tx = session.beginTransaction();
-            session.update(stara_aut);
+            session.merge(stara_aut);
             tx.commit();
         } catch (HibernateException ex) {
             if (tx != null) {

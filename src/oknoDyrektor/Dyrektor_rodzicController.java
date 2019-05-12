@@ -36,6 +36,7 @@ import static utilities.HibernateUtil.pobierzListePeseliUczniow;
 import static utilities.HibernateUtil.podajPeseleRodzicaBezDanych;
 import static utilities.HibernateUtil.podajPeseleUczniaBezDanych;
 import static utilities.HibernateUtil.podajPeseleUczniaBezRodzica;
+import static utilities.HibernateUtil.usunAutoryzacje;
 import static utilities.HibernateUtil.uzyskajLoginZalogowany;
 import static utilities.HibernateUtil.wstawRodzica;
 import static utilities.HibernateUtil.wstawUcznia;
@@ -62,6 +63,8 @@ public class Dyrektor_rodzicController implements Initializable {
     private AnchorPane rootPane;
     @FXML
     private Label userid;
+    @FXML
+    private Label usuwanie_label;
     @FXML
     private TextField imie_u;
     @FXML
@@ -116,6 +119,10 @@ public class Dyrektor_rodzicController implements Initializable {
     private ChoiceBox e_klasa;
     @FXML
     private ChoiceBox edytuj_rodzicabox;
+    @FXML
+    private ChoiceBox box_u_uczen;
+    @FXML
+    private ChoiceBox box_u_rodzic;
 
     private Long pesel = null;
     private String username = "rodzic";
@@ -126,6 +133,7 @@ public class Dyrektor_rodzicController implements Initializable {
         wstawUseraDoZalogowanoJako(username);
         obslugaBoxEdycjiPeseluUcznia();
         obslugaBoxEdycjiPeseluRodzica();
+        ustawWartosciBoxUsuwanie();
 
     }
 
@@ -212,32 +220,15 @@ public class Dyrektor_rodzicController implements Initializable {
 
     }
 
-    private void ustawWartosciBoxEdycja() {
-        List<Long> peselki_u = pobierzListePeseliUczniow();
-        ObservableList<Long> lista_u = FXCollections.observableArrayList(peselki_u);
-        e_pesel_u.setItems(lista_u);
-        if (peselki_u.size() > 0) {
-            e_pesel_u.setValue(peselki_u.get(0));
-            Uczen uczniak = zwrocUcznia(peselki_u.get(0));
-            e_imie_u.setText(uczniak.getImie());
-            e_nazwisko_u.setText(uczniak.getNazwisko());
-            e_klasa.setValue(uczniak.getKlasa().getNazwaKlasy());
-        }
-        List<Long> peselki_r = pobierzListePeseliRodzicow();
-        ObservableList<Long> lista_r = FXCollections.observableArrayList(peselki_r);
-        e_pesel_r.setItems(lista_r);
-        if (peselki_r.size() > 0) {
-            e_pesel_r.setValue(peselki_r.get(0));
-            Rodzic rodzic = zwrocRodzica(peselki_r.get(0));
-            e_imie_o.setText(rodzic.getImieOjca());
-            e_nazwisko_o.setText(rodzic.getNazwiskoOjca());
-            e_imie_m.setText(rodzic.getImieMatki());
-            e_nazwisko_m.setText(rodzic.getNazwiskoMatki());
-        }
+    private void ustawWartosciBoxUsuwanie() {
+        List<String> peselki_u = zrobListeImieINazwiskoUcznia();
+        ObservableList<String> lista_u = FXCollections.observableArrayList(peselki_u);
+        box_u_uczen.setItems(lista_u);
 
-        ObservableList<String> nazwy_k = FXCollections.observableArrayList("1a", "1b", "1c");
-        e_klasa.setItems(nazwy_k);
-        e_klasa.setValue(nazwy_k.get(0));
+        List<String> peselki_r = zrobListeImieINazwiskoRodzica();
+        ObservableList<String> lista_r = FXCollections.observableArrayList(peselki_r);
+        box_u_rodzic.setItems(lista_r);
+
     }
 
     private void obslugaBoxEdycjiPeseluUcznia() {
@@ -360,8 +351,36 @@ public class Dyrektor_rodzicController implements Initializable {
         List<Long> pesele_rodzicow = pobierzListePeseliRodzicow();
         Long pesel_rodz = pesele_rodzicow.get(indeks_r);
 
-        edytujUczniaNoweDane(pesel_uczniak,pesel_rodz, e_imie_u.getText(), e_nazwisko_u.getText(),klasa_U);
+        edytujUczniaNoweDane(pesel_uczniak, pesel_rodz, e_imie_u.getText(), e_nazwisko_u.getText(), klasa_U);
         label_e_uczen.setText("Edytowano!");
+    }
+
+    @FXML
+    private void usunUczniowiDostep() {
+        int indeks = box_u_uczen.getSelectionModel().getSelectedIndex();
+        if (indeks >= 0) {
+            List<Long> pesele_uczniow = pobierzListePeseliUczniow();
+            Long pesel_uczniak = pesele_uczniow.get(indeks);
+            usunAutoryzacje(pesel_uczniak);
+            usuwanie_label.setText("Usunięto dostęp dla ucznia!");
+        }
+
+    }
+
+    @FXML
+    private void usunRodzicowiDostep() {
+        int indeks = box_u_rodzic.getSelectionModel().getSelectedIndex();
+        if (indeks >= 0) {
+            List<Long> pesele_r = pobierzListePeseliRodzicow();
+            Long pesel_rodzica = pesele_r.get(indeks);
+            usunAutoryzacje(pesel_rodzica);
+            usuwanie_label.setText("Usunięto dostęp rodzicowi!");
+        }
+    }
+    
+    @FXML
+    private void wyczyscLabelUsuwania(){
+        usuwanie_label.setText("");
     }
 
     private void ustawWartosciPeseliLoginowUcznia() {

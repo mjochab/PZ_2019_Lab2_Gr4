@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="oknoDyrektor.Dyrektor_rodzicController">
     <children>  
@@ -25,8 +26,8 @@
                 <Separator layoutX="6.0" layoutY="560.0" prefHeight="4.0" prefWidth="923.0" />
                 <Label layoutX="12.0" layoutY="574.0" text="Usuwanie dostępu do dziennika" textFill="#790000" />
                 <Label layoutX="56.0" layoutY="623.0" text="Lista rodziców" />
-                <ChoiceBox fx:id="box_u_rodzic" layoutX="19.0" layoutY="598.0" prefWidth="150.0" />
-                <Button fx:id="btn_u_rodzic" layoutX="190.0" layoutY="598.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="149.0" text="Usuń rodzica" />
+                <ChoiceBox fx:id="box_u_rodzic" layoutX="19.0" layoutY="598.0" onMouseClicked="#wyczyscLabelUsuwania" prefWidth="150.0" />
+                <Button fx:id="btn_u_rodzic" layoutX="190.0" layoutY="598.0" mnemonicParsing="false" onMouseClicked="#usunRodzicowiDostep" prefHeight="17.0" prefWidth="149.0" text="Usuń rodzica" />
             <ChoiceBox fx:id="pesel_r" layoutX="21.0" layoutY="182.0" prefWidth="150.0" />
             <Label layoutX="26.0" layoutY="207.0" prefHeight="17.0" prefWidth="142.0" text="Pesel jednego z rodziców" />
             <TextField fx:id="imie_m" layoutX="190.0" layoutY="182.0" />
@@ -76,8 +77,13 @@
             <Label fx:id="label_e_uczen" layoutX="532.0" layoutY="383.0" prefHeight="17.0" prefWidth="142.0" textFill="#d30303" />
             <Label fx:id="label_e_rodzic" layoutX="538.0" layoutY="517.0" prefHeight="17.0" prefWidth="150.0" textFill="#bf0202" />
             <Label layoutX="565.0" layoutY="627.0" text="Lista uczniów" />
-            <ChoiceBox fx:id="box_u_uczen" layoutX="528.0" layoutY="602.0" prefWidth="150.0" />
-            <Button fx:id="btn_u_uczen" layoutX="699.0" layoutY="602.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="149.0" text="Usuń ucznia" />
+            <ChoiceBox fx:id="box_u_uczen" layoutX="528.0" layoutY="602.0" onMouseClicked="#wyczyscLabelUsuwania" prefWidth="150.0" />
+            <Button fx:id="btn_u_uczen" layoutX="699.0" layoutY="602.0" mnemonicParsing="false" onMouseClicked="#usunUczniowiDostep" prefHeight="17.0" prefWidth="149.0" text="Usuń ucznia" />
+            <Label fx:id="usuwanie_label" layoutX="354.0" layoutY="606.0" prefHeight="17.0" prefWidth="162.0" textAlignment="CENTER" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
             </children>
         </AnchorPane>
         <AnchorPane layoutX="-6.0" prefHeight="726.0" prefWidth="265.0">
