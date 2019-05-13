@@ -128,6 +128,11 @@ public class Dyrektor_rodzicController implements Initializable {
     private Long pesel = null;
     private String username = "rodzic";
 
+    /**
+     *
+     * @param url
+     * @param rb
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ustawWartosciBox();
@@ -195,15 +200,28 @@ public class Dyrektor_rodzicController implements Initializable {
 
     }
 
+    /**
+     * Metoda przekazuje nazwę użytkownika i pesel.
+     * @param username - nazwa użytkownika typu String
+     * @param pesel - pesel użytkownika typu long
+     */
     public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
         this.username = username;
         this.pesel = pesel;
     }
 
+    /**
+     * Metoda przekazuje nazwę użytkownika.
+     * @param username - nazwa użytkownika typu String
+     */
     public void przekazNazweUzytkownika(String username) {
         this.username = username;
     }
 
+    /**
+     * Metoda wstawia do pola nazwę użytkownika przekazaną jako argument.
+     * @param username - nazwa użytkownika typu String
+     */
     public void wstawUseraDoZalogowanoJako(String username) {
         userid.setText(username);
 

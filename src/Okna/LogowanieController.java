@@ -33,6 +33,10 @@ import utilities.*;
 import static utilities.HibernateUtil.uzyskajKtoZalogowany;
 import static utilities.HibernateUtil.uzyskajPeselZalogowany;
 
+/**
+ *
+ * @author Kasia
+ */
 public class LogowanieController implements Initializable {
 
     @FXML
@@ -51,6 +55,11 @@ public class LogowanieController implements Initializable {
     private String username = "uzytkownik";
     private String password = " ";
 
+    /**
+     *
+     * @param url
+     * @param rb
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -116,7 +125,6 @@ public class LogowanieController implements Initializable {
             }
             DyrektorController controller = fxmlLoader.getController();
             controller.wstawUseraDoZalogowanoJako(login_field.getText());
-            controller.wstawPesel(pobierzPeselZalogowanego());
             controller.przekazNazweUzytkownikaIPesel(login_field.getText(), pobierzPeselZalogowanego());
             
             //pane = FXMLLoader.load(getClass().getResource("/oknoDyrektor/Dyrektor.fxml"));
@@ -183,6 +191,11 @@ public class LogowanieController implements Initializable {
         return ktoZal;
     }
 
+    /**
+     * Metoda pobiera pesel zalogowanego użytkownika używając metody uzyskajPeselZalogowany()
+     * @see uzyskajPeselZalogowany()
+     * @return pesel zalogowanego użytkownika
+     */
     public Long pobierzPeselZalogowanego() {
         String login = login_field.getText();      
         String haslo = password_field.getText();
@@ -193,27 +206,12 @@ public class LogowanieController implements Initializable {
         return nr_pesel;
     }
     
+    /**
+     *
+     */
     public void getZalogowanego(){
         login_field.getText(); 
     }
-
-//    private void wstawUseraDoZalogowanoJako(String username) {
-//        userid.setText(username);
-//    }
-//
-//    public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
-//        this.username = username;
-//        this.pesel = pesel;
-//    }
-//
-//    public void przekazNazweUzytkownika(String username) {
-//        this.username = username;
-//    }
-//
-//    public void przekazNazweUzytkownikaPesel() {
-//        this.username = login_field.getText();
-//        this.pesel = pobierzPeselZalogowanego();
-//    }
 
 
 }

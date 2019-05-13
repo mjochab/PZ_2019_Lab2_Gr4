@@ -97,11 +97,17 @@ public class DyrektorController implements Initializable {
     private TableColumn<Nauczyciel, String> kol_imie;
     @FXML
     private TableColumn<Nauczyciel, String> kol_nazwisko;
-    public ObservableList<Nauczyciel> data;
+
+    private ObservableList<Nauczyciel> data;
 
     private String username = "xd";
     private Long peselN = null;
 
+    /**
+     *
+     * @param url
+     * @param rb
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ustawWartosciPeseliLoginow();
@@ -166,19 +172,28 @@ public class DyrektorController implements Initializable {
 
     }
 
+     /**
+     * Metoda wstawia do pola nazwę użytkownika przekazaną jako argument.
+     * @param username - nazwa użytkownika typu String
+     */
     public void wstawUseraDoZalogowanoJako(String username) {
         userid.setText(username);
     }
 
-    public void wstawPesel(Long nr_pesel) {
-        //tajne.setText(nr_pesel.toString());
-    }
-
+    /**
+     * Metoda przekazuje nazwę użytkownika i pesel.
+     * @param username - nazwa użytkownika typu String
+     * @param pesel - pesel użytkownika typu long
+     */
     public void przekazNazweUzytkownikaIPesel(String username, Long nr_pesel) {
         this.username = username;
         peselN = nr_pesel;
     }
 
+    /**
+     * Metoda przekazuje nazwę użytkownika.
+     * @param username - nazwa użytkownika typu String
+     */
     public void przekazNazweUzytkownika(String username) {
         this.username = username;
     }
@@ -188,7 +203,7 @@ public class DyrektorController implements Initializable {
         return uzyskajPesel(login);
     }
 
-    //usuniety label w oknie - uwaga
+
     private void ustawWartosciBox() {
         List<Long> peselki = podajPeseleNauczycielaBezDanych();
         ObservableList<Long> lista = FXCollections.observableArrayList(peselki);
