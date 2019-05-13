@@ -615,9 +615,10 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param pesel
-     * @return
+     * Metoda, w której po podaniu numeru pesel użytkownika jako argumentu metody zwracany jest obiekt
+     * autoryzacji użytkownika z klasy Autoryzacja.
+     * @param pesel - numer pesel typu long
+     * @return obiekt Autoryzacja
      */
     public static Autoryzacja zwrocAutoryzacje(Long pesel) {
         CriteriaQuery<Autoryzacja> criteria = builder.createQuery(Autoryzacja.class);
@@ -630,11 +631,11 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param pesel
-     * @param login
-     * @param haslo
-     * @param kto
+     * Metoda tworzy nowy obiekt Autoryzacja w bazie danych o padanych parametrach. 
+     * @param pesel - numer pesel typu long
+     * @param login - login użytkownika typu String
+     * @param haslo - hasło użytkownika typu String
+     * @param kto - oznaczenie roli użytkownika typu String
      */
     public static void wstawAutoryzacje(long pesel, String login, String haslo, String kto) {
         Autoryzacja nowa_os = new Autoryzacja(pesel, login, haslo, kto);
@@ -657,10 +658,11 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param pesel
-     * @param imie
-     * @param nazwisko
+     * Metoda dodaje nowy obiekt Nauczyciel o podanych parametrach. 
+     * Numer pesel niezbędny jest by przypisać Autoryzację do nowego obiektu.
+     * @param pesel - numer pesel typu long
+     * @param imie - imie nauczyciela typu String
+     * @param nazwisko - nazwisko nauczyciela typu String
      */
     public static void wstawNauczyciela(long pesel, String imie, String nazwisko) {
         Autoryzacja aut = zwrocAutoryzacje(pesel);
@@ -686,13 +688,13 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param pesel_r
-     * @param pesel_uczen
-     * @param imie_o
-     * @param nazwisko_o
-     * @param imie_m
-     * @param nazwisko_m
+     * Metoda dodaje nowy obiekt Rodzic o podanych parametrach. 
+     * Numer pesel niezbędny jest by przypisać Autoryzację do nowego obiektu.
+     * @param pesel_r - pesel rodzica typu long
+     * @param imie_o - imię ojca typu String
+     * @param nazwisko_o - nazwisko ojca typu String
+     * @param imie_m - imię matki typu String
+     * @param nazwisko_m - nazwisko matki typu String
      */
     public static void wstawRodzica(long pesel_r, String imie_o, String nazwisko_o, String imie_m, String nazwisko_m) {
         Autoryzacja aut = zwrocAutoryzacje(pesel_r);
@@ -721,11 +723,14 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param pesel_u
-     * @param imie_u
-     * @param nazwisko_u
-     * @param klasa
+     * Metoda dodaje nowy obiekt Uczen o podanych parametrach. 
+     * Numer pesel ucznia niezbędny jest by przypisać Autoryzację do nowego obiektu,
+     * a numer pesel rodzica wymagany jest by przypisać uczniowi obiekt rodzica.
+     * @param pesel_u - pesel ucznia typu long
+     * @param pesel_r - pesel rodzica typu long
+     * @param imie_u - imię ucznia typu String
+     * @param nazwisko_u - nazwisko ucznia typu String
+     * @param klasa - klasa ucznia typu Klasa
      */
     public static void wstawUcznia(long pesel_u, long pesel_r, String imie_u, String nazwisko_u, Klasa klasa) {
         Autoryzacja aut = zwrocAutoryzacje(pesel_u);
@@ -754,8 +759,9 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @return
+     * Metoda wykorzystywana by pobrać nazwy istniejących klas w bazie
+     * i zwrócić w postaci listy typu String.
+     * @return lista typu String
      */
     public static List<String> pobierzKlasy() {
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
@@ -768,8 +774,9 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @return
+     * Metoda wykorzystywana by pobrać pesele istniejące w tabeli autoryzacji w bazie
+     * i zwrócić w postaci listy typu Long.
+     * @return  lista typu Long
      */
     public static List<Long> pobierzListePeseli() {
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
@@ -781,8 +788,10 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @return
+     * Metoda wykorzystywana by pobrać pesele, które są w tabeli Autoryzacja w bazie danych
+     * oznaczone jako należące do nauczycieli i są aktywne, czyli w kolumnie Kto mają 
+     * oznaczenie "n" oraz znalezione pesele nie są jeszcze dodane do tabeli Nauczyciel.
+     * @return  lista typu Long
      */
     public static List<Long> podajPeseleNauczycielaBezDanych() {
         List<Long> peselki = new ArrayList<>();
@@ -827,8 +836,10 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @return
+     * Metoda wykorzystywana by pobrać pesele, które są w tabeli Autoryzacja w bazie danych
+     * oznaczone jako należące do uczniów i są aktywne, czyli w kolumnie Kto mają 
+     * oznaczenie "u" oraz znalezione pesele nie są jeszcze dodane do tabeli Uczen.
+     * @return  lista typu Long
      */
     public static List<Long> podajPeseleUczniaBezDanych() {
         List<Long> peselki = new ArrayList<>();
@@ -873,8 +884,10 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @return
+     * Metoda wykorzystywana by pobrać pesele, które są w tabeli Autoryzacja w bazie danych
+     * oznaczone jako należące do rodziców i są aktywne, czyli w kolumnie Kto mają 
+     * oznaczenie "r" oraz znalezione pesele nie są jeszcze dodane do tabeli Rodzic.
+     * @return  lista typu Long
      */
     public static List<Long> podajPeseleRodzicaBezDanych() {
         List<Long> peselki = new ArrayList<>();
@@ -919,8 +932,9 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @return
+     * Metoda wykorzystywana by pobrać pesele, które są w tabeli Uczen, ale nie mają jeszcze
+     * przypisanego obiektu rodzica.
+     * @return  lista typu Long
      */
     public static List<Long> podajPeseleUczniaBezRodzica() {
         List<Long> peselki = new ArrayList<>();
@@ -954,8 +968,10 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @return
+     * Metoda wykorzystywana w metodzie podajPeseleUczniaBezRodzica() by wypisać listę peseli uczniów
+     * bez przypisanego obiektu rodzica.
+     * @see podajPeseleUczniaBezRodzica
+     * @return lista typu Long
      */
     public static List<Long> pobierzListePeseliUczniowZRodzica() {
         CriteriaQuery<Uczen> criteria = builder.createQuery(Uczen.class);
@@ -971,8 +987,8 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @return
+     * Metoda wypisująca liste peseli rodziców z tabeli Rodzic w bazie danych.
+     * @return lista typu Long
      */
     public static List<Long> pobierzListePeseliRodzicow() {
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
@@ -984,8 +1000,8 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @return
+     * Metoda wypisująca liste peseli rodziców z tabeli Nauczyciel w bazie danych.
+     * @return lista typu Long
      */
     public static List<Long> pobierzListePeseliNauczycieli() {
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
@@ -997,8 +1013,8 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @return
+     * Metoda wypisująca liste peseli rodziców z tabeli Uczen w bazie danych.
+     * @return lista typu Long
      */
     public static List<Long> pobierzListePeseliUczniow() {
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
@@ -1025,6 +1041,14 @@ public class HibernateUtil {
         return rodzic;
     }
 
+    /**
+     * Metoda służąca do edycji danych wybranego rodzica weryfikowanego po numerze pesel.
+     * @param pesel_r - pesel rodzica typu long
+     * @param imie_o - imię ojca typu String
+     * @param nazwisko_o - nazwisko ojca typu String
+     * @param imie_m - imie matki typu String
+     * @param nazwisko_m - nazwisko matki typu String
+     */
     public static void edytujRodzicaNoweDane(long pesel_r, String imie_o, String nazwisko_o, String imie_m, String nazwisko_m) {
         Rodzic nowy_rodzic = zwrocRodzica(pesel_r);
         nowy_rodzic.setImieMatki(imie_m);
@@ -1048,7 +1072,16 @@ public class HibernateUtil {
         }
     }
     
-        public static void edytujUczniaNoweDane(long pesel_u,long pesel_r, String imie_u, String nazwisko_u, Klasa klasa) {
+    /**
+     * Metoda służąca do edycji danych wybranego ucznia weryfikowanego po numerze pesel
+     * wraz z możliwą zmianą przypisanego rodzica.
+     * @param pesel_u - pesel ucznia typu long
+     * @param pesel_r - pesel rodzica typu long
+     * @param imie_u - imię ucznia typu String
+     * @param nazwisko_u - nazwisko ucznia typu String
+     * @param klasa - klasa ucznia typu Klasa
+     */
+    public static void edytujUczniaNoweDane(long pesel_u,long pesel_r, String imie_u, String nazwisko_u, Klasa klasa) {
         Uczen uczen_nowy = zwrocUcznia(pesel_u);
         Rodzic rodzic = zwrocRodzica(pesel_r);
         uczen_nowy.setRodzic(rodzic);
@@ -1072,6 +1105,12 @@ public class HibernateUtil {
         }
     }
         
+    /**
+     * Metoda służąca do edycji danych wybranego nauczyciela weryfikowanego po numerze pesel.
+     * @param pesel - pesel nauczyciela typu long
+     * @param imie - imię nauczyciela typu String
+     * @param nazwisko - nazwisko nauczyciela typu String
+     */
     public static void edytujNauczyciela(long pesel, String imie, String nazwisko) {
         Nauczyciel nowa_os = zwrocNauczyciela(pesel);
         nowa_os.setImie(imie);
@@ -1093,54 +1132,12 @@ public class HibernateUtil {
             session.close();
         }
     }
-    public static void przekopiujAutoryzacjeNaNowyPesel(long stary_pesel, long nowy_pesel) {
-        Autoryzacja nowa_aut = zwrocAutoryzacje(stary_pesel);
-        Autoryzacja stara_aut = zwrocAutoryzacje(stary_pesel);
-        nowa_aut.setPesel(nowy_pesel);
 
-        Session session = sessionFactory.openSession();
-
-        Transaction tx = null;
-        Transaction tx2 = null;
-        Integer stId = null;
-        try {
-            tx = session.beginTransaction();
-
-            session.merge(nowa_aut);
-            tx.commit();
-            tx2 = session.beginTransaction();
-            session.delete(stara_aut);
-            tx2.commit();
-        } catch (HibernateException ex) {
-            if (tx != null) {
-                tx.rollback();
-            }
-        } finally {
-            session.close();
-        }
-    }
-
-    public static void edytujRodzicaDlaUcznia(long pesel_r,long pesel_u) {
-        Rodzic nowy_rodzic = zwrocRodzica(pesel_r);
-        Uczen uczniak = zwrocUcznia(pesel_u);
-        uczniak.setRodzic(nowy_rodzic);
-        Session session = sessionFactory.openSession();
-
-        Transaction tx = null;
-        Integer stId = null;
-        try {
-            tx = session.beginTransaction();
-            session.merge(uczniak);
-            tx.commit();
-        } catch (HibernateException ex) {
-            if (tx != null) {
-                tx.rollback();
-            }
-        } finally {
-            session.close();
-        }
-    }
-
+    /**
+     * Metoda usuwająca dostęp uczniowi do logowania się do aplikacji poprzez zmienienie
+     * jego roli w kolumnie Kto w tabeli Autoryzacja.
+     * @param pesel - pesel ucznia typu long
+     */
     public static void usunAutoryzacjeUcznia(long pesel) {
         Autoryzacja stara_aut = zwrocAutoryzacje(pesel);
         stara_aut.setKto("a");
@@ -1161,6 +1158,11 @@ public class HibernateUtil {
         }
     }
     
+    /**
+     * Metoda usuwająca dostęp nauczycielowi do logowania się do aplikacji poprzez zmienienie
+     * jego roli w kolumnie Kto w tabeli Autoryzacja.
+     * @param pesel - pesel nauczyciela typu long
+     */
     public static void usunAutoryzacjeNauczyciela(long pesel) {
         Autoryzacja stara_aut = zwrocAutoryzacje(pesel);
         stara_aut.setKto("b");
@@ -1181,6 +1183,11 @@ public class HibernateUtil {
         }
     }
     
+    /**
+     * Metoda usuwająca dostęp rodzicowi do logowania się do aplikacji poprzez zmienienie
+     * jego roli w kolumnie Kto w tabeli Autoryzacja.
+     * @param pesel - pesel rodzica typu long
+     */
     public static void usunAutoryzacjeRodzica(long pesel) {
         Autoryzacja stara_aut = zwrocAutoryzacje(pesel);
         stara_aut.setKto("c");
