@@ -94,9 +94,9 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param pesel
-     * @return
+     * Metoda zwracająca rolę użytkownika czyli wartość z kolumny Kto w tabeli Autoryzacja.
+     * @param pesel - pesel użytkownika typu long
+     * @return wartość z kolumny Kto dla podanego peselu
      */
     public static String zwrocKtoZalogowany(Long pesel) {
 
@@ -264,10 +264,10 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param login
-     * @param haslo
-     * @return
+     * Metoda zwracająca numer pesel zalogowanego użytkownika po podaniu parametrów login, haslo.
+     * @param login - login użytkownika typu String
+     * @param haslo - hasło użytkownika typu String
+     * @return zwraca numer pesel zalogowanego użytkownika
      */
     public static Long uzyskajPeselZalogowany(String login, String haslo) {
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
@@ -286,9 +286,9 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param login
-     * @return
+     * Metoda zwraca numer pesel uzytkownika o podanym loginie.
+     * @param login - login użytkownika typu String
+     * @return numer pesel użytkownika
      */
     public static Long uzyskajPesel(String login) {
         CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
@@ -306,9 +306,9 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param pesel
-     * @return
+     * Metoda zwracająca rolę użytkownika, czyli wartość z kolumny Kto w tabeli Autoryzacja.
+     * @param pesel - pesel użytkownika typu long
+     * @return wartość z kolumny Kto dla podanego peselu
      */
     public static String uzyskajKtoZalogowany(Long pesel) {
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
@@ -327,9 +327,9 @@ public class HibernateUtil {
     }
 
     /**
-     *
-     * @param pesel
-     * @return
+      * Metoda zwracająca login użytkownika przypisany do numeru pesel z tabeli Autoryzacja.
+     * @param pesel - pesel użytkownika typu long
+     * @return login dla podanego peselu
      */
     public static String uzyskajLoginZalogowany(Long pesel) {
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
@@ -345,11 +345,6 @@ public class HibernateUtil {
         //String osoba = entityManager.createQuery(criteria).getSingleResult();
 
         return osoba;
-    }
-
-    private void sprawdzDaneLogowania() {
-        //trzeba przeprowadzić testy przed cryteria bo występuje wyjątek 
-        //Exception in thread "main" javax.persistence.NoResultException: No entity found for query
     }
 
     /**
