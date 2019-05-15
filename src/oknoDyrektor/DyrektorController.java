@@ -289,6 +289,7 @@ public class DyrektorController implements Initializable {
             }
         }
         ;
+
     }
 
     private void wstawienieDoTabeli() {

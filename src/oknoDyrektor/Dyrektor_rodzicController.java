@@ -299,7 +299,7 @@ public class Dyrektor_rodzicController implements Initializable {
             }
         });
     }
-
+    
     private void obslugaBoxEdycjiPeseluRodzica() {
         ustawWartosciPeseliRodzicaEdycja();
         e_pesel_r.valueProperty().addListener(new ChangeListener<String>() {
@@ -323,6 +323,7 @@ public class Dyrektor_rodzicController implements Initializable {
     @FXML
     private void wstawNowegoUcznia() {
         Klasa klasa_U = new Klasa(klasa.getSelectionModel().getSelectedItem().toString());
+
         if (imie_u.getText().isEmpty() || nazwisko_u.getText().isEmpty()) {
             ucz_error.setText("Niepoprawne dane!");
         } else {
@@ -344,9 +345,7 @@ public class Dyrektor_rodzicController implements Initializable {
             } catch (Exception e) {
                 ucz_error.setText("Niepoprawny pesel!");
             }
-
         }
-
     }
 
     @FXML

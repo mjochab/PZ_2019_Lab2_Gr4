@@ -681,7 +681,7 @@ public class HibernateUtil {
             session.close();
         }
     }
-
+     */
     /**
      * Metoda dodaje nowy obiekt Rodzic o podanych parametrach. 
      * Numer pesel niezbędny jest by przypisać Autoryzację do nowego obiektu.
@@ -691,6 +691,7 @@ public class HibernateUtil {
      * @param imie_m - imię matki typu String
      * @param nazwisko_m - nazwisko matki typu String
      */
+
     public static void wstawRodzica(long pesel_r, String imie_o, String nazwisko_o, String imie_m, String nazwisko_m) {
         Autoryzacja aut = zwrocAutoryzacje(pesel_r);
 
@@ -727,6 +728,7 @@ public class HibernateUtil {
      * @param nazwisko_u - nazwisko ucznia typu String
      * @param klasa - klasa ucznia typu Klasa
      */
+
     public static void wstawUcznia(long pesel_u, long pesel_r, String imie_u, String nazwisko_u, Klasa klasa) {
         Autoryzacja aut = zwrocAutoryzacje(pesel_u);
         Autoryzacja aut_rodz = zwrocAutoryzacje(pesel_r);
