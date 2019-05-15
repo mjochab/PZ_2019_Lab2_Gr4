@@ -84,6 +84,8 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
+            <Label fx:id="err_ucz_aut" layoutX="26.0" layoutY="101.0" prefHeight="17.0" prefWidth="187.0" textFill="#bf0000" />
+            <Label fx:id="err_rodz_aut" layoutX="26.0" layoutY="233.0" prefHeight="17.0" prefWidth="187.0" textFill="#ab0303" />
             </children>
         </AnchorPane>
         <AnchorPane layoutX="-6.0" prefHeight="726.0" prefWidth="265.0">
@@ -91,8 +93,9 @@
                 <Button fx:id="nauczycielbtn" layoutX="9.0" layoutY="80.0" mnemonicParsing="false" onAction="#LoadNauczyciel" prefHeight="25.0" prefWidth="248.0" text="Nauczyciel" />
                 <Button fx:id="autoryzacjabtn" layoutX="9.0" layoutY="44.0" mnemonicParsing="false" onAction="#LoadUczen" prefHeight="25.0" prefWidth="248.0" text="Autoryzacja" />
                 <Button fx:id="rodzicbtn" layoutX="7.0" layoutY="120.0" mnemonicParsing="false" onAction="#LoadRodzic" prefHeight="25.0" prefWidth="248.0" text="Rodzic i uczeń" />
-                <Button fx:id="wylogujbtn" layoutX="7.0" layoutY="171.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />
+                <Button fx:id="wylogujbtn" layoutX="7.0" layoutY="231.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />
                 <Label fx:id="userid1" layoutX="24.0" layoutY="14.0" prefHeight="17.0" prefWidth="177.0" text="Dziennik elektroniczny.net" />
+            <Button fx:id="harmonogram_btn" layoutX="9.0" layoutY="160.0" onAction="#LoadHarmonogram" mnemonicParsing="false" prefHeight="25.0" prefWidth="248.0" text="Harmonogram" />
             </children>
         </AnchorPane>
           <Label layoutX="963.0" layoutY="21.0" prefHeight="17.0" prefWidth="97.0" text="Zalogowano jako" />

@@ -75,6 +75,8 @@ public class DyrektorController implements Initializable {
     @FXML
     private Label label_usuwanie;
     @FXML
+    private Label err_nowa_aut;
+    @FXML
     private TextField imie_n;
     @FXML
     private TextField nazwisko_n;
@@ -172,8 +174,26 @@ public class DyrektorController implements Initializable {
 
     }
 
-     /**
+    @FXML
+    private void LoadHarmonogram(ActionEvent event) throws IOException {
+        AnchorPane pane;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("Harmonogram.fxml"));
+        try {
+            pane = fxmlLoader.load();
+            rootPane.getChildren().setAll(pane);
+        } catch (IOException ex) {
+            Logger.getLogger(DyrektorController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        HarmonogramController controller = fxmlLoader.getController();
+        controller.wstawUseraDoZalogowanoJako(username);
+        controller.przekazNazweUzytkownikaIPesel(username, peselN);
+
+    }
+
+    /**
      * Metoda wstawia do pola nazwę użytkownika przekazaną jako argument.
+     *
      * @param username - nazwa użytkownika typu String
      */
     public void wstawUseraDoZalogowanoJako(String username) {
@@ -182,6 +202,7 @@ public class DyrektorController implements Initializable {
 
     /**
      * Metoda przekazuje nazwę użytkownika i pesel.
+     *
      * @param username - nazwa użytkownika typu String
      * @param pesel - pesel użytkownika typu long
      */
@@ -192,6 +213,7 @@ public class DyrektorController implements Initializable {
 
     /**
      * Metoda przekazuje nazwę użytkownika.
+     *
      * @param username - nazwa użytkownika typu String
      */
     public void przekazNazweUzytkownika(String username) {
@@ -202,7 +224,6 @@ public class DyrektorController implements Initializable {
         String login = userid.getText();
         return uzyskajPesel(login);
     }
-
 
     private void ustawWartosciBox() {
         List<Long> peselki = podajPeseleNauczycielaBezDanych();
@@ -227,6 +248,10 @@ public class DyrektorController implements Initializable {
         pesel_n.setItems(lista);
         if (peselki.size() > 0) {
             pesel_n.setValue(peselki.get(0));
+            err_nowa_aut.setText("");
+        }
+        if (peselki.size() == 0) {
+            err_nowa_aut.setText("Proszę dodać nową autoryzację!");
         }
     }
 
@@ -258,6 +283,7 @@ public class DyrektorController implements Initializable {
                 nazwisko_n.setText("");
                 err_label.setText("Dodano do bazy!");
                 ustawWartosciPeseliLoginow();
+                wstawienieDoTabeli();
             } catch (Exception e) {
                 err_label.setText("Niepoprawne dane!");
             }
@@ -327,13 +353,13 @@ public class DyrektorController implements Initializable {
             label_usuwanie.setText("Usunięto dostęp nauczycielowi!");
         }
     }
-    
+
     @FXML
-    private void czyszczenieLabelaUsuwanie(){
+    private void czyszczenieLabelaUsuwanie() {
         label_usuwanie.setText("");
     }
-    
-     private void ustawWartosciPeseliRodzicaEdycja() {
+
+    private void ustawWartosciPeseliRodzicaEdycja() {
         List<String> peselki = zrobListeImieINazwiskoNauczyciela();
         ObservableList<String> lista = FXCollections.observableArrayList(peselki);
         box_nauczycieli.setItems(lista);

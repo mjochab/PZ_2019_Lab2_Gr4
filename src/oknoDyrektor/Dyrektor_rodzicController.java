@@ -113,6 +113,10 @@ public class Dyrektor_rodzicController implements Initializable {
     @FXML
     private Label label_e_rodzic;
     @FXML
+    private Label err_ucz_aut;
+    @FXML
+    private Label err_rodz_aut;
+    @FXML
     private Label label_e_uczen;
     @FXML
     private ChoiceBox klasa;
@@ -200,8 +204,26 @@ public class Dyrektor_rodzicController implements Initializable {
 
     }
 
+    @FXML
+    private void LoadHarmonogram(ActionEvent event) throws IOException {
+        AnchorPane pane;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("Harmonogram.fxml"));
+        try {
+            pane = fxmlLoader.load();
+            rootPane.getChildren().setAll(pane);
+        } catch (IOException ex) {
+            Logger.getLogger(Dyrektor_rodzicController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        HarmonogramController controller = fxmlLoader.getController();
+        controller.wstawUseraDoZalogowanoJako(username);
+        controller.przekazNazweUzytkownikaIPesel(username, pesel);
+
+    }
+
     /**
      * Metoda przekazuje nazwę użytkownika i pesel.
+     *
      * @param username - nazwa użytkownika typu String
      * @param pesel - pesel użytkownika typu long
      */
@@ -212,6 +234,7 @@ public class Dyrektor_rodzicController implements Initializable {
 
     /**
      * Metoda przekazuje nazwę użytkownika.
+     *
      * @param username - nazwa użytkownika typu String
      */
     public void przekazNazweUzytkownika(String username) {
@@ -220,6 +243,7 @@ public class Dyrektor_rodzicController implements Initializable {
 
     /**
      * Metoda wstawia do pola nazwę użytkownika przekazaną jako argument.
+     *
      * @param username - nazwa użytkownika typu String
      */
     public void wstawUseraDoZalogowanoJako(String username) {
@@ -396,9 +420,9 @@ public class Dyrektor_rodzicController implements Initializable {
             usuwanie_label.setText("Usunięto dostęp rodzicowi!");
         }
     }
-    
+
     @FXML
-    private void wyczyscLabelUsuwania(){
+    private void wyczyscLabelUsuwania() {
         usuwanie_label.setText("");
     }
 
@@ -408,6 +432,10 @@ public class Dyrektor_rodzicController implements Initializable {
         pesel_u.setItems(lista);
         if (peselki.size() > 0) {
             pesel_u.setValue(peselki.get(0));
+            err_ucz_aut.setText("");
+        }
+        if (peselki.size() == 0) {
+            err_ucz_aut.setText("Prodzę dodać nową autoryzację!");
         }
     }
 
@@ -427,6 +455,10 @@ public class Dyrektor_rodzicController implements Initializable {
         pesel_r.setItems(lista);
         if (peselki.size() > 0) {
             pesel_r.setValue(peselki.get(0));
+            err_rodz_aut.setText("");
+        }
+        if (peselki.size() == 0) {
+            err_rodz_aut.setText("Proszę dodać nową autoryzację!");
         }
     }
 

@@ -18,7 +18,8 @@
                 <Button fx:id="nauczycielbtn" layoutX="7.0" layoutY="79.0" mnemonicParsing="false" onAction="#LoadNauczyciel" prefHeight="25.0" prefWidth="248.0" text="Nauczyciel" />
                 <Button fx:id="autoryzacjabtn" layoutX="7.0" layoutY="40.0" mnemonicParsing="false" onAction="#LoadUczen" prefHeight="25.0" prefWidth="248.0" text="Autoryzacja" />
                 <Button fx:id="rodzicbtn" layoutX="7.0" layoutY="120.0" mnemonicParsing="false" onAction="#LoadRodzic" prefHeight="25.0" prefWidth="248.0" text="Rodzic i uczeń" />
-                <Button fx:id="wylogujbtn" layoutX="7.0" layoutY="171.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />
+                <Button fx:id="wylogujbtn" layoutX="7.0" layoutY="226.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />
+            <Button fx:id="harmonogram_btn" layoutX="7.0" layoutY="156.0" mnemonicParsing="false" onAction="#LoadHarmonogram" prefHeight="25.0" prefWidth="248.0" text="Harmonogram" />
             </children>
         </AnchorPane>
         <Label fx:id="userid" layoutX="1080.0" layoutY="16.0" prefHeight="17.0" prefWidth="97.0" text="tu login" />
@@ -65,6 +66,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
+            <Label fx:id="err_nowa_aut" layoutX="64.0" layoutY="82.0" prefHeight="17.0" prefWidth="199.0" textFill="#da0909" />
             </children>
         </AnchorPane>
     </children>

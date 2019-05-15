@@ -26,6 +26,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import mapping.*;
 import oknoDyrektor.DyrektorController;
+import oknoDyrektor.Dyrektor_AutoryzacjaController;
 import oknoNauczyciel.NauczycielKlasyController;
 import oknoRodzic.RodzicController;
 import oknoUczen.UczenOcenyController;
@@ -67,7 +68,7 @@ public class LogowanieController implements Initializable {
 
     @FXML
     private void logDyrek(ActionEvent event) throws IOException {
-        AnchorPane pane = FXMLLoader.load(getClass().getResource("/oknoDyrektor/Dyrektor.fxml"));
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("/oknoDyrektor/Dyrektor_Autoryzacja.fxml"));
         rootPane.getChildren().setAll(pane);
     }
 
@@ -123,7 +124,7 @@ public class LogowanieController implements Initializable {
             catch(IOException ex){
                Logger.getLogger(LogowanieController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            DyrektorController controller = fxmlLoader.getController();
+            Dyrektor_AutoryzacjaController controller = fxmlLoader.getController();
             controller.wstawUseraDoZalogowanoJako(login_field.getText());
             controller.przekazNazweUzytkownikaIPesel(login_field.getText(), pobierzPeselZalogowanego());
             
