@@ -6,63 +6,86 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="oknoDyrektor.Dyrektor_rodzicController">
     <children>  
         <AnchorPane layoutX="268.0" layoutY="35.0" prefHeight="653.0" prefWidth="954.0">
             <children>
-                <TextField fx:id="imie_u" layoutX="191.0" layoutY="45.0" />
-                <TextField fx:id="nazwisko_u" layoutX="366.0" layoutY="45.0" />
-                <Label layoutX="236.0" layoutY="70.0" text="Imię ucznia" />
-                <Label layoutX="397.0" layoutY="70.0" text="Nazwisko ucznia" />
-                <Label layoutX="19.0" layoutY="6.0" text="Dodawanie" />
-                <Button fx:id="dodajbtn" layoutX="697.0" layoutY="45.0" mnemonicParsing="false" onMouseClicked="#wstawNowegoUcznia" prefHeight="25.0" prefWidth="149.0" text="Dodaj ucznia" />
+                <TextField fx:id="imie_u" layoutX="362.0" layoutY="45.0" />
+                <TextField fx:id="nazwisko_u" layoutX="523.0" layoutY="45.0" />
+                <Label layoutX="407.0" layoutY="70.0" text="Imię ucznia" />
+                <Label layoutX="554.0" layoutY="70.0" text="Nazwisko ucznia" />
+                <Label layoutX="19.0" layoutY="6.0" prefHeight="17.0" prefWidth="213.0" text="Dodawanie danych ucznia" />
+                <Button fx:id="dodajbtn" layoutX="694.0" layoutY="97.0" mnemonicParsing="false" onMouseClicked="#wstawNowegoUcznia" prefHeight="25.0" prefWidth="149.0" text="Dodaj ucznia" />
                 <ChoiceBox fx:id="pesel_u" layoutX="24.0" layoutY="45.0" prefWidth="150.0" />
                 <Label layoutX="67.0" layoutY="70.0" text="Pesel ucznia" />
                 <Separator layoutX="16.0" layoutY="279.0" prefHeight="4.0" prefWidth="923.0" />
-                <Label layoutX="19.0" layoutY="290.0" text="Edycja" />
-                <Button fx:id="edytujbtn" layoutX="697.0" layoutY="327.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Edytuj ucznia" />
-                <Separator layoutX="16.0" layoutY="551.0" prefHeight="4.0" prefWidth="923.0" />
-                <Label layoutX="12.0" layoutY="574.0" text="Usuwanie" />
-                <Label layoutX="12.0" layoutY="602.0" text="Lista" />
-                <ChoiceBox layoutX="58.0" layoutY="598.0" prefWidth="150.0" />
-                <Button layoutX="231.0" layoutY="598.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="149.0" text="Usuń" />
-            <ChoiceBox fx:id="pesel_r" layoutX="24.0" layoutY="143.0" prefWidth="150.0" />
-            <Label layoutX="67.0" layoutY="168.0" text="Pesel rodzica" />
-            <TextField fx:id="imie_m" layoutX="193.0" layoutY="143.0" />
-            <Label layoutX="238.0" layoutY="168.0" text="Imię matki" />
-            <TextField fx:id="nazwisko_m" layoutX="367.0" layoutY="143.0" />
-            <Label layoutX="398.0" layoutY="168.0" text="Nazwisko matki" />
-            <TextField fx:id="imie_o" layoutX="531.0" layoutY="143.0" />
-            <Label layoutX="581.0" layoutY="168.0" text="Imię ojca" />
-            <Label layoutX="733.0" layoutY="168.0" text="Nazwisko ojca" />
-            <TextField fx:id="nazwisko_o" layoutX="696.0" layoutY="143.0" />
-            <ChoiceBox fx:id="klasa" layoutX="530.0" layoutY="45.0" prefWidth="150.0" />
-            <Label layoutX="591.0" layoutY="70.0" text="Klasa" />
-            <TextField fx:id="e_imie_u" layoutX="191.0" layoutY="327.0" />
-            <TextField fx:id="e_nazwisko_u" layoutX="366.0" layoutY="327.0" />
-            <Label layoutX="238.0" layoutY="352.0" text="Imię ucznia" />
-            <Label layoutX="398.0" layoutY="352.0" text="Nazwisko ucznia" />
+                <Label layoutX="19.0" layoutY="290.0" prefHeight="17.0" prefWidth="142.0" text="Edycja danych ucznia" />
+                <Button fx:id="edytujbtn" layoutX="693.0" layoutY="379.0" mnemonicParsing="false" onMouseClicked="#edytujUcznia" prefHeight="25.0" prefWidth="149.0" text="Edytuj ucznia" />
+                <Separator layoutX="6.0" layoutY="560.0" prefHeight="4.0" prefWidth="923.0" />
+                <Label layoutX="12.0" layoutY="574.0" text="Usuwanie dostępu do dziennika" textFill="#790000" />
+                <Label layoutX="56.0" layoutY="623.0" text="Lista rodziców" />
+                <ChoiceBox fx:id="box_u_rodzic" layoutX="19.0" layoutY="598.0" onMouseClicked="#wyczyscLabelUsuwania" prefWidth="150.0" />
+                <Button fx:id="btn_u_rodzic" layoutX="190.0" layoutY="598.0" mnemonicParsing="false" onMouseClicked="#usunRodzicowiDostep" prefHeight="17.0" prefWidth="149.0" text="Usuń rodzica" />
+            <ChoiceBox fx:id="pesel_r" layoutX="21.0" layoutY="182.0" prefWidth="150.0" />
+            <Label layoutX="26.0" layoutY="207.0" prefHeight="17.0" prefWidth="142.0" text="Pesel jednego z rodziców" />
+            <TextField fx:id="imie_m" layoutX="190.0" layoutY="182.0" />
+            <Label layoutX="235.0" layoutY="207.0" text="Imię matki" />
+            <TextField fx:id="nazwisko_m" layoutX="364.0" layoutY="182.0" />
+            <Label layoutX="395.0" layoutY="207.0" text="Nazwisko matki" />
+            <TextField fx:id="imie_o" layoutX="528.0" layoutY="182.0" />
+            <Label layoutX="578.0" layoutY="207.0" text="Imię ojca" />
+            <Label layoutX="730.0" layoutY="207.0" text="Nazwisko ojca" />
+            <TextField fx:id="nazwisko_o" layoutX="693.0" layoutY="182.0" />
+            <ChoiceBox fx:id="klasa" layoutX="687.0" layoutY="45.0" prefWidth="150.0" />
+            <Label layoutX="748.0" layoutY="70.0" text="Klasa" />
+            <TextField fx:id="e_imie_u" layoutX="356.0" layoutY="327.0" />
+            <TextField fx:id="e_nazwisko_u" layoutX="530.0" layoutY="327.0" />
+            <Label layoutX="401.0" layoutY="352.0" text="Imię ucznia" />
+            <Label layoutX="559.0" layoutY="352.0" text="Nazwisko ucznia" />
             <ChoiceBox fx:id="e_pesel_u" layoutX="18.0" layoutY="327.0" prefWidth="150.0" />
-            <Label layoutX="58.0" layoutY="352.0" text="Pesel ucznia" />
-            <ChoiceBox fx:id="e_pesel_r" layoutX="16.0" layoutY="410.0" prefWidth="150.0" />
-            <Label layoutX="59.0" layoutY="436.0" text="Pesel rodzica" />
-            <TextField fx:id="e_imie_m" layoutX="190.0" layoutY="410.0" />
-            <Label layoutX="235.0" layoutY="435.0" text="Imię matki" />
-            <TextField fx:id="e_nazwisko_m" layoutX="364.0" layoutY="410.0" />
-            <Label layoutX="395.0" layoutY="435.0" text="Nazwisko matki" />
-            <TextField fx:id="e_imie_o" layoutX="531.0" layoutY="410.0" />
-            <Label layoutX="581.0" layoutY="435.0" text="Imię ojca" />
-            <Label layoutX="729.0" layoutY="436.0" text="Nazwisko ojca" />
-            <TextField fx:id="e_nazwisko_o" layoutX="697.0" layoutY="410.0" />
-            <ChoiceBox fx:id="e_klasa" layoutX="531.0" layoutY="327.0" prefWidth="150.0" />
-            <Label layoutX="592.0" layoutY="352.0" text="Klasa" />
-            <Button fx:id="dodajbtnRodzica" layoutX="696.0" layoutY="202.0" mnemonicParsing="false" onMouseClicked="#wstawNowegoRodzica" prefHeight="25.0" prefWidth="149.0" text="Dodaj rodzica" />
-            <ChoiceBox fx:id="pesel_dz" layoutX="25.0" layoutY="202.0" prefHeight="25.0" prefWidth="149.0" />
-            <Label layoutX="69.0" layoutY="231.0" text="Pesel ucznia" />
-            <ChoiceBox fx:id="e_pesel_dz" layoutX="19.0" layoutY="474.0" prefWidth="150.0" />
-            <Label layoutX="61.0" layoutY="505.0" text="Pesel ucznia" />
-            <Button fx:id="edytujbtnRodzica" layoutX="697.0" layoutY="474.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Edytuj rodzica" />
+            <Label layoutX="58.0" layoutY="352.0" text="Wybrany uczeń" />
+            <ChoiceBox fx:id="e_pesel_r" layoutX="22.0" layoutY="463.0" prefWidth="150.0" />
+            <Label layoutX="52.0" layoutY="488.0" text="Wybrany rodzic" />
+            <TextField fx:id="e_imie_m" layoutX="196.0" layoutY="463.0" />
+            <Label layoutX="241.0" layoutY="488.0" text="Imię matki" />
+            <TextField fx:id="e_nazwisko_m" layoutX="370.0" layoutY="463.0" />
+            <Label layoutX="401.0" layoutY="488.0" text="Nazwisko matki" />
+            <TextField fx:id="e_imie_o" layoutX="537.0" layoutY="463.0" />
+            <Label layoutX="587.0" layoutY="488.0" text="Imię ojca" />
+            <Label layoutX="738.0" layoutY="488.0" text="Nazwisko ojca" />
+            <TextField fx:id="e_nazwisko_o" layoutX="703.0" layoutY="463.0" />
+            <ChoiceBox fx:id="e_klasa" layoutX="693.0" layoutY="327.0" prefWidth="150.0" />
+            <Label layoutX="754.0" layoutY="356.0" text="Klasa" />
+            <Button fx:id="dodajbtnRodzica" layoutX="693.0" layoutY="241.0" mnemonicParsing="false" onMouseClicked="#wstawNowegoRodzica" prefHeight="25.0" prefWidth="149.0" text="Dodaj rodzica" />
+            <Button fx:id="edytujbtnRodzica" layoutX="703.0" layoutY="513.0" mnemonicParsing="false" onMouseClicked="#edytujRodzica" prefHeight="25.0" prefWidth="149.0" text="Edytuj rodzica" />
+            <Label layoutX="19.0" layoutY="151.0" prefHeight="17.0" prefWidth="213.0" text="Dodawanie danych rodziców" />
+            <ChoiceBox fx:id="ucz_pesel_r" layoutX="193.0" layoutY="45.0" prefWidth="150.0" />
+            <Label layoutX="230.0" layoutY="70.0" text="Pesel rodzica" />
+            <Separator layoutX="17.0" layoutY="140.0" prefHeight="4.0" prefWidth="923.0" />
+            <Label fx:id="ucz_error" layoutX="522.0" layoutY="101.0" prefHeight="17.0" prefWidth="142.0" textAlignment="CENTER" textFill="#d00404" />
+            <Label fx:id="rodzic_error" layoutX="530.0" layoutY="245.0" prefHeight="17.0" prefWidth="142.0" textAlignment="CENTER" textFill="#bf0000" />
+            <Label layoutX="245.0" layoutY="352.0" text="Rodzic" />
+            <TextField fx:id="field_uczen_p" disable="true" editable="false" layoutX="19.0" layoutY="379.0" />
+            <Label layoutX="58.0" layoutY="404.0" text="Pesel ucznia" />
+            <Separator layoutX="17.0" layoutY="428.0" prefHeight="4.0" prefWidth="923.0" />
+            <Label layoutX="22.0" layoutY="432.0" prefHeight="17.0" prefWidth="142.0" text="Edycja danych rodzica" />
+            <TextField fx:id="pesel_r_e" disable="true" editable="false" layoutX="25.0" layoutY="513.0" />
+            <Label layoutX="65.0" layoutY="538.0" text="Pesel rodzica" />
+            <ChoiceBox fx:id="edytuj_rodzicabox" layoutX="188.0" layoutY="327.0" prefWidth="150.0" />
+            <Label fx:id="label_e_uczen" layoutX="532.0" layoutY="383.0" prefHeight="17.0" prefWidth="142.0" textFill="#d30303" />
+            <Label fx:id="label_e_rodzic" layoutX="538.0" layoutY="517.0" prefHeight="17.0" prefWidth="150.0" textFill="#bf0202" />
+            <Label layoutX="565.0" layoutY="627.0" text="Lista uczniów" />
+            <ChoiceBox fx:id="box_u_uczen" layoutX="528.0" layoutY="602.0" onMouseClicked="#wyczyscLabelUsuwania" prefWidth="150.0" />
+            <Button fx:id="btn_u_uczen" layoutX="699.0" layoutY="602.0" mnemonicParsing="false" onMouseClicked="#usunUczniowiDostep" prefHeight="17.0" prefWidth="149.0" text="Usuń ucznia" />
+            <Label fx:id="usuwanie_label" layoutX="354.0" layoutY="606.0" prefHeight="17.0" prefWidth="162.0" textAlignment="CENTER" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="err_ucz_aut" layoutX="26.0" layoutY="101.0" prefHeight="17.0" prefWidth="187.0" textFill="#bf0000" />
+            <Label fx:id="err_rodz_aut" layoutX="26.0" layoutY="233.0" prefHeight="17.0" prefWidth="187.0" textFill="#ab0303" />
             </children>
         </AnchorPane>
         <AnchorPane layoutX="-6.0" prefHeight="726.0" prefWidth="265.0">
@@ -70,8 +93,9 @@
                 <Button fx:id="nauczycielbtn" layoutX="9.0" layoutY="80.0" mnemonicParsing="false" onAction="#LoadNauczyciel" prefHeight="25.0" prefWidth="248.0" text="Nauczyciel" />
                 <Button fx:id="autoryzacjabtn" layoutX="9.0" layoutY="44.0" mnemonicParsing="false" onAction="#LoadUczen" prefHeight="25.0" prefWidth="248.0" text="Autoryzacja" />
                 <Button fx:id="rodzicbtn" layoutX="7.0" layoutY="120.0" mnemonicParsing="false" onAction="#LoadRodzic" prefHeight="25.0" prefWidth="248.0" text="Rodzic i uczeń" />
-                <Button fx:id="wylogujbtn" layoutX="7.0" layoutY="171.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />
+                <Button fx:id="wylogujbtn" layoutX="7.0" layoutY="231.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="248.0" text="Wyloguj" />
                 <Label fx:id="userid1" layoutX="24.0" layoutY="14.0" prefHeight="17.0" prefWidth="177.0" text="Dziennik elektroniczny.net" />
+            <Button fx:id="harmonogram_btn" layoutX="9.0" layoutY="160.0" onAction="#LoadHarmonogram" mnemonicParsing="false" prefHeight="25.0" prefWidth="248.0" text="Harmonogram" />
             </children>
         </AnchorPane>
           <Label layoutX="963.0" layoutY="21.0" prefHeight="17.0" prefWidth="97.0" text="Zalogowano jako" />

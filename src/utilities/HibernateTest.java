@@ -156,9 +156,10 @@ public class HibernateTest {
 //    List<Uczen> uczniowie = new ArrayList<>();
 //    uczniowie = zwrocUczniowZklasy("1a");
 //    zwrocObecnosciZprzedmiotu(przedmiot, uczniowie);
-        System.out.println(podajPeseleUczniaBezRodzica().size());
+        //System.out.println(podajPeseleUczniaBezRodzica().size());
        //System.out.println(pobierzListePeseliUczniow().size());
-
+        //edytujAutoryzacje(10000000008L,10000000999L);  
+        //usunAutoryzacje(10000000001L);
     
   }
 }

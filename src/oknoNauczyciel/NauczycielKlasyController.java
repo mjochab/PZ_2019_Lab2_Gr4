@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -34,12 +35,15 @@ import javafx.stage.Stage;
 import utilities.HibernateUtil;
 import static utilities.HibernateUtil.zwrocKlaseKtoraWychowuje;
 
+/**
+ *
+ * @author Veth
+ */
 public class NauczycielKlasyController implements Initializable {
 
   //W oczekiwaniu na przekazanie wartosci z logowania, tymczasowe stałe:
-  private Long pesel = 22222222220L;
-  private String username = "Wojtus";
-
+  private Long pesel;
+  private String username;
   @FXML
   private Button klasa1;
   @FXML
@@ -55,19 +59,18 @@ public class NauczycielKlasyController implements Initializable {
 
   /**
    * Initializes the controller class.
+   * @param url
+   * @param rb
    */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
+       Platform.runLater(() -> {
+    
     wybierzKlaseButtony();
     wstawUseraDoZalogowanoJako(username);
-     System.out.println(pesel);
-    // TODO
+       });
   }
 
-  @FXML
-  private void handleButtonAction(ActionEvent event) throws IOException {
-
-  }
 
   @FXML
   private void logout(ActionEvent event) throws IOException {
@@ -149,6 +152,11 @@ public class NauczycielKlasyController implements Initializable {
 
   }
 
+  /**
+   *
+   * @param username
+   * @param pesel
+   */
   public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
 
     this.username = username;
@@ -156,6 +164,10 @@ public class NauczycielKlasyController implements Initializable {
 
   }
 
+  /**
+   *
+   * @param username
+   */
   public void wstawUseraDoZalogowanoJako(String username) {
 
     userid.setText(username);

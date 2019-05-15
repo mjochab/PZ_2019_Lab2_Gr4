@@ -14,7 +14,6 @@
       <Label fx:id="userid" layoutX="1161.0" layoutY="16.0" prefHeight="17.0" prefWidth="97.0" text="tu login" />
       <Button fx:id="wychowankowieBtn" layoutX="54.0" layoutY="141.0" mnemonicParsing="false" onAction="#przejdzDoWychowankow" prefHeight="25.0" prefWidth="118.0" text="Wychowankowie" />
       <Button fx:id="obecnosciBtn" layoutX="54.0" layoutY="187.0" mnemonicParsing="false" onAction="#przejdzDoObecnosci" prefHeight="25.0" prefWidth="118.0" text="Obecnosci" />
-      <Button fx:id="logoutBtn" layoutX="54.0" layoutY="227.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="118.0" text="Wyjdz" />
       <Text layoutX="24.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Panel wychowawcy:" />
       <Label fx:id="gagatek" layoutX="416.0" layoutY="80.0" text="Gagatek" visible="false">
          <font>
