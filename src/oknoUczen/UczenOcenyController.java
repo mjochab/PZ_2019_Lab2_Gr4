@@ -119,10 +119,6 @@ public class UczenOcenyController implements Initializable {
         controller.wstawUseraDoZalogowanoJako(username);
         controller.przekazNazweUzytkownikaIPesel(username, pesel);
 
-        //AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenOceny.fxml"));
-        //rootPane.getChildren().setAll(pane);
-        wpisywanieOcen();
-
     }
 
     @FXML
@@ -140,8 +136,6 @@ public class UczenOcenyController implements Initializable {
         controller.wstawUseraDoZalogowanoJako(username);
         controller.przekazNazweUzytkownikaIPesel(username, pesel);
 
-        //AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenNieobecnosci.fxml"));
-        //rootPane.getChildren().setAll(pane);
     }
 
     @FXML
@@ -159,19 +153,22 @@ public class UczenOcenyController implements Initializable {
         controller.wstawUseraDoZalogowanoJako(username);
         controller.przekazNazweUzytkownikaIPesel(username, pesel);
 
-        //AnchorPane pane = FXMLLoader.load(getClass().getResource("UczenUwagi.fxml"));
-        //rootPane.getChildren().setAll(pane);
     }
 
     @FXML
     private void zmianaNazwKolumn() {
         nazwyKolumn = HibernateUtil.pobieranieNazwPrzedmiotow();
+        tabelaOcen.getColumns().clear();
+        
+        for (int i = 0; i < nazwyKolumn.length; i++) {
+            TableColumn<Integer, Number> przedmiot = new TableColumn<Integer, Number>();
+            tabelaOcen.getColumns().add(przedmiot);
+        }
         kolumna = tabelaOcen.getColumns();
 
         if (nazwyKolumn.length != 0) {
             int i = 0;
-
-            for (TableColumn kol : kolumna) {
+            for (TableColumn<Integer, Number> kol : kolumna) {
                 kol.setText(nazwyKolumn[i]);
                 i++;
             }
@@ -206,7 +203,6 @@ public class UczenOcenyController implements Initializable {
     }
 
     private void wpisywanieOcen() {
-        System.out.println(pesel);
         uczen = HibernateUtil.zwrocUcznia(pesel);
         Set oceny = uczen.getOcenas();
 

@@ -692,7 +692,8 @@ public class HibernateUtil {
      * @param pesel
      * @param imie
      * @param nazwisko
-     */
+
+    
     public static void wstawNauczyciela(long pesel, String imie, String nazwisko) {
         Autoryzacja aut = zwrocAutoryzacje(pesel);
         Nauczyciel nowa_os = new Nauczyciel(pesel, imie, nazwisko);
@@ -713,7 +714,7 @@ public class HibernateUtil {
             session.close();
         }
     }
-
+     */
     /**
      *
      * @param pesel_r
@@ -723,6 +724,7 @@ public class HibernateUtil {
      * @param imie_m
      * @param nazwisko_m
      */
+    /*
     public static void wstawRodzica(long pesel_r, long pesel_uczen, String imie_o, String nazwisko_o, String imie_m, String nazwisko_m) {
         Autoryzacja aut = zwrocAutoryzacje(pesel_r);
         Autoryzacja aut_ucz = zwrocAutoryzacje(pesel_uczen);
@@ -754,6 +756,7 @@ public class HibernateUtil {
      * @param nazwisko_u
      * @param klasa
      */
+    /*
     public static void wstawUcznia(long pesel_u, String imie_u, String nazwisko_u, Klasa klasa) {
         Autoryzacja aut = zwrocAutoryzacje(pesel_u);
         Uczen nowy_ucz = new Uczen(pesel_u, imie_u, nazwisko_u, klasa);
@@ -779,6 +782,8 @@ public class HibernateUtil {
      *
      * @return
      */
+    
+    
     public static List<Klasa> pobierzKlasy() {
         CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
         Root root = criteria.from(Klasa.class);

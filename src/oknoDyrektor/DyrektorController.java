@@ -26,7 +26,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import static utilities.HibernateUtil.podajPeseleNauczycielaBezDanych;
 import static utilities.HibernateUtil.uzyskajPesel;
-import static utilities.HibernateUtil.wstawNauczyciela;
+//import static utilities.HibernateUtil.wstawNauczyciela;
 
 /**
  * FXML Controller class
@@ -167,7 +167,7 @@ public class DyrektorController implements Initializable {
         //Long peselek = Long.parseLong(pesel_uz.getText());
         //wstawNauczyciela(peselek,login_uz.getText(),haslo_uz.getText(),kto_box.getSelectionModel().getSelectedItem().toString());
         Long peselN = Long.parseLong(pesel_n.getSelectionModel().getSelectedItem().toString());
-        wstawNauczyciela(peselN,imie_n.getText(),nazwisko_n.getText());
+      //  wstawNauczyciela(peselN,imie_n.getText(),nazwisko_n.getText());
     }
     
 
