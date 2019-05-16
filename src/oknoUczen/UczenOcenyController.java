@@ -159,20 +159,26 @@ public class UczenOcenyController implements Initializable {
     private void zmianaNazwKolumn() {
         nazwyKolumn = HibernateUtil.pobieranieNazwPrzedmiotow();
         tabelaOcen.getColumns().clear();
-        
-        for (int i = 0; i < nazwyKolumn.length; i++) {
-            TableColumn<Integer, Number> przedmiot = new TableColumn<Integer, Number>();
-            tabelaOcen.getColumns().add(przedmiot);
-        }
-        kolumna = tabelaOcen.getColumns();
-
-        if (nazwyKolumn.length != 0) {
-            int i = 0;
-            for (TableColumn<Integer, Number> kol : kolumna) {
-                kol.setText(nazwyKolumn[i]);
-                i++;
-            }
+        if (nazwyKolumn == null) {
+            TableColumn<Integer, String> pusta = new TableColumn<Integer, String>();
+            pusta.setText("Brak przedmiotow");
+            tabelaOcen.getColumns().add(pusta);
         } else {
+
+            for (int i = 0; i < nazwyKolumn.length; i++) {
+                TableColumn<Integer, Number> przedmiot = new TableColumn<Integer, Number>();
+                tabelaOcen.getColumns().add(przedmiot);
+            }
+            kolumna = tabelaOcen.getColumns();
+
+            if (nazwyKolumn.length != 0) {
+                int i = 0;
+                for (TableColumn<Integer, Number> kol : kolumna) {
+                    kol.setText(nazwyKolumn[i]);
+                    i++;
+                }
+            } else {
+            }
         }
     }
 
