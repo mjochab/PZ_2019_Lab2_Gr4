@@ -33,12 +33,18 @@ import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import static utilities.HibernateUtil.dodajNowyPrzedmiot;
+import static utilities.HibernateUtil.pobierzKlasePoNazwie;
 import static utilities.HibernateUtil.pobierzKlasy;
 import static utilities.HibernateUtil.pobierzListePeseliUczniow;
+import static utilities.HibernateUtil.pobierzPrzedmiotPoNazwie;
 import static utilities.HibernateUtil.podajPeseleNauczycielaBezDanych;
 import static utilities.HibernateUtil.podajPeseleRodzicaBezDanych;
 import static utilities.HibernateUtil.podajPeseleUczniaBezDanych;
 import static utilities.HibernateUtil.podajPeseleUczniaBezRodzica;
+import static utilities.HibernateUtil.sprawdzCzyKlasaJestPowiazana;
+import static utilities.HibernateUtil.sprawdzCzyPrzedmiotJestPowiazany;
+import static utilities.HibernateUtil.usunKlaseJesliNieMaPowiazan;
 import static utilities.HibernateUtil.zwrocKlasyKtorychUcze;
 import static utilities.HibernateUtil.zwrocKtoZalogowany;
 
@@ -152,14 +158,10 @@ public class HibernateTest {
 
 
   public static void main(String[] args) throws ParseException {
-//    Przedmiot przedmiot = new Przedmiot("algebra_liniowa");
-//    List<Uczen> uczniowie = new ArrayList<>();
-//    uczniowie = zwrocUczniowZklasy("1a");
-//    zwrocObecnosciZprzedmiotu(przedmiot, uczniowie);
-        //System.out.println(podajPeseleUczniaBezRodzica().size());
-       //System.out.println(pobierzListePeseliUczniow().size());
-        //edytujAutoryzacje(10000000008L,10000000999L);  
-        //usunAutoryzacje(10000000001L);
-    
+        Przedmiot dane = pobierzPrzedmiotPoNazwie("olaa");
+        //dodajNowyPrzedmiot(dane);
+        System.out.println(sprawdzCzyPrzedmiotJestPowiazany(dane));
+        //Klasa klasa = pobierzKlasePoNazwie("1a");
+        //System.out.println(sprawdzCzyKlasaJestPowiazana(klasa));
   }
 }
