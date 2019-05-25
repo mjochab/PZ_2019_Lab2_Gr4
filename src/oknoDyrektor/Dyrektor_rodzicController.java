@@ -259,7 +259,9 @@ public class Dyrektor_rodzicController implements Initializable {
         List<String> nazwy_klas = pobierzKlasy();
         ObservableList<String> nazwy_k = FXCollections.observableArrayList(nazwy_klas);
         klasa.setItems(nazwy_k);
-        klasa.setValue(nazwy_k.get(0));
+        if(nazwy_klas.size()>0){
+            klasa.setValue(nazwy_k.get(0));
+        }      
 
     }
 

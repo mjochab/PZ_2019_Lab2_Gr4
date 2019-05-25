@@ -282,7 +282,7 @@ public class HibernateUtil {
         try {
             nr_pesel = entityManager.createQuery(criteria).getSingleResult();
         } catch (NoResultException e) {
-            System.out.println("nic nie pasuje");
+            //System.out.println("nic nie pasuje");
         }
         //Long nr_pesel = entityManager.createQuery(criteria).getSingleResult();
 
@@ -694,7 +694,7 @@ public class HibernateUtil {
             session.close();
         }
     }
-     */
+
     /**
      * Metoda dodaje nowy obiekt Rodzic o podanych parametrach. Numer pesel
      * niezbędny jest by przypisać Autoryzację do nowego obiektu.
@@ -705,7 +705,6 @@ public class HibernateUtil {
      * @param imie_m - imię matki typu String
      * @param nazwisko_m - nazwisko matki typu String
      */
-
     public static void wstawRodzica(long pesel_r, String imie_o, String nazwisko_o, String imie_m, String nazwisko_m) {
         Autoryzacja aut = zwrocAutoryzacje(pesel_r);
 
@@ -743,7 +742,6 @@ public class HibernateUtil {
      * @param nazwisko_u - nazwisko ucznia typu String
      * @param klasa - klasa ucznia typu Klasa
      */
-
     public static void wstawUcznia(long pesel_u, long pesel_r, String imie_u, String nazwisko_u, Klasa klasa) {
         Autoryzacja aut = zwrocAutoryzacje(pesel_u);
         Autoryzacja aut_rodz = zwrocAutoryzacje(pesel_r);
@@ -1383,8 +1381,8 @@ public class HibernateUtil {
             session.close();
         }
     }
-    
-        public static void usunPrzedmiot(Przedmiot przedmiot) {
+
+    public static void usunPrzedmiot(Przedmiot przedmiot) {
         Session session = sessionFactory.openSession();
 
         Transaction tx = null;
@@ -1435,8 +1433,8 @@ public class HibernateUtil {
 
         return klasy.contains(przedmiot);
     }
-    
-        public static List<String> pobierzListePrzedmiotow() {
+
+    public static List<String> pobierzListePrzedmiotow() {
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
         Root root = criteria.from(Przedmiot.class);
         criteria.select(root.get("nazwaPrzedmiotu"));
@@ -1444,5 +1442,90 @@ public class HibernateUtil {
 
         return prz;
     }
-}
 
+    public static List<String> podajListeWolnychGodzDanegoDniaDlaDanejKlasy(String dzien, Klasa klasa) {
+        List<String> godzinyZajec = List.of("08:00:00", "08:55:00", "09:50:00", "10:45:00", "11:55:00", "13:00:00", "13:45:00", "14:45:00");
+        CriteriaQuery<Date> criteria = builder.createQuery(Date.class);
+        Root root = criteria.from(Zajecia.class);
+        criteria.select(root.get("godzina"));
+        criteria.where(builder.equal(root.get("klasa"), klasa), builder.equal(root.get("dzien"), dzien));
+        List<Date> godzinkiBaza = entityManager.createQuery(criteria).getResultList();
+
+        List<String> godzBazaString = new ArrayList<>();
+        for (int i = 0; i < godzinkiBaza.size(); i++) {
+            godzBazaString.add(godzinkiBaza.get(i).toString());
+        }
+
+        List<String> wolneGodz = new ArrayList<>();
+        List<String> pelna_lista = new ArrayList<>();
+        pelna_lista.addAll(godzBazaString);
+        pelna_lista.addAll(godzinyZajec);
+
+        for (int i = 0; i < pelna_lista.size(); i++) {
+            boolean uniq = true;
+            for (int j = 0; j < pelna_lista.size(); j++) {
+                if (i != j) {
+                    if (Objects.equals(pelna_lista.get(i), pelna_lista.get(j))) {
+                        uniq = false;
+                    }
+                }
+            }
+            if (uniq) {
+                wolneGodz.add(pelna_lista.get(i));
+            }
+        }
+
+        return wolneGodz;
+    }
+
+    public static Boolean sprawdzCzyNauczycielNieMaZajecWDniuGodz(Nauczyciel naucz, String dzien, Date godzina) {
+        try {
+            CriteriaQuery<Nauczyciel> criteria = builder.createQuery(Nauczyciel.class);
+            Root root = criteria.from(Zajecia.class);
+            criteria.select(root.get("nauczyciel"));
+            criteria.where(builder.equal(root.get("dzien"), dzien), builder.equal(root.get("godzina"), godzina));
+            Nauczyciel nauczBaza = entityManager.createQuery(criteria).getSingleResult();
+
+            return naucz.equals(nauczBaza);
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
+    public static void dodajZajecia(Zajecia zajecia) {
+        Session session = sessionFactory.openSession();
+
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+            session.save(zajecia);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+    }
+    
+    public static void usunZajecia(Zajecia zajecia) {
+        Session session = sessionFactory.openSession();
+
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+            session.delete(zajecia);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+    }
+}
