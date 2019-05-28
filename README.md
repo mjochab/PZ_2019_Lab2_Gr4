@@ -114,14 +114,22 @@ Mamy możliwość usprawiedliwiania obecności uczniów a także generowania pdf
 
 
 6. Okno dyrektora:
-
+W oknie dyrektora mamy możliwość zarządzania użytkownikami aplikacji: rodzice,nauczyciele,uczniowe oraz przedmiotami, klasami by utworzyć harmonogram zajęć.
 
 
 ![dyrektor](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/Login_v2/Projekty%20okienek/autoryzacja.PNG)
-![dyrektor](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/Login_v2/Projekty%20okienek/harmonogram.PNG)
-![dyrektor](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/Login_v2/Projekty%20okienek/nauczyciel.PNG)
-![dyrektor](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/Login_v2/Projekty%20okienek/uczen_rodzic.PNG)
 
+W oknie widocznym powyżej ustawiamy nową autoryzację dla użytkownika czyli r-rodzica, n-nauczyciela, u-ucznia. Dzięki tej autoryzacji użytkownik otrzymuje dostęp do aplikacji.
+
+![dyrektor](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/Login_v2/Projekty%20okienek/harmonogram.PNG)
+
+W zakładce harmonogramu ustalane są zajęcia, czyli cały podział godzin dla uczniów. W tym panelu dodajemy też nowe przedmioty oraz klasy do których uczęszczają uczniowie. Klasę uczniowy przypisyjemy w momecie dodawania nowego ucznia.
+![dyrektor](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/Login_v2/Projekty%20okienek/nauczyciel.PNG)
+
+W zakładce nauczyciela uzupełniamy dane nauczyciela jak jego dane osobowe i mamy możliwość edycji tych danych. Przypisane nauczyciela do klasy jako wychowawca odbywa sie podczas tworzenia nowej klasy. Dodawanie nauczyciela jako prowadzącego przedmiot odbywa się podczas dodawania nowych zajęć do harmonogramu.
+
+![dyrektor](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/Login_v2/Projekty%20okienek/uczen_rodzic.PNG)
+W panelu Rodzic i uczeń dodajemy dane osobowe uczniów oraz rodziców. W tym panelu przypisujemy uczniowi klasę, do której chodzi. 
 
 Tutoriale:
 
