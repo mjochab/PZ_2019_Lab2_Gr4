@@ -32,41 +32,18 @@ import mapping.*;
 import utilities.HibernateUtil.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import static utilities.HibernateUtil.dodajNowyPrzedmiot;
+import static utilities.HibernateUtil.dodajDoSkladuKlasy;
+import static utilities.HibernateUtil.dodajPrzykladowaObecnosc;
+import static utilities.HibernateUtil.edytujSkladKlasy;
 import static utilities.HibernateUtil.pobierzKlasePoNazwie;
-import static utilities.HibernateUtil.pobierzKlasy;
-import static utilities.HibernateUtil.pobierzListePeseliUczniow;
-import static utilities.HibernateUtil.pobierzPrzedmiotPoNazwie;
-import static utilities.HibernateUtil.podajListeWolnychGodzDanegoDniaDlaDanejKlasy;
-import static utilities.HibernateUtil.podajPeseleNauczycielaBezDanych;
-import static utilities.HibernateUtil.podajPeseleRodzicaBezDanych;
-import static utilities.HibernateUtil.podajPeseleUczniaBezDanych;
-import static utilities.HibernateUtil.podajPeseleUczniaBezRodzica;
-import static utilities.HibernateUtil.sprawdzCzyKlasaJestPowiazana;
-import static utilities.HibernateUtil.sprawdzCzyNauczycielNieMaZajecWDniuGodz;
-import static utilities.HibernateUtil.sprawdzCzyPrzedmiotJestPowiazany;
-import static utilities.HibernateUtil.usunKlaseJesliNieMaPowiazan;
-import static utilities.HibernateUtil.zwrocKlasyKtorychUcze;
-import static utilities.HibernateUtil.zwrocKtoZalogowany;
+import static utilities.HibernateUtil.pobierzSkladPoUczniu;
+import static utilities.HibernateUtil.pobierzZajeciaPoID;
+import static utilities.HibernateUtil.zwrocUcznia;
 
-import static utilities.HibernateUtil.uzyskajKtoZalogowany;
-import static utilities.HibernateUtil.uzyskajLoginZalogowany;
-import static utilities.HibernateUtil.uzyskajPeselZalogowany;
-import static utilities.HibernateUtil.zwrocPrzedmiotyKtorychUczeDanaKlase;
-import static utilities.HibernateUtil.zwrocRodzajeOcen;
-import static utilities.HibernateUtil.zwrocUczniowZklasy;
-import static utilities.HibernateUtil.zwrocNauczyciela;
-import static utilities.HibernateUtil.zwrocPrzedmiotyKtorychUczeDanaKlase;
-import static utilities.HibernateUtil.zwrocRodzajeOcen;
-import static utilities.HibernateUtil.zwrocUczniowZklasy;
-import static utilities.HibernateUtil.zwrocWJakieDniTygodniaMamZajecia;
-import static utilities.Utils.zwrocDatyWktorychMamZajecia;
 
 public class HibernateTest {
 
@@ -165,16 +142,22 @@ public class HibernateTest {
         //Przedmiot dane = pobierzPrzedmiotPoNazwie("olaa");
         //dodajNowyPrzedmiot(dane);
         //System.out.println(sprawdzCzyPrzedmiotJestPowiazany(dane));
-        //Klasa klasa = pobierzKlasePoNazwie("1a");
+        Klasa klasa = pobierzKlasePoNazwie("2s");
+        Uczen uczniak = zwrocUcznia(88888888888L);
         //System.out.println(sprawdzCzyKlasaJestPowiazana(klasa));
         //System.out.println(podajListeWolnychGodzDanegoDniaDlaDanejKlasy("pon",klasa).size());
-        Nauczyciel nauczy = zwrocNauczyciela(22222222222L);
-
-        String time = "08:00:00";
-        DateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-        Date date = sdf.parse(time);
-
-        System.out.println(sprawdzCzyNauczycielNieMaZajecWDniuGodz(nauczy, "pon", date));
-
+        //Nauczyciel nauczy = zwrocNauczyciela(22222222222L);
+        //String time = "08:00:00";
+        //DateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+        //Date date = sdf.parse(time);
+        //System.out.println(sprawdzCzyNauczycielNieMaZajecWDniuGodz(nauczy, "pon", date));
+        //System.out.println(pobierzZajeciaPoID(101).getNauczyciel().getPesel());
+        SkladKlasy nowy = new SkladKlasy(klasa,uczniak);
+        //dodajDoSkladuKlasy(nowy);
+        //dodajPrzykladowaObecnosc(uczniak);
+        SkladKlasy nowyUczniak = pobierzSkladPoUczniu(uczniak);
+        nowyUczniak.setKlasa(klasa);
+        edytujSkladKlasy(nowyUczniak);
+        
     }
 }

@@ -58,337 +58,338 @@ import utilities.Utils;
  */
 public class WychowawcaController implements Initializable {
 
-  @FXML
-  private AnchorPane rootPane;
-  @FXML
-  private Label userid1;
-  @FXML
-  private Label userid;
-  @FXML
-  private Pane paneWychowankow;
-  @FXML
-  private Button wychowankowieBtn;
-  @FXML
-  private Button obecnosciBtn;
-  @FXML
-  private Button logoutBtn;
-  @FXML
-  private Label gagatek;
-  @FXML
-  private Pane gagatekPane;
-  @FXML
-  private Label jakaKlasa;
+    @FXML
+    private AnchorPane rootPane;
+    @FXML
+    private Label userid1;
+    @FXML
+    private Label userid;
+    @FXML
+    private Pane paneWychowankow;
+    @FXML
+    private Button wychowankowieBtn;
+    @FXML
+    private Button obecnosciBtn;
+    @FXML
+    private Button logoutBtn;
+    @FXML
+    private Label gagatek;
+    @FXML
+    private Pane gagatekPane;
+    @FXML
+    private Label jakaKlasa;
 
-  private static String klasa = null;
-  private String username = null;
-  private Long pesel = null;
-  List<Uczen> uczniowie = new ArrayList<>();
+    private static String klasa = null;
+    private String username = null;
+    private Long pesel = null;
+    List<Uczen> uczniowie = new ArrayList<>();
 
-  /**
-   * Initializes the controller class.
-   */
-  @Override
-  public void initialize(URL url, ResourceBundle rb) {
-    Platform.runLater(() -> {
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        Platform.runLater(() -> {
 
-      wstawUseraDoZalogowanoJako(username);
-      wstawKlaseDoLabela(klasa);
-      setUczniowie();
-      //stworzZakladkiOceny();
-      //stworzZakladkiZobecnosciami();
-      obecnosciBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, stworzTabeleObecnosci());
-      wychowankowieBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, stworzTabeleWychowankow());
-      gagatek.setVisible(false);
-    });
-  }
+            wstawUseraDoZalogowanoJako(username);
+            wstawKlaseDoLabela(klasa);
+            setUczniowie();
+            //stworzZakladkiOceny();
+            //stworzZakladkiZobecnosciami();
+            obecnosciBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, stworzTabeleObecnosci());
+            wychowankowieBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, stworzTabeleWychowankow());
+            gagatek.setVisible(false);
+        });
+    }
 
-  @FXML
-  private void przejdzDoWychowankow(ActionEvent event) {
+    @FXML
+    private void przejdzDoWychowankow(ActionEvent event) {
 
-  }
+    }
 
-  @FXML
-  private void przejdzDoObecnosci(ActionEvent event) {
-  }
+    @FXML
+    private void przejdzDoObecnosci(ActionEvent event) {
+    }
 
-  @FXML
-  private void logout(ActionEvent event) {
-  }
+    @FXML
+    private void logout(ActionEvent event) {
+    }
 
-  private void wstawKlaseDoLabela(String klasa) {
-    jakaKlasa.setText(klasa);
-  }
+    private void wstawKlaseDoLabela(String klasa) {
+        jakaKlasa.setText(klasa);
+    }
 
-  private TableColumn stworzKolumneUczniow(String tytulIgetter) {
-    TableColumn kolumna = new TableColumn(tytulIgetter);
-    kolumna.setMinWidth(100);
-    kolumna.setCellValueFactory(
-            new PropertyValueFactory<Uczen, String>(tytulIgetter));
+    private TableColumn stworzKolumneUczniow(String tytulIgetter) {
+        TableColumn kolumna = new TableColumn(tytulIgetter);
+        kolumna.setMinWidth(100);
+        kolumna.setCellValueFactory(
+                new PropertyValueFactory<Uczen, String>(tytulIgetter));
 
-    return kolumna;
-  }
+        return kolumna;
+    }
 
-  private void wypelnijTabeleWychowankow() {
-    paneWychowankow.getChildren().clear();
-    TableView<Uczen> table = new TableView<>();
-    
-    VBox hbox = new VBox();
-    hbox.setMinWidth(350);
-    List<TableColumn> kolumny = new ArrayList<>();
-    kolumny.add(stworzKolumneUczniow("Imie"));
-    kolumny.add(stworzKolumneUczniow("Nazwisko"));
-    kolumny.add(stworzKolumneUczniow("Pesel"));
-    ObservableList<Uczen> data
-            = FXCollections.observableArrayList(uczniowie);
-    table.setItems(data);
-    table.getColumns().addAll(kolumny.get(0), kolumny.get(1), kolumny.get(2));
+    private void wypelnijTabeleWychowankow() {
+        paneWychowankow.getChildren().clear();
+        TableView<Uczen> table = new TableView<>();
 
-    table.addEventHandler(MouseEvent.MOUSE_CLICKED, zwrocEventHandleraDlaWychowankow(table, hbox));
-     hbox.getChildren().add(table);
-   
-    paneWychowankow.getChildren().add(hbox);
-  }
+        VBox hbox = new VBox();
+        hbox.setMinWidth(350);
+        List<TableColumn> kolumny = new ArrayList<>();
+        kolumny.add(stworzKolumneUczniow("Imie"));
+        kolumny.add(stworzKolumneUczniow("Nazwisko"));
+        kolumny.add(stworzKolumneUczniow("Pesel"));
+        ObservableList<Uczen> data
+                = FXCollections.observableArrayList(uczniowie);
+        table.setItems(data);
+        table.getColumns().addAll(kolumny.get(0), kolumny.get(1), kolumny.get(2));
 
-  private void wypelnijTabeleObecnosci() {
-    paneWychowankow.getChildren().clear();
+        table.addEventHandler(MouseEvent.MOUSE_CLICKED, zwrocEventHandleraDlaWychowankow(table, hbox));
+        hbox.getChildren().add(table);
 
-    TableView<Uczen> table = new TableView<>();
+        paneWychowankow.getChildren().add(hbox);
+    }
 
-    List<TableColumn> kolumny = new ArrayList<>();
-    kolumny.add(stworzKolumneUczniow("Imie"));
-    kolumny.add(stworzKolumneUczniow("Nazwisko"));
-    kolumny.add(stworzKolumneUczniow("Pesel"));
-    ObservableList<Uczen> data
-            = FXCollections.observableArrayList(uczniowie);
-    table.setItems(data);
-    table.getColumns().addAll(kolumny.get(0), kolumny.get(1), kolumny.get(2));
+    private void wypelnijTabeleObecnosci() {
+        paneWychowankow.getChildren().clear();
 
-    table.addEventHandler(MouseEvent.MOUSE_CLICKED, zwrocEventHandleraDlaNieobecnych(table));
+        TableView<Uczen> table = new TableView<>();
 
-    paneWychowankow.getChildren().add(table);
-  }
+        List<TableColumn> kolumny = new ArrayList<>();
+        kolumny.add(stworzKolumneUczniow("Imie"));
+        kolumny.add(stworzKolumneUczniow("Nazwisko"));
+        kolumny.add(stworzKolumneUczniow("Pesel"));
+        ObservableList<Uczen> data
+                = FXCollections.observableArrayList(uczniowie);
+        table.setItems(data);
+        table.getColumns().addAll(kolumny.get(0), kolumny.get(1), kolumny.get(2));
 
-  private EventHandler zwrocEventHandleraDlaWychowankow(TableView<Uczen> table, VBox hbox) {
+        table.addEventHandler(MouseEvent.MOUSE_CLICKED, zwrocEventHandleraDlaNieobecnych(table));
 
-    EventHandler eventHandler = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
+        paneWychowankow.getChildren().add(table);
+    }
 
-        Uczen selectedItem = table.getSelectionModel().getSelectedItem();
-        wygenerujMenuRaportow(selectedItem, table, hbox);
+    private EventHandler zwrocEventHandleraDlaWychowankow(TableView<Uczen> table, VBox hbox) {
 
-      }
-    };
-    return eventHandler;
-  }
+        EventHandler eventHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
 
-  private EventHandler zwrocEventHandleraDlaNieobecnych(TableView<Uczen> table) {
+                Uczen selectedItem = table.getSelectionModel().getSelectedItem();
+                wygenerujMenuRaportow(selectedItem, table, hbox);
 
-    EventHandler eventHandler = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
+            }
+        };
+        return eventHandler;
+    }
 
-        Uczen selectedItem = table.getSelectionModel().getSelectedItem();
-        stworzTabeleNieobecnego(selectedItem, table);
+    private EventHandler zwrocEventHandleraDlaNieobecnych(TableView<Uczen> table) {
 
-      }
-    };
-    return eventHandler;
-  }
+        EventHandler eventHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
 
-  private void wygenerujMenuRaportow(Uczen uczen, TableView<Uczen> staraTabela, VBox hbox) {
+                Uczen selectedItem = table.getSelectionModel().getSelectedItem();
+                stworzTabeleNieobecnego(selectedItem, table);
 
-    gagatekPane.getChildren().clear();
+            }
+        };
+        return eventHandler;
+    }
 
-    gagatekPane.setVisible(true);
+    private void wygenerujMenuRaportow(Uczen uczen, TableView<Uczen> staraTabela, VBox hbox) {
 
-    // MASZ TU OBIEKT UCZNIA PO KLIKNIECIU NA REKORD W DUZEJ TABELI!!!!
+        gagatekPane.getChildren().clear();
+
+        gagatekPane.setVisible(true);
+
+        // MASZ TU OBIEKT UCZNIA PO KLIKNIECIU NA REKORD W DUZEJ TABELI!!!!
 //    gagatek.setText(uczen.getImie() + " " + uczen.getNazwisko() + " " + uczen.getKlasa().getNazwaKlasy());
-
-    Label label = new Label();
-    label.setVisible(true);
-    label.setText("Pobierz raport wywiadówkowy ucznia "+uczen.getImie()+" "+uczen.getNazwisko()+" w pdf");
-    label.setTextFill(Color.web("#8B0000"));
-
- 
-    Button pobierzRaport = new Button("Pobierz raport");
-    pobierzRaport.setOnAction(action -> {
         try {
-            // pobierz raport
-            Utils.tworzeniePDF(uczen);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(WychowawcaController.class.getName()).log(Level.SEVERE, null, ex);
+            Label label = new Label();
+            label.setVisible(true);
+            label.setText("Pobierz raport wywiadówkowy ucznia " + uczen.getImie() + " " + uczen.getNazwisko() + " w pdf");
+            label.setTextFill(Color.web("#8B0000"));
+
+            Button pobierzRaport = new Button("Pobierz raport");
+            pobierzRaport.setOnAction(action -> {
+                try {
+                    // pobierz raport
+                    Utils.tworzeniePDF(uczen);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(WychowawcaController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+
+            VBox validationAlertBox = new VBox();
+            validationAlertBox.setSpacing(15);
+            validationAlertBox.setPadding(new Insets(15, 20, 5, 10));
+            validationAlertBox.setAlignment(Pos.CENTER);
+            validationAlertBox.getChildren().addAll(label, pobierzRaport);
+            hbox.getChildren().clear();
+
+            hbox.getChildren().addAll(staraTabela, validationAlertBox);
+        } catch (Exception e) {
         }
-    });
+    }
 
-    VBox validationAlertBox = new VBox();
-    validationAlertBox.setSpacing(15);
-    validationAlertBox.setPadding(new Insets(15, 20, 5, 10));
-    validationAlertBox.setAlignment(Pos.CENTER);
-    validationAlertBox.getChildren().addAll(label, pobierzRaport);
-    hbox.getChildren().clear();
-    
-     hbox.getChildren().addAll(staraTabela,validationAlertBox);
+    private void stworzTabeleNieobecnego(Uczen uczen, TableView<Uczen> staraTabela) {
+        try {
+            gagatekPane.getChildren().clear();
 
-  }
+            gagatekPane.setVisible(true);
 
-  private void stworzTabeleNieobecnego(Uczen uczen, TableView<Uczen> staraTabela) {
+            gagatek.setText(uczen.getImie() + " " + uczen.getNazwisko() + " " + uczen.getKlasa().getNazwaKlasy());
 
-    gagatekPane.getChildren().clear();
+            Label label = new Label();
+            label.setVisible(true);
+            label.setText("Usprawiedliwianie - kliknij na nieobecność by usprawiedliwić");
+            label.setTextFill(Color.web("#8B0000"));
+            Label label1 = new Label();
+            label1.setVisible(false);
+            label1.setText("Zmieniono stan obecnosci!");
+            label1.setTextFill(Color.web("#8B0000"));
+            TableView<Obecnosc> table = new TableView<>();
+            table.setPlaceholder(new Label("Brak godzin do usprawiedliwienia."));
+            ObservableList<Obecnosc> data
+                    = FXCollections.observableArrayList(zwrocNieobecnosciUcznia(uczen));
+            table.setItems(data);
 
-    gagatekPane.setVisible(true);
+            TableColumn kolumnaOcena = new TableColumn("Wartosc");
+            kolumnaOcena.setMinWidth(100);
+            kolumnaOcena.setCellValueFactory(
+                    new PropertyValueFactory<Obecnosc, Integer>("Wartosc"));
 
-    gagatek.setText(uczen.getImie() + " " + uczen.getNazwisko() + " " + uczen.getKlasa().getNazwaKlasy());
+            TableColumn kolumnaWartosc = new TableColumn("Przedmiot");
+            kolumnaWartosc.setMinWidth(175);
+            kolumnaWartosc.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> data) {
+                    StringProperty ocenyUczniaDoWyswietlenia = new SimpleStringProperty();
+                    ocenyUczniaDoWyswietlenia.setValue(data.getValue().getPrzedmiot().getNazwaPrzedmiotu());
 
-    Label label = new Label();
-    label.setVisible(true);
-    label.setText("Usprawiedliwianie - kliknij na nieobecność by usprawiedliwić");
-    label.setTextFill(Color.web("#8B0000"));
-    Label label1 = new Label();
-    label1.setVisible(false);
-    label1.setText("Zmieniono stan obecnosci!");
-    label1.setTextFill(Color.web("#8B0000"));
-    TableView<Obecnosc> table = new TableView<>();
-    table.setPlaceholder(new Label("Brak godzin do usprawiedliwienia."));
-    ObservableList<Obecnosc> data
-            = FXCollections.observableArrayList(zwrocNieobecnosciUcznia(uczen));
-    table.setItems(data);
+                    return ocenyUczniaDoWyswietlenia;
+                }
+            });
 
-    TableColumn kolumnaOcena = new TableColumn("Wartosc");
-    kolumnaOcena.setMinWidth(100);
-    kolumnaOcena.setCellValueFactory(
-            new PropertyValueFactory<Obecnosc, Integer>("Wartosc"));
+            TableColumn kolumnaData = new TableColumn("Data");
+            kolumnaData.setMinWidth(100);
+            kolumnaData.setCellValueFactory(
+                    new PropertyValueFactory<Obecnosc, Date>("Data"));
+            kolumnaData.setCellFactory(column -> {
+                TableCell<Obecnosc, Date> cell = new TableCell<Obecnosc, Date>() {
+                    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-    TableColumn kolumnaWartosc = new TableColumn("Przedmiot");
-    kolumnaWartosc.setMinWidth(175);
-    kolumnaWartosc.setCellValueFactory(new Callback<CellDataFeatures<Obecnosc, String>, ObservableValue<String>>() {
-      @Override
-      public ObservableValue<String> call(CellDataFeatures<Obecnosc, String> data) {
-        StringProperty ocenyUczniaDoWyswietlenia = new SimpleStringProperty();
-        ocenyUczniaDoWyswietlenia.setValue(data.getValue().getPrzedmiot().getNazwaPrzedmiotu());
+                    @Override
+                    protected void updateItem(Date item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setText(null);
+                        } else {
+                            setText(format.format(item));
+                        }
+                    }
+                };
 
-        return ocenyUczniaDoWyswietlenia;
-      }
-    });
+                return cell;
+            });
 
-    TableColumn kolumnaData = new TableColumn("Data");
-    kolumnaData.setMinWidth(100);
-    kolumnaData.setCellValueFactory(
-            new PropertyValueFactory<Obecnosc, Date>("Data"));
-    kolumnaData.setCellFactory(column -> {
-      TableCell<Obecnosc, Date> cell = new TableCell<Obecnosc, Date>() {
-        private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            table.getColumns().addAll(kolumnaOcena, kolumnaWartosc, kolumnaData);
 
-        @Override
-        protected void updateItem(Date item, boolean empty) {
-          super.updateItem(item, empty);
-          if (empty) {
-            setText(null);
-          } else {
-            setText(format.format(item));
-          }
+            table.addEventHandler(MouseEvent.MOUSE_CLICKED, usprawiedliw(table, label1));
+
+            VBox validationAlertBox = new VBox();
+            validationAlertBox.setSpacing(15);
+            validationAlertBox.setPadding(new Insets(15, 20, 5, 10));
+            validationAlertBox.setAlignment(Pos.CENTER);
+            gagatek.setVisible(true);
+            validationAlertBox.getChildren().addAll(gagatek, label, table, label1);
+
+            gagatekPane.getChildren().addAll(validationAlertBox);
+        } catch (Exception e) {
         }
-      };
+    }
 
-      return cell;
-    });
+    private EventHandler usprawiedliw(TableView<Obecnosc> table, Label label) {
+        EventHandler eventHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                String stan = "";
+                Obecnosc selectedItem = table.getSelectionModel().getSelectedItem();
+                if (selectedItem.getWartosc().equals("nr")) {
+                    stan = "usprawiedliwiony";
+                    selectedItem.setWartosc("u");
+                    HibernateUtil.usprawiedliwNieobecnosc(selectedItem);
+                } else if (selectedItem.getWartosc().equals("n")) {
+                    stan = "usprawiedliwiony";
+                    selectedItem.setWartosc("u");
+                    HibernateUtil.usprawiedliwNieobecnosc(selectedItem);
+                } else if (selectedItem.getWartosc().equals("u")) {
+                    stan = "nieusprawiedliwiony";
+                    selectedItem.setWartosc("n");
+                    HibernateUtil.usprawiedliwNieobecnosc(selectedItem);
+                }
 
-    table.getColumns().addAll(kolumnaOcena, kolumnaWartosc, kolumnaData);
+                ustawLabel(stan, label, selectedItem);
+                label.setVisible(true);
+                table.refresh();
+            }
+        };
+        return eventHandler;
+    }
 
-    table.addEventHandler(MouseEvent.MOUSE_CLICKED, usprawiedliw(table, label1));
+    private void ustawLabel(String stan, Label label, Obecnosc selectedItem) {
+        label.setText("Zmieniono stan obecnosci z dnia: " + selectedItem.getData().toString() + " \r\n ucznia: " + selectedItem.getUczen().getImie() + " " + selectedItem.getUczen().getNazwisko() + "\r\n na: " + stan);
+    }
 
-    VBox validationAlertBox = new VBox();
-    validationAlertBox.setSpacing(15);
-    validationAlertBox.setPadding(new Insets(15, 20, 5, 10));
-    validationAlertBox.setAlignment(Pos.CENTER);
-    gagatek.setVisible(true);
-    validationAlertBox.getChildren().addAll(gagatek, label, table, label1);
+    private void wstawUseraDoZalogowanoJako(String username) {
 
-    gagatekPane.getChildren().addAll(validationAlertBox);
+        userid.setText(username);
 
-  }
+    }
 
-  private EventHandler usprawiedliw(TableView<Obecnosc> table, Label label) {
+    public void przekazKlaseIusername(String klasa, String username, Long pesel) {
+        this.username = username;
+        this.klasa = klasa;
+        this.pesel = pesel;
 
-    EventHandler eventHandler = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-        String stan = "";
-        Obecnosc selectedItem = table.getSelectionModel().getSelectedItem();
-        if (selectedItem.getWartosc().equals("nr")) {
-          stan = "usprawiedliwiony";
-          selectedItem.setWartosc("u");
-          HibernateUtil.usprawiedliwNieobecnosc(selectedItem);
-        } else if (selectedItem.getWartosc().equals("n")) {
-          stan = "usprawiedliwiony";
-          selectedItem.setWartosc("u");
-          HibernateUtil.usprawiedliwNieobecnosc(selectedItem);
-        } else if (selectedItem.getWartosc().equals("u")) {
-          stan = "nieusprawiedliwiony";
-          selectedItem.setWartosc("n");
-          HibernateUtil.usprawiedliwNieobecnosc(selectedItem);
-        }
-        
-        ustawLabel(stan, label, selectedItem);
-        label.setVisible(true);
-        table.refresh();
-      }
-    };
-    return eventHandler;
-  }
+    }
 
-  private void ustawLabel(String stan, Label label, Obecnosc selectedItem){
-    label.setText("Zmieniono stan obecnosci z dnia: " + selectedItem.getData().toString() + " \r\n ucznia: " + selectedItem.getUczen().getImie() + " " + selectedItem.getUczen().getNazwisko()+"\r\n na: "+stan);
-  }
-  private void wstawUseraDoZalogowanoJako(String username) {
+    public String getKlasa() {
+        return klasa;
+    }
 
-    userid.setText(username);
+    public void setUczniowie() {
 
-  }
+        this.uczniowie = zwrocUczniowZklasy(zwrocKlaseKtoraWychowuje(pesel));
+    }
 
-  public void przekazKlaseIusername(String klasa, String username, Long pesel) {
-    this.username = username;
-    this.klasa = klasa;
-    this.pesel = pesel;
+    private EventHandler stworzTabeleObecnosci() {
 
-  }
+        EventHandler eventHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
 
-  public String getKlasa() {
-    return klasa;
-  }
+                wypelnijTabeleObecnosci();
+                gagatekPane.setVisible(false);
+                gagatek.setVisible(false);
+            }
+        };
+        return eventHandler;
+    }
 
-  public void setUczniowie() {
+    private EventHandler stworzTabeleWychowankow() {
 
-    this.uczniowie = zwrocUczniowZklasy(zwrocKlaseKtoraWychowuje(pesel));
-  }
+        EventHandler eventHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
 
-  private EventHandler stworzTabeleObecnosci() {
+                wypelnijTabeleWychowankow();
+                gagatekPane.setVisible(false);
+                gagatek.setVisible(false);
+            }
+        };
 
-    EventHandler eventHandler = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-
-        wypelnijTabeleObecnosci();
-        gagatekPane.setVisible(false);
-        gagatek.setVisible(false);
-      }
-    };
-    return eventHandler;
-  }
-
-  private EventHandler stworzTabeleWychowankow() {
-
-    EventHandler eventHandler = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-
-        wypelnijTabeleWychowankow();
-        gagatekPane.setVisible(false);
-        gagatek.setVisible(false);
-      }
-    };
-
-    return eventHandler;
-  }
+        return eventHandler;
+    }
 
 }

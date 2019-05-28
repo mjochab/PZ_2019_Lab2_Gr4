@@ -41,153 +41,158 @@ import static utilities.HibernateUtil.zwrocKlaseKtoraWychowuje;
  */
 public class NauczycielKlasyController implements Initializable {
 
-  //W oczekiwaniu na przekazanie wartosci z logowania, tymczasowe stałe:
-  private Long pesel;
-  private String username;
-  @FXML
-  private Button klasa1;
-  @FXML
-  private Button klasa2;
-  @FXML
-  private Button wylogujbtn;
-  @FXML
-  private Label userid;
-  @FXML
-  private Pane panelButtonow;
-  @FXML
-  private AnchorPane rootPane;
+    //W oczekiwaniu na przekazanie wartosci z logowania, tymczasowe stałe:
+    private Long pesel;
+    private String username;
+    @FXML
+    private Button klasa1;
+    @FXML
+    private Button klasa2;
+    @FXML
+    private Button wylogujbtn;
+    @FXML
+    private Label userid;
+    @FXML
+    private Pane panelButtonow;
+    @FXML
+    private AnchorPane rootPane;
 
-  /**
-   * Initializes the controller class.
-   * @param url
-   * @param rb
-   */
-  @Override
-  public void initialize(URL url, ResourceBundle rb) {
-       Platform.runLater(() -> {
-    
-    wybierzKlaseButtony();
-    wstawUseraDoZalogowanoJako(username);
-       });
-  }
+    /**
+     * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        Platform.runLater(() -> {
 
-
-  @FXML
-  private void logout(ActionEvent event) throws IOException {
-    AnchorPane pane = FXMLLoader.load(getClass().getResource("/Okna/Logowanie.fxml"));
-    rootPane.getChildren().setAll(pane);
-  }
-
-  private void wybierzKlaseButtony() {
-    VBox vb = new VBox();
-    String[] nazwyKlas = utilities.HibernateUtil.zwrocNazwyKlasKtorychUcze(pesel);
-    Button[] listaButtonow = new Button[nazwyKlas.length];
-    for (int i = 0; i < nazwyKlas.length; i++) {
-      Button b = new Button(nazwyKlas[i]);
-      b.setId("klasax" + i);
-      b.setText(nazwyKlas[i]);
-      b.addEventHandler(MouseEvent.MOUSE_CLICKED,
-              (event -> {
-                try {
-                  zaladujKlase(b);
-                } catch (IOException ex) {
-                  Logger.getLogger(NauczycielKlasyController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-              }));
-      listaButtonow[i] = b;
-    }
-    String klasaKtoraWychowuje = "";
-    if ((klasaKtoraWychowuje = zwrocKlaseKtoraWychowuje(pesel)).equals("")) {
-
-    } else {
-      Button wychowankowie = new Button("Wychowankowie");
-      wychowankowie.addEventHandler(MouseEvent.MOUSE_CLICKED, przejdzDoWychowankowHandler());
-      vb.getChildren().add(wychowankowie);
-
+            wybierzKlaseButtony();
+            wstawUseraDoZalogowanoJako(username);
+        });
     }
 
-    HBox hb = new HBox();
-    hb.setSpacing(15);
-    hb.setPadding(new Insets(15, 20, 5, 10));
-    hb.setAlignment(Pos.CENTER);
-    hb.getChildren().addAll(listaButtonow);
-    vb.getChildren().addAll(hb);
-    vb.setSpacing(15);
-    vb.setPadding(new Insets(15, 20, 5, 10));
-    vb.setAlignment(Pos.CENTER);
-    panelButtonow.getChildren().clear();
-    panelButtonow.getChildren().addAll(vb);
+    @FXML
+    private void logout(ActionEvent event) throws IOException {
+        AnchorPane pane = FXMLLoader.load(getClass().getResource("/Okna/Logowanie.fxml"));
+        rootPane.getChildren().setAll(pane);
+    }
 
-  }
+    private void wybierzKlaseButtony() {
 
-  private EventHandler przejdzDoWychowankowHandler() {
-
-    EventHandler eventHandler = new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-        try {
-          zaladujOknoWychowawcy();
-        } catch (IOException ex) {
-          java.util.logging.Logger.getLogger(KlasaController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        VBox vb = new VBox();
+        String[] nazwyKlas = utilities.HibernateUtil.zwrocNazwyKlasKtorychUcze(pesel);
+        System.out.println(nazwyKlas.length);
+        Button[] listaButtonow = new Button[nazwyKlas.length];
+        for (int i = 0; i < nazwyKlas.length; i++) {
+            Button b = new Button(nazwyKlas[i]);
+            b.setId("klasax" + i);
+            b.setText(nazwyKlas[i]);
+            b.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    (event -> {
+                        try {
+                            zaladujKlase(b);
+                        } catch (IOException ex) {
+                            Logger.getLogger(NauczycielKlasyController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }));
+            listaButtonow[i] = b;
         }
-      }
-    };
-    return eventHandler;
+        try {
+            String klasaKtoraWychowuje = "";
+            if ((klasaKtoraWychowuje = zwrocKlaseKtoraWychowuje(pesel)).equals("")) {
 
-  }
+            } else {
+                Button wychowankowie = new Button("Wychowankowie");
+                wychowankowie.addEventHandler(MouseEvent.MOUSE_CLICKED, przejdzDoWychowankowHandler());
+                vb.getChildren().add(wychowankowie);
 
-  private void zaladujOknoWychowawcy() throws IOException {
+            }
+        } catch (Exception e) {
+        }
 
-    Stage st = new Stage();
-    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Wychowawca.fxml"));
-    Region root = (Region) fxmlLoader.load();
+        HBox hb = new HBox();
+        hb.setSpacing(15);
+        hb.setPadding(new Insets(15, 20, 5, 10));
+        hb.setAlignment(Pos.CENTER);
+        hb.getChildren().addAll(listaButtonow);
+        vb.getChildren().addAll(hb);
+        vb.setSpacing(15);
+        vb.setPadding(new Insets(15, 20, 5, 10));
+        vb.setAlignment(Pos.CENTER);
+        panelButtonow.getChildren().clear();
+        panelButtonow.getChildren().addAll(vb);
 
-    Scene scene = new Scene(root);
-    st.setScene(scene);
+    }
 
-    WychowawcaController mainController = fxmlLoader.<WychowawcaController>getController();
-    mainController.przekazKlaseIusername(zwrocKlaseKtoraWychowuje(pesel), username, pesel);
+    private EventHandler przejdzDoWychowankowHandler() {
 
-    st.show();
+        EventHandler eventHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                try {
+                    zaladujOknoWychowawcy();
+                } catch (IOException ex) {
+                    java.util.logging.Logger.getLogger(KlasaController.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                }
+            }
+        };
+        return eventHandler;
 
-  }
+    }
 
-  /**
-   *
-   * @param username
-   * @param pesel
-   */
-  public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
+    private void zaladujOknoWychowawcy() throws IOException {
 
-    this.username = username;
-    this.pesel = pesel;
+        Stage st = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Wychowawca.fxml"));
+        Region root = (Region) fxmlLoader.load();
 
-  }
+        Scene scene = new Scene(root);
+        st.setScene(scene);
 
-  /**
-   *
-   * @param username
-   */
-  public void wstawUseraDoZalogowanoJako(String username) {
+        WychowawcaController mainController = fxmlLoader.<WychowawcaController>getController();
+        mainController.przekazKlaseIusername(zwrocKlaseKtoraWychowuje(pesel), username, pesel);
 
-    userid.setText(username);
+        st.show();
 
-  }
+    }
 
-  private void zaladujKlase(Button b) throws IOException {
+    /**
+     *
+     * @param username
+     * @param pesel
+     */
+    public void przekazNazweUzytkownikaIPesel(String username, Long pesel) {
 
-    Stage st = new Stage();
-    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Klasa.fxml"));
-    Region root = (Region) fxmlLoader.load();
+        this.username = username;
+        this.pesel = pesel;
 
-    Scene scene = new Scene(root);
-    st.setScene(scene);
+    }
 
-    KlasaController mainController = fxmlLoader.<KlasaController>getController();
-    mainController.przekazKlaseIusername(b.getText(), username, pesel);
+    /**
+     *
+     * @param username
+     */
+    public void wstawUseraDoZalogowanoJako(String username) {
 
-    st.show();
+        userid.setText(username);
 
-  }
+    }
+
+    private void zaladujKlase(Button b) throws IOException {
+
+        Stage st = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Klasa.fxml"));
+        Region root = (Region) fxmlLoader.load();
+
+        Scene scene = new Scene(root);
+        st.setScene(scene);
+
+        KlasaController mainController = fxmlLoader.<KlasaController>getController();
+        mainController.przekazKlaseIusername(b.getText(), username, pesel);
+
+        st.show();
+
+    }
 
 }

@@ -55,6 +55,9 @@ import static utilities.HibernateUtil.zwrocAutoryzacje;
 import static utilities.HibernateUtil.zwrocNauczyciela;
 import static utilities.HibernateUtil.podajListeWolnychGodzDanegoDniaDlaDanejKlasy;
 import static utilities.HibernateUtil.sprawdzCzyNauczycielNieMaZajecWDniuGodz;
+import static utilities.HibernateUtil.pobierzListeIDZajecDlaKlasy;
+import static utilities.HibernateUtil.pobierzZajeciaPoID;
+import static utilities.HibernateUtil.usunZajecia;
 
 /**
  * FXML Controller class
@@ -92,6 +95,8 @@ public class HarmonogramController implements Initializable {
     @FXML
     private Label zajecia_label;
     @FXML
+    private Label usuwanie_label;
+    @FXML
     private Label naucz_error;
     @FXML
     private ChoiceBox box_przedmiot_d;
@@ -105,12 +110,19 @@ public class HarmonogramController implements Initializable {
     private ChoiceBox d_box_dzien;
     @FXML
     private ChoiceBox d_box_godz;
+    @FXML
+    private ChoiceBox usuwanie_box_k;
+    @FXML
+    private ChoiceBox zajecia_box;
+    @FXML
+    private Label wartoscID;
 
     private Long pesel = null;
     private String username = "harmonogram";
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        ustawBoXUsuwanie();
         ustawWartosciBox();
         ustawBoxPrzedmiotyUsuwanie();
         ustawWartosciPeseliWychowawcaNowaKlasa();
@@ -273,6 +285,7 @@ public class HarmonogramController implements Initializable {
                 field_nazwa_klasy.setText("");
                 label_dodawanie_klasy.setText("Dodano nową klasę!");
                 ustawWartosciBox();
+                odswiezBoxy();
             } catch (Exception e) {
                 label_dodawanie_klasy.setText("Niepoprawne dane!");
             }
@@ -299,6 +312,7 @@ public class HarmonogramController implements Initializable {
                 pobranaKlasa.setNauczyciel(nauczyciel);
                 edytujKlaseZNowymiDanymi(pobranaKlasa);
                 ustawWartosciBox();
+                odswiezBoxy();
                 ustawWartosciPeseliWychowawcaNowaKlasa();
                 label_m_klasa.setText("Pomyślnie edytowano!");
             } else {
@@ -349,6 +363,7 @@ public class HarmonogramController implements Initializable {
                 usunKlaseJesliNieMaPowiazan(pobranaKlasa);
                 label_m_klasa.setText("Usunięto!");
                 ustawWartosciBox();
+                odswiezBoxy();
                 ustawWartosciPeseliWychowawcaNowaKlasa();
             }
         } catch (Exception e) {
@@ -367,6 +382,7 @@ public class HarmonogramController implements Initializable {
                 dodajNowyPrzedmiot(nowy);
                 label_przedmiot_d.setText("Dodano!");
                 ustawBoxPrzedmiotyUsuwanie();
+                odswiezBoxy();
             }
         } catch (Exception e) {
             label_przedmiot_d.setText("Niepoprawne dane!");
@@ -393,6 +409,7 @@ public class HarmonogramController implements Initializable {
                 usunPrzedmiot(przed);
                 label_przedmiot_u.setText("Usunięto!");
                 ustawBoxPrzedmiotyUsuwanie();
+                odswiezBoxy();
             }
         } catch (Exception e) {
             label_przedmiot_u.setText("Niepoprawne dane!");
@@ -419,14 +436,14 @@ public class HarmonogramController implements Initializable {
                 naucz_error.setText("");
                 int indeks = d_box_klasa.getSelectionModel().getSelectedIndex();
                 d_box_dzien.setItems(listaDni);
-                
+
                 if (indeks > -1) {
                     String klas = klasy.get(indeks);
                     Klasa klasa = pobierzKlasePoNazwie(klas);
                     d_box_dzien.valueProperty().addListener(new ChangeListener<String>() {
                         @Override
                         public void changed(ObservableValue ov, String poprzednia, String String) {
-                            int indeks_dzien = d_box_dzien.getSelectionModel().getSelectedIndex();                       
+                            int indeks_dzien = d_box_dzien.getSelectionModel().getSelectedIndex();
                             if (indeks_dzien > -1) {
                                 String dzien = dniZajec.get(indeks_dzien);
                                 List<String> listaWolnychGodz = podajListeWolnychGodzDanegoDniaDlaDanejKlasy(dzien, klasa);
@@ -466,34 +483,96 @@ public class HarmonogramController implements Initializable {
     @FXML
     private void dodajNoweZajecia() throws ParseException {
         //Zajecia(Klasa klasa, Nauczyciel nauczyciel, Przedmiot przedmiot, Date godzina, String dzien)
-        try{
-        int prz_indeks = d_box_przedmiot.getSelectionModel().getSelectedIndex();
-        List<String> przedmioty = pobierzListePrzedmiotow();
-        Przedmiot przedmiot_z_listy = pobierzPrzedmiotPoNazwie(przedmioty.get(prz_indeks));
-        String dzien = d_box_dzien.getSelectionModel().getSelectedItem().toString();
-        String klasa_wybrana = d_box_klasa.getSelectionModel().getSelectedItem().toString();
-        Klasa klasa = pobierzKlasePoNazwie(klasa_wybrana);
-        int naucz_indeks = d_box_prowadz.getSelectionModel().getSelectedIndex();
-        List<Long> nauczyciele = pobierzListePeseliNauczycieli();
-        Nauczyciel nauczyciel_z_listy = zwrocNauczyciela(nauczyciele.get(naucz_indeks));
-        String time = d_box_godz.getSelectionModel().getSelectedItem().toString();
-        DateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-        Date date = sdf.parse(time);
+        try {
+            int prz_indeks = d_box_przedmiot.getSelectionModel().getSelectedIndex();
+            List<String> przedmioty = pobierzListePrzedmiotow();
+            Przedmiot przedmiot_z_listy = pobierzPrzedmiotPoNazwie(przedmioty.get(prz_indeks));
+            String dzien = d_box_dzien.getSelectionModel().getSelectedItem().toString();
+            String klasa_wybrana = d_box_klasa.getSelectionModel().getSelectedItem().toString();
+            Klasa klasa = pobierzKlasePoNazwie(klasa_wybrana);
+            int naucz_indeks = d_box_prowadz.getSelectionModel().getSelectedIndex();
+            List<Long> nauczyciele = pobierzListePeseliNauczycieli();
+            Nauczyciel nauczyciel_z_listy = zwrocNauczyciela(nauczyciele.get(naucz_indeks));
+            String time = d_box_godz.getSelectionModel().getSelectedItem().toString();
+            DateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+            Date date = sdf.parse(time);
 
-        if (sprawdzCzyNauczycielNieMaZajecWDniuGodz(nauczyciel_z_listy, dzien, date)) {
-            naucz_error.setText("Wybrany nauczyciel prowadzi już zajecia!");
-            zajecia_label.setText("");
-        } else {
-            Zajecia zajecia = new Zajecia(klasa, nauczyciel_z_listy, przedmiot_z_listy, date, dzien);
-            dodajZajecia(zajecia);
-            ustawWartosciBoxDodawanieZajec();
-            naucz_error.setText("");
-            zajecia_label.setText("Dodano!");
-        }
+            if (sprawdzCzyNauczycielNieMaZajecWDniuGodz(nauczyciel_z_listy, dzien, date)) {
+                naucz_error.setText("Wybrany nauczyciel prowadzi już zajecia!");
+                zajecia_label.setText("");
+            } else {
+                Zajecia zajecia = new Zajecia(klasa, nauczyciel_z_listy, przedmiot_z_listy, date, dzien);
+                dodajZajecia(zajecia);
+                ustawWartosciBoxDodawanieZajec();
+                ustawBoXUsuwanie();
+                odswiezBoxy();
+                naucz_error.setText("");
+                zajecia_label.setText("Dodano!");
+            }
 
-        }catch(Exception e){
+        } catch (Exception e) {
             zajecia_label.setText("Proszę podać dane!");
         }
     }
+
+    private void ustawBoXUsuwanie() {
+        List<String> klasy = pobierzKlasy();
+        ObservableList<String> listaKlas = FXCollections.observableArrayList(klasy);
+        usuwanie_box_k.setItems(listaKlas);
+        if (klasy.size() > 0) {
+            usuwanie_box_k.setValue(klasy.get(0));
+            usuwanie_box_k.valueProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue ov, String poprzednia, String nowa) {
+                    usuwanie_label.setText("");
+                    if (usuwanie_box_k.getSelectionModel().getSelectedIndex() > -1) {
+                        String nazwaK = usuwanie_box_k.getSelectionModel().getSelectedItem().toString();
+                        Klasa klasa_wybrana = pobierzKlasePoNazwie(nazwaK);
+                        List<Integer> listaID = pobierzListeIDZajecDlaKlasy(klasa_wybrana);
+                        List<String> listaZajeciowa = new ArrayList<>();
+                        for (int i = 0; i < listaID.size(); i++) {
+                            Zajecia zajeciaDoOpisu = pobierzZajeciaPoID(listaID.get(i));
+                            String opis = zajeciaDoOpisu.getPrzedmiot().getNazwaPrzedmiotu() + " - " + zajeciaDoOpisu.getGodzina().toString();
+                            listaZajeciowa.add(opis);
+                        }
+                        ObservableList<String> listaZ = FXCollections.observableArrayList(listaZajeciowa);
+                        zajecia_box.setItems(listaZ);
+                        zajecia_box.valueProperty().addListener(new ChangeListener<String>() {
+                            @Override
+                            public void changed(ObservableValue ov, String poprzednia, String nowa) {
+                                int indek = zajecia_box.getSelectionModel().getSelectedIndex();
+                                if (indek > -1 && indek < listaID.size()) {
+                                    wartoscID.setText(listaID.get(zajecia_box.getSelectionModel().getSelectedIndex()) + "");
+                                }
+                            }
+                        });
+                    }
+
+                }
+            });
+
+        }
+    }
+
+    @FXML
+    private void usuwanieZajecZHarmonogramu() {
+        try {
+        usunZajecia(Integer.parseInt(wartoscID.getText()));
+        ustawBoXUsuwanie();
+        odswiezBoxy();
+        usuwanie_label.setText("Usunięto!");
+        } catch (Exception e) {
+         usuwanie_label.setText("Niepoprawne dane!");
+        }
+    }
+    
+    private void odswiezBoxy(){
+        ustawBoXUsuwanie();
+        ustawWartosciBox();
+        ustawBoxPrzedmiotyUsuwanie();
+        ustawWartosciPeseliWychowawcaNowaKlasa();
+        ustawWartosciBoxDodawanieZajec();
+    }
+    
 
 }

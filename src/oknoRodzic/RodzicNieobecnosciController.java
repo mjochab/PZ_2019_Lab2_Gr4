@@ -176,12 +176,15 @@ public class RodzicNieobecnosciController implements Initializable {
     }
 
     private void wstawNieobecnosci(Uczen uczen) {
-        tabelaNieob.getItems().clear();
-        Set nieobecnosciSet = uczen.getObecnoscs();
-        listaNieobecnosci = posortujNieobecnosci(nieobecnosciSet);
-        data = FXCollections.observableArrayList(listaNieobecnosci);
-        tabelaNieob.setItems(data);
-        addButtonToTable();
+        if (uczen != null) {
+            tabelaNieob.getItems().clear();
+            Set nieobecnosciSet = uczen.getObecnoscs();
+            listaNieobecnosci = posortujNieobecnosci(nieobecnosciSet);
+            data = FXCollections.observableArrayList(listaNieobecnosci);
+            tabelaNieob.setItems(data);
+            addButtonToTable();
+        }
+
     }
 
     private ArrayList<Obecnosc> posortujNieobecnosci(Set nieobecnosciSet) {
@@ -203,15 +206,19 @@ public class RodzicNieobecnosciController implements Initializable {
 
     @FXML
     private void usprawiedliwNieobecnosc(ActionEvent event) throws IOException {
-        Iterator<Obecnosc> it = listaNieobecnosci.iterator();
-        while (it.hasNext()) {
-            Obecnosc ob = it.next();
-            if (ob.getWartosc().equals("n")) {
-                ob.setWartosc("u");
-                HibernateUtil.edytujNieobecnosc(ob);
-                tabelaNieob.refresh();
+        try{
+            Iterator<Obecnosc> it = listaNieobecnosci.iterator();
+            while (it.hasNext()) {
+                Obecnosc ob = it.next();
+                if (ob.getWartosc().equals("n")) {
+                    ob.setWartosc("u");
+                    HibernateUtil.edytujNieobecnosc(ob);
+                    tabelaNieob.refresh();
+                }
             }
+        }catch(Exception e){
         }
+
     }
 
     private void addButtonToTable() {

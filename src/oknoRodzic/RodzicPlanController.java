@@ -176,28 +176,31 @@ public class RodzicPlanController implements Initializable {
     }
 
     private void wstawPlan(Uczen uczen) {
-        tabelaZajec.getItems().clear();
-        Klasa plan = zwrocPlan(uczen.getKlasa().getNazwaKlasy());
-        Set zajecia = plan.getZajecias();
-        ArrayList<Zajecia> zajeciaPosortowane = Utils.posortujZajecia(zajecia);
-        kolumna = tabelaZajec.getColumns();
-        ArrayList<String> zajeciaDnia;
+        if (uczen != null) {
+            tabelaZajec.getItems().clear();
+            Klasa plan = zwrocPlan(uczen.getKlasa().getNazwaKlasy());
+            Set zajecia = plan.getZajecias();
+            ArrayList<Zajecia> zajeciaPosortowane = Utils.posortujZajecia(zajecia);
+            kolumna = tabelaZajec.getColumns();
+            ArrayList<String> zajeciaDnia;
 
-        for (int i = 0; i < zajecia.size(); i++) {
-            tabelaZajec.getItems().add(i);
-        }
+            for (int i = 0; i < zajecia.size(); i++) {
+                tabelaZajec.getItems().add(i);
+            }
 
-        ArrayList<String> godziny = Utils.pobierzGodziny(zajeciaPosortowane);
-        Utils.wstawianieGodziny(godziny, godzina);
+            ArrayList<String> godziny = Utils.pobierzGodziny(zajeciaPosortowane);
+            Utils.wstawianieGodziny(godziny, godzina);
 
-        for (TableColumn<Integer, String> kol : kolumna) {
-            if (kol.getText().equals("Godzina")) {
+            for (TableColumn<Integer, String> kol : kolumna) {
+                if (kol.getText().equals("Godzina")) {
 
-            } else {
-                zajeciaDnia = Utils.pobierzZajeciaDnia(kol.getId(), zajeciaPosortowane, godziny);
-                Utils.wstawianieZajecDoKolumn(kol, zajeciaDnia);
+                } else {
+                    zajeciaDnia = Utils.pobierzZajeciaDnia(kol.getId(), zajeciaPosortowane, godziny);
+                    Utils.wstawianieZajecDoKolumn(kol, zajeciaDnia);
+                }
             }
         }
+
     }
 
     private EventHandler zwrocEventHandleraDlaDzieci(TableView<Uczen> table) {

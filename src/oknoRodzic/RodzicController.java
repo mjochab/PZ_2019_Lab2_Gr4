@@ -224,7 +224,8 @@ public class RodzicController implements Initializable {
     }
 
     private void wpisywanieOcen(Uczen uczen) {
-        tabelaOcen.getItems().clear();
+        if(uczen!=null){
+                tabelaOcen.getItems().clear();
         Set oceny = uczen.getOcenas();
         for (int i = 0; i < oceny.size(); i++) {
             tabelaOcen.getItems().add(i);
@@ -237,6 +238,8 @@ public class RodzicController implements Initializable {
                 wstawianieOcenDoKolumn(kol, listaOcen);
             }
         }
+        }
+
     }
 
     private EventHandler zwrocEventHandleraDlaDzieci(TableView<Uczen> table) {

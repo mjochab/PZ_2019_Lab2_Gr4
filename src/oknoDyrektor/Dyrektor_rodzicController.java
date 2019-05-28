@@ -27,12 +27,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import mapping.Klasa;
 import mapping.Rodzic;
+import mapping.SkladKlasy;
 import mapping.Uczen;
+import static utilities.HibernateUtil.dodajDoSkladuKlasy;
+import static utilities.HibernateUtil.dodajPrzykladowaObecnosc;
 import static utilities.HibernateUtil.edytujRodzicaNoweDane;
+import static utilities.HibernateUtil.edytujSkladKlasy;
 import static utilities.HibernateUtil.edytujUczniaNoweDane;
 import static utilities.HibernateUtil.pobierzKlasy;
 import static utilities.HibernateUtil.pobierzListePeseliRodzicow;
 import static utilities.HibernateUtil.pobierzListePeseliUczniow;
+import static utilities.HibernateUtil.pobierzSkladPoUczniu;
 import static utilities.HibernateUtil.podajPeseleRodzicaBezDanych;
 import static utilities.HibernateUtil.podajPeseleUczniaBezDanych;
 import static utilities.HibernateUtil.podajPeseleUczniaBezRodzica;
@@ -259,9 +264,9 @@ public class Dyrektor_rodzicController implements Initializable {
         List<String> nazwy_klas = pobierzKlasy();
         ObservableList<String> nazwy_k = FXCollections.observableArrayList(nazwy_klas);
         klasa.setItems(nazwy_k);
-        if(nazwy_klas.size()>0){
+        if (nazwy_klas.size() > 0) {
             klasa.setValue(nazwy_k.get(0));
-        }      
+        }
 
     }
 
@@ -288,43 +293,52 @@ public class Dyrektor_rodzicController implements Initializable {
             @Override
             public void changed(ObservableValue ov, String poprzednia, String nowa) {
                 int indeks = e_pesel_u.getSelectionModel().getSelectedIndex();
-                List<Long> pesele_ucznia = pobierzListePeseliUczniow();
-                Long peselek = pesele_ucznia.get(indeks);
-                Uczen uczniak = zwrocUcznia(peselek);
-                String pesel_rodzica = uczniak.getRodzic().getPesel() + "";
-                e_imie_u.setText(uczniak.getImie());
-                e_nazwisko_u.setText(uczniak.getNazwisko());
-                edytuj_rodzicabox.setValue(uczniak.getRodzic().getImieMatki() + " " + uczniak.getRodzic().getNazwiskoMatki());
-                e_klasa.setValue(uczniak.getKlasa().getNazwaKlasy());
-                field_uczen_p.setText(peselek.toString());
-                label_e_uczen.setText("");
+                if (indeks > -1) {
+                    List<Long> pesele_ucznia = pobierzListePeseliUczniow();
+                    Long peselek = pesele_ucznia.get(indeks);
+                    Uczen uczniak = zwrocUcznia(peselek);
+                    String pesel_rodzica = uczniak.getRodzic().getPesel() + "";
+                    e_imie_u.setText(uczniak.getImie());
+                    e_nazwisko_u.setText(uczniak.getNazwisko());
+                    edytuj_rodzicabox.setValue(uczniak.getRodzic().getImieMatki() + " " + uczniak.getRodzic().getNazwiskoMatki());
+                    e_klasa.setValue(uczniak.getKlasa().getNazwaKlasy());
+                    field_uczen_p.setText(peselek.toString());
+                    label_e_uczen.setText("");
+                }
+
             }
         });
     }
-    
+
     private void obslugaBoxEdycjiPeseluRodzica() {
         ustawWartosciPeseliRodzicaEdycja();
         e_pesel_r.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue ov, String poprzednia, String String) {
                 int indeks = e_pesel_r.getSelectionModel().getSelectedIndex();
-                List<Long> pesele_rodzica = pobierzListePeseliRodzicow();
-                Long peselek = pesele_rodzica.get(indeks);
-                Rodzic rodzic = zwrocRodzica(peselek);
-                String pesel_rodz = rodzic.getPesel() + "";
-                e_imie_o.setText(rodzic.getImieOjca());
-                e_nazwisko_o.setText(rodzic.getNazwiskoOjca());
-                e_imie_m.setText(rodzic.getImieMatki());
-                e_nazwisko_m.setText(rodzic.getNazwiskoMatki());
-                pesel_r_e.setText(pesel_rodz);
-                label_e_rodzic.setText("");
+                if (indeks > -1) {
+                    List<Long> pesele_rodzica = pobierzListePeseliRodzicow();
+                    Long peselek = pesele_rodzica.get(indeks);
+                    Rodzic rodzic = zwrocRodzica(peselek);
+                    String pesel_rodz = rodzic.getPesel() + "";
+                    e_imie_o.setText(rodzic.getImieOjca());
+                    e_nazwisko_o.setText(rodzic.getNazwiskoOjca());
+                    e_imie_m.setText(rodzic.getImieMatki());
+                    e_nazwisko_m.setText(rodzic.getNazwiskoMatki());
+                    pesel_r_e.setText(pesel_rodz);
+                    label_e_rodzic.setText("");
+                }
+
             }
         });
     }
 
     @FXML
     private void wstawNowegoUcznia() {
-        Klasa klasa_U = new Klasa(klasa.getSelectionModel().getSelectedItem().toString());
+        Klasa klasa_U = null;
+        if (klasa.getSelectionModel().getSelectedIndex() > -1) {
+            klasa_U = new Klasa(klasa.getSelectionModel().getSelectedItem().toString());
+        }
 
         if (imie_u.getText().isEmpty() || nazwisko_u.getText().isEmpty()) {
             ucz_error.setText("Niepoprawne dane!");
@@ -336,14 +350,22 @@ public class Dyrektor_rodzicController implements Initializable {
                 Long peselek = pesele_ucznia.get(indeks);
                 List<Long> pesele_rodzica = pobierzListePeseliRodzicow();
                 Long peselek_r = pesele_rodzica.get(indeks2);
+                if (klasa_U != null) {
+                    wstawUcznia(peselek, peselek_r, imie_u.getText(), nazwisko_u.getText(), klasa_U);
+                    SkladKlasy nowyUczniak = new SkladKlasy(klasa_U,zwrocUcznia(peselek));
+                    dodajDoSkladuKlasy(nowyUczniak);
+                    dodajPrzykladowaObecnosc(zwrocUcznia(peselek));
+                    ucz_error.setText("Dodano ucznia!");
+                    imie_u.setText("");
+                    nazwisko_u.setText("");
+                    ustawWartosciBox();
+                    obslugaBoxEdycjiPeseluUcznia();
+                    obslugaBoxEdycjiPeseluRodzica();
+                    odswiezBoxy();
+                } else {
+                    ucz_error.setText("Niepoprawne dane!");
+                }
 
-                wstawUcznia(peselek, peselek_r, imie_u.getText(), nazwisko_u.getText(), klasa_U);
-                ucz_error.setText("Dodano ucznia!");
-                imie_u.setText("");
-                nazwisko_u.setText("");
-                ustawWartosciBox();
-                obslugaBoxEdycjiPeseluUcznia();
-                obslugaBoxEdycjiPeseluRodzica();
             } catch (Exception e) {
                 ucz_error.setText("Niepoprawny pesel!");
             }
@@ -369,6 +391,7 @@ public class Dyrektor_rodzicController implements Initializable {
                 ustawWartosciBox();
                 obslugaBoxEdycjiPeseluUcznia();
                 obslugaBoxEdycjiPeseluRodzica();
+                odswiezBoxy();
             } catch (Exception e) {
                 rodzic_error.setText("Niepoprawny pesel!");
             }
@@ -378,25 +401,50 @@ public class Dyrektor_rodzicController implements Initializable {
     @FXML
     private void edytujRodzica() {
         int indeks = e_pesel_r.getSelectionModel().getSelectedIndex();
-        List<Long> pesele_rodzica = pobierzListePeseliRodzicow();
-        Long pesel_rodzic = pesele_rodzica.get(indeks);
+        if (indeks > -1 && !e_imie_o.getText().isEmpty() && !e_nazwisko_o.getText().isEmpty() && !e_imie_m.getText().isEmpty() && !e_nazwisko_m.getText().isEmpty()) {
+            List<Long> pesele_rodzica = pobierzListePeseliRodzicow();
+            Long pesel_rodzic = pesele_rodzica.get(indeks);
 
-        edytujRodzicaNoweDane(pesel_rodzic, e_imie_o.getText(), e_nazwisko_o.getText(), e_imie_m.getText(), e_nazwisko_m.getText());
-        label_e_rodzic.setText("Edytowano!");
+            edytujRodzicaNoweDane(pesel_rodzic, e_imie_o.getText(), e_nazwisko_o.getText(), e_imie_m.getText(), e_nazwisko_m.getText());
+            label_e_rodzic.setText("Edytowano!");
+            e_imie_o.setText("");
+            e_nazwisko_o.setText("");
+            e_imie_m.setText("");
+            e_nazwisko_m.setText("");
+            odswiezBoxy();
+        } else {
+            label_e_rodzic.setText("Niepoprawne dane!");
+        }
+
     }
 
     @FXML
     private void edytujUcznia() {
-        Klasa klasa_U = new Klasa(e_klasa.getSelectionModel().getSelectedItem().toString());
-        int indeks = e_pesel_u.getSelectionModel().getSelectedIndex();
-        List<Long> pesele_uczniow = pobierzListePeseliUczniow();
-        Long pesel_uczniak = pesele_uczniow.get(indeks);
-        int indeks_r = edytuj_rodzicabox.getSelectionModel().getSelectedIndex();
-        List<Long> pesele_rodzicow = pobierzListePeseliRodzicow();
-        Long pesel_rodz = pesele_rodzicow.get(indeks_r);
+        if (e_klasa.getSelectionModel().getSelectedIndex() > -1 && e_pesel_u.getSelectionModel().getSelectedIndex() > -1 && edytuj_rodzicabox.getSelectionModel().getSelectedIndex() > -1) {
+            Klasa klasa_U = new Klasa(e_klasa.getSelectionModel().getSelectedItem().toString());
+            int indeks = e_pesel_u.getSelectionModel().getSelectedIndex();
+            List<Long> pesele_uczniow = pobierzListePeseliUczniow();
+            Long pesel_uczniak = pesele_uczniow.get(indeks);
+            int indeks_r = edytuj_rodzicabox.getSelectionModel().getSelectedIndex();
+            List<Long> pesele_rodzicow = pobierzListePeseliRodzicow();
+            Long pesel_rodz = pesele_rodzicow.get(indeks_r);
+            if (!e_imie_u.getText().isEmpty() && !e_nazwisko_u.getText().isEmpty()) {
+                edytujUczniaNoweDane(pesel_uczniak, pesel_rodz, e_imie_u.getText(), e_nazwisko_u.getText(), klasa_U);
+                label_e_uczen.setText("Edytowano!");
+                e_imie_u.setText("");
+                e_nazwisko_u.setText("");
+                odswiezBoxy();
+                SkladKlasy nowyUczniak = pobierzSkladPoUczniu(zwrocUcznia(pesel_uczniak));
+                nowyUczniak.setKlasa(klasa_U);
+                edytujSkladKlasy(nowyUczniak);
+            } else {
+                label_e_uczen.setText("Niepoprawne dane!");
+            }
 
-        edytujUczniaNoweDane(pesel_uczniak, pesel_rodz, e_imie_u.getText(), e_nazwisko_u.getText(), klasa_U);
-        label_e_uczen.setText("Edytowano!");
+        } else {
+            label_e_uczen.setText("Niepoprawne dane!");
+        }
+
     }
 
     @FXML
@@ -407,6 +455,7 @@ public class Dyrektor_rodzicController implements Initializable {
             Long pesel_uczniak = pesele_uczniow.get(indeks);
             usunAutoryzacjeUcznia(pesel_uczniak);
             usuwanie_label.setText("Usunięto dostęp dla ucznia!");
+            odswiezBoxy();
         }
 
     }
@@ -419,6 +468,7 @@ public class Dyrektor_rodzicController implements Initializable {
             Long pesel_rodzica = pesele_r.get(indeks);
             usunAutoryzacjeRodzica(pesel_rodzica);
             usuwanie_label.setText("Usunięto dostęp rodzicowi!");
+            odswiezBoxy();
         }
     }
 
@@ -534,4 +584,15 @@ public class Dyrektor_rodzicController implements Initializable {
         return przedstawienie;
     }
 
+    private void odswiezBoxy() {
+        ustawWartosciBox();
+        obslugaBoxEdycjiPeseluUcznia();
+        obslugaBoxEdycjiPeseluRodzica();
+        ustawWartosciBoxUsuwanie();
+        ustawWartosciPeseliLoginowUcznia();
+        ustawWartosciPeseliLoginowRodzica();
+        ustawWartosciPeseliRodzicaDlaUcznia();
+        ustawWartosciPeseliUczniaEdycja();
+        ustawWartosciPeseliRodzicaEdycja();
+    }
 }

@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Predicate;
@@ -119,15 +120,20 @@ public class HibernateUtil {
      * @return string z nazwa klasy np '1a'
      */
     public static String zwrocKlaseKtoraWychowuje(Long pesel) {
-        CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
-        Root<Nauczyciel> root = criteria.from(Nauczyciel.class);
-        criteria.select(root.get("klasas"));
-        criteria.where(builder.equal(root.get("pesel"), pesel));
+        try {
+            CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
+            Root<Nauczyciel> root = criteria.from(Nauczyciel.class);
+            criteria.select(root.get("klasas"));
+            criteria.where(builder.equal(root.get("pesel"), pesel));
 
-        Klasa klasaObj = entityManager.createQuery(criteria).getSingleResult();
+            Klasa klasaObj = entityManager.createQuery(criteria).getSingleResult();
 
-        String klasa = klasaObj.getNazwaKlasy();
-        return klasa;
+            String klasa = klasaObj.getNazwaKlasy();
+            return klasa;
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 
     /**
@@ -1240,6 +1246,11 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     * Metoda służąca do dodawania nowej klasy do bazy danych.
+     *
+     * @param klasa klasa, która ma być dodana typy Klasa
+     */
     public static void dodajNowaKlase(Klasa klasa) {
         Session session = sessionFactory.openSession();
 
@@ -1261,6 +1272,8 @@ public class HibernateUtil {
     }
 
     /**
+     * Metoda wypisująca listę peseli nayczyciela, którzy nie są wychowawcami.
+     *
      * @return lista typu Long
      */
     public static List<Long> podajPeseleNauczycielaBezWychowankow() {
@@ -1302,6 +1315,12 @@ public class HibernateUtil {
         return peselki;
     }
 
+    /**
+     * Metoda, która zwraca obiekt typu Klasa po podaniu nazwy klasy.
+     *
+     * @param nazwaKlasy - nazwa klasy typu String
+     * @return wybrana klasa - typu Klasa
+     */
     public static Klasa pobierzKlasePoNazwie(String nazwaKlasy) {
         CriteriaQuery<Klasa> criteria = builder.createQuery(Klasa.class);
         Root root = criteria.from(Klasa.class);
@@ -1312,6 +1331,12 @@ public class HibernateUtil {
         return klasa;
     }
 
+    /**
+     * Metoda edytująca klasę po podaniu obektu klasy, który ma w sobie
+     * zmienione dane.
+     *
+     * @param klasa typu Klasa
+     */
     public static void edytujKlaseZNowymiDanymi(Klasa klasa) {
         Session session = sessionFactory.openSession();
 
@@ -1330,6 +1355,14 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     * Metoda, która ma za zadanie sprawdzić powiązania klasy z tabelami Zajęcia
+     * oraz Skład klasy. W tych tabelach po usunięciu klasy nie moga byc
+     * wartości null.
+     *
+     * @param klasa typu klasa
+     * @return wartość typu Boolean czy klasa jest powiązana
+     */
     public static Boolean sprawdzCzyKlasaJestPowiazana(Klasa klasa) {
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
         Root root = criteria.from(SkladKlasy.class);
@@ -1346,6 +1379,13 @@ public class HibernateUtil {
         return klasy.contains(klasa);
     }
 
+    /**
+     * Metoda słyżąca do usuwania klasy po uprzednim sprawdzeniu czy nei ma ona
+     * powiązań.
+     *
+     * @see sprawdzCzyKlasaJestPowiazana
+     * @param klasa typu Klasa
+     */
     public static void usunKlaseJesliNieMaPowiazan(Klasa klasa) {
         Session session = sessionFactory.openSession();
 
@@ -1364,6 +1404,11 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     * Metoda służąca do dodawania nowych przedmiotów do bazy danych.
+     *
+     * @param przedmiot typu Przedmiot
+     */
     public static void dodajNowyPrzedmiot(Przedmiot przedmiot) {
         Session session = sessionFactory.openSession();
 
@@ -1382,6 +1427,12 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     * Metoda służąca do usuwania przemiotów z bazy.
+     *
+     * @see sprawdzCzyPrzedmiotJestPowiazany
+     * @param przedmiot typu Przedmiot
+     */
     public static void usunPrzedmiot(Przedmiot przedmiot) {
         Session session = sessionFactory.openSession();
 
@@ -1400,6 +1451,13 @@ public class HibernateUtil {
         }
     }
 
+    /**
+     * Metoda, która pobiera przedmiot po podaniu jego nazwy poprzez zmienną
+     * typu String
+     *
+     * @param nazwa nazwa klasy typu String
+     * @return przedmiot typu Przedmiot
+     */
     public static Przedmiot pobierzPrzedmiotPoNazwie(String nazwa) {
         CriteriaQuery<Przedmiot> criteria = builder.createQuery(Przedmiot.class);
         Root root = criteria.from(Przedmiot.class);
@@ -1410,6 +1468,14 @@ public class HibernateUtil {
         return prz;
     }
 
+    /**
+     * Metoda, która sprawdza czy przedmiot jest powiązany z tabelami Ocena,
+     * Zajęcia, Obecność, ponieważ nie moa być tam wartości null w odniesieniu
+     * do przedmiotu.
+     *
+     * @param przedmiot typu Przedmiot
+     * @return wartość Boolean czy przedmiot jest powiązany
+     */
     public static Boolean sprawdzCzyPrzedmiotJestPowiazany(Przedmiot przedmiot) {
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
         Root root = criteria.from(Ocena.class);
@@ -1434,6 +1500,11 @@ public class HibernateUtil {
         return klasy.contains(przedmiot);
     }
 
+    /**
+     * Metoda pobiera nazwy przedmiotów i zwraca w postaci listy.
+     *
+     * @return lista typu String
+     */
     public static List<String> pobierzListePrzedmiotow() {
         CriteriaQuery<String> criteria = builder.createQuery(String.class);
         Root root = criteria.from(Przedmiot.class);
@@ -1443,6 +1514,13 @@ public class HibernateUtil {
         return prz;
     }
 
+    /**
+     * Metoda, która służy wypisaniu godzin, w których można ustalić zajęcia.
+     *
+     * @param dzien typu String
+     * @param klasa typu Klasa
+     * @return lista typu String wolnych godzin
+     */
     public static List<String> podajListeWolnychGodzDanegoDniaDlaDanejKlasy(String dzien, Klasa klasa) {
         List<String> godzinyZajec = List.of("08:00:00", "08:55:00", "09:50:00", "10:45:00", "11:55:00", "13:00:00", "13:45:00", "14:45:00");
         CriteriaQuery<Date> criteria = builder.createQuery(Date.class);
@@ -1478,6 +1556,15 @@ public class HibernateUtil {
         return wolneGodz;
     }
 
+    /**
+     * Metoda sprawdzająca czy dany nayczyciel może w wybranej godzinie i dniu
+     * prowadzić zajęcia.
+     *
+     * @param naucz typu Nauczyciel
+     * @param dzien typu String
+     * @param godzina typu Date
+     * @return wartość Boolean czy nauczyciel może uczyć
+     */
     public static Boolean sprawdzCzyNauczycielNieMaZajecWDniuGodz(Nauczyciel naucz, String dzien, Date godzina) {
         try {
             CriteriaQuery<Nauczyciel> criteria = builder.createQuery(Nauczyciel.class);
@@ -1493,6 +1580,11 @@ public class HibernateUtil {
 
     }
 
+    /**
+     * Metoda dodająca nowe zajęcia.
+     *
+     * @param zajecia typu Zajecia
+     */
     public static void dodajZajecia(Zajecia zajecia) {
         Session session = sessionFactory.openSession();
 
@@ -1510,15 +1602,64 @@ public class HibernateUtil {
             session.close();
         }
     }
-    
-    public static void usunZajecia(Zajecia zajecia) {
+
+    /**
+     * Metoda, która pobiera listę ID zajęć dla wybranej klasy.
+     *
+     * @param klasa typu Klasa
+     * @return lista typu Integer wybranych id zajęć
+     */
+    public static List<Integer> pobierzListeIDZajecDlaKlasy(Klasa klasa) {
+        CriteriaQuery<Integer> criteria = builder.createQuery(Integer.class);
+        Root root = criteria.from(Zajecia.class);
+        criteria.select(root.get("id"));
+        criteria.where(builder.equal(root.get("klasa"), klasa));
+        List<Integer> indeksowanie = entityManager.createQuery(criteria).getResultList();
+        return indeksowanie;
+    }
+
+    /**
+     * Metoda pobierająca zajęcia dwołując się do Id przedmiotu.
+     *
+     * @param id typu Integer
+     * @return zajęcia o wybranym ID
+     */
+    public static Zajecia pobierzZajeciaPoID(Integer id) {
+        CriteriaQuery<Zajecia> criteria = builder.createQuery(Zajecia.class);
+        Root root = criteria.from(Zajecia.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get("id"), id));
+        Zajecia zajecia = entityManager.createQuery(criteria).getSingleResult();
+        return zajecia;
+    }
+
+    /**
+     * Metoda usuwająca zajęcia na podstawie ID.
+     *
+     * @param id typu Integer
+     */
+    public static void usunZajecia(Integer id) {
+        entityManager.getTransaction().begin();
+        CriteriaDelete<Zajecia> criteria = builder.createCriteriaDelete(Zajecia.class);
+        Root root = criteria.from(Zajecia.class);
+        criteria.where(builder.equal(root.get("id"), id));
+        entityManager.createQuery(criteria).executeUpdate();
+        entityManager.getTransaction().commit();
+    }
+
+    /**
+     * Metoda dodająca ucznia do Składu klasy.
+     *
+     * @param nowy typu Sklad klasy
+     */
+    public static void dodajDoSkladuKlasy(SkladKlasy nowy) {
         Session session = sessionFactory.openSession();
 
         Transaction tx = null;
         Integer stId = null;
         try {
             tx = session.beginTransaction();
-            session.delete(zajecia);
+            session.save(nowy);
             tx.commit();
         } catch (HibernateException ex) {
             if (tx != null) {
@@ -1527,5 +1668,73 @@ public class HibernateUtil {
         } finally {
             session.close();
         }
+
+    }
+
+    /**
+     * Metoda edytująca ucznia w Składzie klasy.
+     *
+     * @param nowy typu Sklad klasy
+     */
+    public static void edytujSkladKlasy(SkladKlasy nowy) {
+        Session session = sessionFactory.openSession();
+
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+            session.merge(nowy);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+
+    }
+
+    /**
+     * Metoda służąca dodawaniu przykładowej obecności dla ucznia w bazie, 
+     * aby umożliwić działanie metod bazujących na tej tabeli.
+     * @param uczniak typu Uczen
+     */
+    public static void dodajPrzykladowaObecnosc(Uczen uczniak) {
+        //Obecnosc(Przedmiot przedmiot, Uczen uczen, Date data, String wartosc) {
+        Przedmiot przedmiot = pobierzPrzedmiotPoNazwie("Godzina wychowawcza");
+        Date data_szkolna = java.sql.Date.valueOf("2019-09-01");
+        String wartosc = "u";
+        Obecnosc obecnosc = new Obecnosc(przedmiot, uczniak, data_szkolna, wartosc);
+
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        Integer stId = null;
+        try {
+            tx = session.beginTransaction();
+            session.save(obecnosc);
+            tx.commit();
+        } catch (HibernateException ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+
+    }
+
+    /**
+     * Metoda pobierająca obiekt składu klasy przypisany do danego ucznia.
+     * @param uczen typu Uczen
+     * @return SkladKlasy
+     */
+    public static SkladKlasy pobierzSkladPoUczniu(Uczen uczen) {
+        CriteriaQuery<SkladKlasy> criteria = builder.createQuery(SkladKlasy.class);
+        Root root = criteria.from(SkladKlasy.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get("uczen"), uczen));
+        SkladKlasy skladowa = entityManager.createQuery(criteria).getSingleResult();
+        return skladowa;
     }
 }
