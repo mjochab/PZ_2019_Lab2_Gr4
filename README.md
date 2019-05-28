@@ -71,7 +71,7 @@ Kolejno należy stworzyć plan zajęć, przedmioty. Dodać uczniów i ich rodzic
 
 Przewodnik po aplikacji:
 1. Ekran logowania. Podać login i hasło.
-
+![logowanie](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/Login_v2/Projekty%20okienek/logowanie.PNG)
 
 2. Okno ucznia:
 Po zalogowaniu jest widoczna tabela z przedmiotami i ocenami wraz z typem oceny (np. spr), dostępna jest też zakładka - nieobecności, gdzie uczeń może sprawdzić stan swoich obecności.
