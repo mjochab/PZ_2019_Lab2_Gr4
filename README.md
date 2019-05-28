@@ -99,19 +99,21 @@ Wybieramy klasę którą chcemy obejrzeć i przechodzimy dalej.
 Po wybraniu klasy ukaże się tabela z ocenami z danego przedmiotu, możemy wybrać przedmiot z którego oceny chcemy zobaczyć. Nauczyciel ma możliwość dodawania, edycji i usuwania ocen.
 Kolejną możliwością jest sprawdzanie i zmiana stanu obecności danych uczniów. Należy kliknąć na zakładkę Nieobecności, ukaże się tabela z przedmiotami które uczymy i datami w których nauczamy danego przedmiotu. Jako nauczyciel możemy wstawić obecność i nieobecność.
 
-Okno wychowawcy:
-
-Mamy możliwość usprawiedliwiania obecności uczniów a także generowania pdfa "wywiadówkowego" z ocenami danego ucznia.
-
 ![nauczyciel](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/Login_v2/Projekty%20okienek/nauczyciel_zalogowany.PNG)
 ![nauczyciel](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/Login_v2/Projekty%20okienek/nauczyciel_oceny.PNG)
 ![nauczyciel](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/Login_v2/Projekty%20okienek/nauczyciel_obecnosci.PNG)
+
+5. Okno wychowawcy (dostępne z okna nauczyciela)
+
+Mamy możliwość usprawiedliwiania obecności uczniów a także generowania pdfa "wywiadówkowego" z ocenami danego ucznia.
 ![nauczyciel](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/Login_v2/Projekty%20okienek/wychowawca_obecnosci.PNG)
 ![nauczyciel](https://github.com/mjochab/PZ_2019_Lab2_Gr4/blob/Login_v2/Projekty%20okienek/wychowawca_pdf.PNG)
 
 
 
-4. Okno dyrektora:
+
+
+6. Okno dyrektora:
 
 
 
